@@ -2,9 +2,9 @@
 
 **English**
 
-[![License](https://img.shields.io/github/license/ch0t4nk/PDFtoMD?style=flat)](https://github.com/ch0t4nk/PDFtoMD/blob/master/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD?style=flat)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD?style=flat)](https://github.com/ch0t4nk/PDFtoMD/network)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
 
 Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.
 
