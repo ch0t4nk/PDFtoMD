@@ -116,7 +116,7 @@ grep "OPENAI_API_KEY" .env
 - [ ] `.env` file exists and contains your API key
 - [ ] `.env` is listed in `.gitignore`
 - [ ] No API keys hardcoded in source files
-- [ ] `python config.py` shows "✅ Configured" 
+- [ ] `python config.py` shows "✅ Configured"
 - [ ] All tools use SSOT configuration system
 - [ ] Old API keys have been revoked
 - [ ] Git history contains no exposed keys

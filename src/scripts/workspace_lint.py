@@ -3,6 +3,18 @@
 Workspace Lint & Fix Script for MarkPDFDown
 Automatically fixes common markdown and Python linting issues across the workspace
 while ignoring output directories and temporary files.
+
+Enterprise Enhancement for MarkPDFDown
+Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
+Licensed under the Apache License, Version 2.0
+
+This file is part of the enterprise enhancement suite for MarkPDFDown,
+providing automated workspace linting and fixing capabilities with intelligent
+issue detection and resolution across markdown and Python files.
+
+Author: Joseph Wright (github: ch0t4nk)
+Created: July 16, 2025
+Version: 1.0
 """
 
 import os

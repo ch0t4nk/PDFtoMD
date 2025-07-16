@@ -2,6 +2,18 @@
 """
 OpenAI Batch API PDF Converter
 Efficiently process multiple PDFs using OpenAI's Batch API (50% cost reduction + better rate limits)
+
+Enterprise Enhancement for MarkPDFDown
+Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
+Licensed under the Apache License, Version 2.0
+
+This file is part of the enterprise enhancement suite for MarkPDFDown,
+providing efficient PDF processing using OpenAI's Batch API for significant
+cost reduction and improved rate limit management.
+
+Author: Joseph Wright (github: ch0t4nk)
+Created: July 16, 2025
+Version: 1.0
 """
 
 import os

@@ -6,6 +6,18 @@ This is the centralized configuration system for all MarkPDFDown components.
 All API keys, directories, and settings are managed from this single location.
 
 Security Note: Never commit API keys to git. Use environment variables (.env file).
+
+Enterprise Enhancement for MarkPDFDown
+Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
+Licensed under the Apache License, Version 2.0
+
+This file is part of the enterprise enhancement suite for MarkPDFDown,
+providing centralized configuration management for enterprise deployments
+with secure API key handling and comprehensive settings management.
+
+Author: Joseph Wright (github: ch0t4nk)
+Created: July 16, 2025
+Version: 1.0
 """
 
 import os

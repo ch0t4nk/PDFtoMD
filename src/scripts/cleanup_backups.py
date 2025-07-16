@@ -2,6 +2,18 @@
 """
 Cleanup Script for MarkPDFDown Workspace
 Removes backup files created by workspace linting
+
+Enterprise Enhancement for MarkPDFDown
+Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
+Licensed under the Apache License, Version 2.0
+
+This file is part of the enterprise enhancement suite for MarkPDFDown,
+providing automated cleanup utilities to remove backup files created
+during workspace linting operations.
+
+Author: Joseph Wright (github: ch0t4nk)
+Created: July 16, 2025
+Version: 1.0
 """
 
 import sys
