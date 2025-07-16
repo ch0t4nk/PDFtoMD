@@ -4,17 +4,13 @@
 <p align="center">English</p>
 
 [![Size]][hub_url]
-[!```bash
-# Quick start - process all PDFs in examples/pdfs/ folder
-
-python src/batch/auto_batch.py
-
-# Custom folders
-
-python src/batch/auto_batch.py documents outputs[hub_url]
+[![Pulls]][hub_url]
 [![Tag]][tag_url]
 [![License]][license_url]
-<p>Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.</p>![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
+
+<p>Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.</p>
+
+![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
 
 </div>
 
@@ -106,19 +102,19 @@ See the [SSOT Configuration Guide](docs/guides/SSOT_GUIDE.md) and [Security Guid
 ### 🤖 Auto Batch Processing (Recommended)
 
 For processing multiple PDFs with **50% cost savings** using OpenAI Batch API:
-`bash
+```bash
 # Quick start - process all PDFs in examples/pdfs/ folder
 
-python batch/auto_batch.py
+python src/batch/auto_batch.py
 
 # Custom folders
 
-python batch/auto_batch.py documents outputs
+python src/batch/auto_batch.py documents outputs
 
 # Windows users can double-click
 
-auto_batch.bat
-`
+auto_batch_launcher.bat
+```
 - **Batch Processing Features:**
 - ✅ Fully automated workflow (set it and forget it)
 - 💰 50% cost savings with OpenAI Batch API
