@@ -11,6 +11,9 @@ markpdfdown/
 ├── 📋 .env.template                 # Template for .env file
 ├── 🚀 migrate_to_ssot.py           # Migration tool for SSOT
 ├── 📊 launcher.py                   # Universal launcher script
+├── 📄 LICENSE                       # Apache 2.0 License
+├── 📝 COPYRIGHT                     # Copyright and attribution notices
+├── 👥 CONTRIBUTORS.md               # Project contributors and attributions
 │
 ├── 📁 src/                          # Source code (organized structure)
 │   ├── 📁 core/                     # Core application code

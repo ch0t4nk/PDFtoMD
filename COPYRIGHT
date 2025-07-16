@@ -1,0 +1,34 @@
+# Copyright Notice
+
+## Original Work
+Copyright (c) 2024 MarkPDFDown Team  
+Licensed under the Apache License, Version 2.0
+
+Original project: https://github.com/MarkPDFdown/markpdfdown
+
+## Modifications and Enhancements
+Copyright (c) 2025 Joseph Wright  
+Licensed under the Apache License, Version 2.0
+
+**Enterprise-Ready Enhancements:**
+- Single Source of Truth (SSOT) Configuration System v3.0
+- Enhanced security with API key protection
+- Git history cleanup and security audit
+- Comprehensive documentation overhaul  
+- Centralized configuration management
+- Security best practices implementation
+
+These modifications are distributed under the same Apache License 2.0 as the original work.
+
+## License
+This project is licensed under the Apache License, Version 2.0.
+See the LICENSE file for the complete license text.
+
+You may obtain a copy of the License at:
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

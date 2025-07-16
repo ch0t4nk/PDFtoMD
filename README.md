@@ -7,13 +7,21 @@
 [![Pulls]][hub_url]
 [![Tag]][tag_url]
 [![License]][license_url]
-<p>A powerful tool that leverages multimodal large language models to transcribe PDF files into Markdown format.</p>![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
+<p>Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.</p>![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
 
 </div>
 
 ## Overview
 
-MarkPDFDown is designed to simplify the process of converting PDF documents into clean, editable Markdown text. By utilizing advanced multimodal AI models, it can accurately extract text, preserve formatting, and handle complex document structures including tables, formulas, and diagrams.
+MarkPDFDown is designed to simplify the process of converting PDF documents into clean, editable Markdown text for enterprise environments. By utilizing advanced multimodal AI models with enterprise-grade security and configuration management, it can accurately extract text, preserve formatting, and handle complex document structures including tables, formulas, and diagrams.
+
+## Enterprise Features
+
+- **🔧 Single Source of Truth (SSOT) Configuration** - Centralized configuration management for enterprise deployments
+- **🔒 Enterprise Security Framework** - Secure API key management, git history protection, and compliance features
+- **👥 Team Collaboration Ready** - Multi-user support with secure onboarding procedures
+- **📊 Cost Management & Analytics** - Detailed cost tracking and budget controls for enterprise use
+- **⚙️ Production-Ready Architecture** - Robust error handling, logging, and monitoring capabilities
 
 ## Features
 
@@ -41,7 +49,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone the repository
 
-git clone https://github.com/MarkPDFdown/markpdfdown.git
+git clone https://github.com/ch0t4nk/markpdfdown.git
 cd markpdfdown
 
 # Install dependencies and create virtual environment
@@ -55,7 +63,7 @@ conda activate markpdfdown
 
 # Clone the repository
 
-git clone https://github.com/MarkPDFdown/markpdfdown.git
+git clone https://github.com/ch0t4nk/markpdfdown.git
 cd markpdfdown
 
 # Install dependencies
@@ -242,16 +250,31 @@ Please ensure your code follows the project's coding standards by running the li
 
 This project is licensed under the Apache License 2.0. See the LICENSE file for details.
 
+## Attribution
+
+This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdown) by the original MarkPDFDown team.
+
+**Original Project:** https://github.com/MarkPDFdown/markpdfdown  
+**Original License:** Apache License 2.0
+
+**Enterprise Enhancements by Joseph Wright ([@ch0t4nk](https://github.com/ch0t4nk)):**
+- 🔧 Single Source of Truth (SSOT) Configuration System v3.0
+- 🔒 Enterprise Security Framework with API key protection and git history cleanup
+- 📚 Comprehensive documentation suite for enterprise adoption
+- 🛡️ Security best practices and incident response procedures
+- 🎯 Centralized configuration management with .env template system
+- 👥 Team collaboration features and secure onboarding procedures
+
 ## Acknowledgments
 
 - Thanks to the developers of the multimodal AI models that power this tool
 - Inspired by the need for better PDF to Markdown conversion tools
 
 [hub_url]: https://hub.docker.com/r/jorbenzhu/markpdfdown/
-[tag_url]: https://github.com/markpdfdown/markpdfdown/releases
-[license_url]: https://github.com/markpdfdown/markpdfdown/blob/main/LICENSE
+[tag_url]: https://github.com/ch0t4nk/markpdfdown/releases
+[license_url]: https://github.com/ch0t4nk/markpdfdown/blob/main/LICENSE
 
 [Size]: https://img.shields.io/docker/image-size/jorbenzhu/markpdfdown/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/jorbenzhu/markpdfdown.svg?style=flat&label=pulls&logo=docker
-[Tag]: https://img.shields.io/github/release/markpdfdown/markpdfdown.svg
-[License]: https://img.shields.io/github/license/markpdfdown/markpdfdown
+[Tag]: https://img.shields.io/github/release/ch0t4nk/markpdfdown.svg
+[License]: https://img.shields.io/github/license/ch0t4nk/markpdfdown
