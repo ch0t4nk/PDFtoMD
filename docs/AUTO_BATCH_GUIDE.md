@@ -12,16 +12,17 @@ auto_batch.bat
 
 ### All Platforms
 ```bash
-python auto_batch.py
+python batch/auto_batch.py
 ```
 
 That's it! The system will automatically:
-- 🔍 Find all PDFs in the `pdfs` folder
+- 🔍 Find all PDFs in the `examples/pdfs` folder
 - 📊 Estimate costs
 - 🚀 Submit to OpenAI Batch API
 - ⏰ Monitor progress
 - 📥 Download results
-- 📁 Organize outputs with timestamps
+- 📁 Organize outputs in clean structure
+- 🔧 Auto-lint for better formatting
 - 🧹 Clean up temporary files
 
 ## Table of Contents
@@ -30,6 +31,7 @@ That's it! The system will automatically:
 - [Installation & Setup](#installation--setup)
 - [Basic Usage](#basic-usage)
 - [Advanced Usage](#advanced-usage)
+- [Linting System](#linting-system)
 - [Configuration](#configuration)
 - [Cost Management](#cost-management)
 - [Output Structure](#output-structure)
@@ -42,12 +44,17 @@ That's it! The system will automatically:
 - **Zero interaction required** - Set it and forget it
 - **Smart progress monitoring** - Automatic status checks
 - **Intelligent cost estimation** - Know costs before processing
-- **Session-based organization** - Timestamped output folders
+- **Clean output organization** - All files in outputs/converted/
 
 ### 💰 **Cost Optimization**
 - **50% savings** with OpenAI Batch API vs standard API
 - **Detailed cost tracking** - Per-page and per-document analysis
 - **Smart batching** - Optimal request grouping
+
+### 🔧 **Local Linting System**
+- **Zero API cost** - Local formatting improvements
+- **Automatic cleanup** - PDF artifacts and formatting issues
+- **Significant optimization** - 30-40% file size reduction
 - **Cost alerts** - Configurable spending thresholds
 
 ### 🔄 **Robust Processing**
@@ -165,6 +172,59 @@ python monitor_batch.py batch_12345...
 python track_batch_cost.py batch_12345...
 ```
 
+### Utility Commands
+```bash
+# Show recent conversions
+python batch/auto_batch.py --list-recent
+
+# Daily cost summary
+python batch/auto_batch.py --summary
+
+# Manual cleanup
+python batch/auto_batch.py --cleanup
+```
+
+## Linting System
+
+### Local Markdown Linting (Zero API Cost)
+
+The system includes a powerful local linting engine that improves markdown formatting without any API costs:
+
+### Automatic Linting
+- **Built-in to batch processing** - Applied automatically after conversion
+- **No additional cost** - Runs locally on your machine
+- **Significant improvements** - 30-40% file size reduction typical
+
+### Manual Linting
+```bash
+# Lint all converted files
+python quick_lint.py outputs/converted
+
+# Lint single file
+python quick_lint.py myfile.md
+
+# Lint with custom pattern
+python utils/linting/markdown_linter.py outputs/converted --pattern "*.md"
+```
+
+### Linting Features
+- **Excessive newlines** → Clean spacing (3+ newlines → 2)
+- **Header spacing** → Proper blank lines around headers
+- **Table formatting** → Clean table structure and alignment
+- **List formatting** → Consistent bullet points and numbering
+- **Code blocks** → Proper fencing and formatting
+- **Image alt text** → Improved accessibility
+- **PDF artifacts** → Remove page numbers, weird spacing
+- **Whitespace cleanup** → Trailing spaces, mixed tabs/spaces
+- **Section numbering** → Clean header formatting
+
+### Linting Results Example
+```
+📊 Linting Results: 453KB → 277KB (39% reduction, 177KB saved)
+Files processed: 4 PDF conversions
+Total fixes applied: 22 formatting improvements
+```
+
 ## Configuration
 
 ### Configuration File Options
@@ -249,43 +309,58 @@ COST_ALERT_THRESHOLD = 5.00     # Require confirmation
 
 ## Output Structure
 
-### Session-Based Organization
+### Clean Organized Structure (New)
 ```
-converted_markdown/
-└── session_20250715_202045/
-    ├── markdown_files/
-    │   ├── document1_batch.md
-    │   ├── document2_batch.md
-    │   └── document3_batch.md
-    ├── cost_analysis.json
-    ├── README.md (session summary)
-    └── usage_stats_batch_xxxxx.json
+outputs/
+├── converted/           📝 All .md files with date prefixes
+│   ├── 20250716_document1_batch.md
+│   ├── 20250716_document2_batch.md
+│   └── 20250716_document3_batch.md
+├── metadata/           📊 Daily summaries and cost data
+│   ├── 20250716_summary.json
+│   └── 20250715_summary.json
+└── temp/               🗂️ Auto-cleaned temp files (24hr lifecycle)
 ```
 
 ### File Naming Convention
 - **Input**: `document.pdf`
-- **Output**: `document_batch.md`
-- **Session**: `session_YYYYMMDD_HHMMSS`
+- **Output**: `20250716_document_batch.md` (date prefixed)
+- **Metadata**: `20250716_summary.json` (daily aggregated)
 
-### Cost Analysis JSON
+### Daily Summary JSON
 ```json
 {
-  "batch_id": "batch_12345...",
-  "total_cost": 0.4676,
-  "total_tokens": 2890166,
-  "pages_processed": 93,
-  "cost_per_page": 0.0050,
+  "date": "20250716",
+  "total_cost": 1.1130,
+  "total_files": 4,
+  "total_pages": 189,
+  "average_cost_per_page": 0.0059,
+  "daily_totals": {
+    "total_cost": 1.1130,
+    "total_files": 4,
+    "total_pages": 189,
+    "average_cost_per_page": 0.0059
+  },
   "files": [
     {
       "filename": "document.pdf",
+      "output_file": "20250716_document_batch.md",
       "pages": 16,
       "cost": 0.0777,
       "tokens": 438572,
-      "cost_per_page": 0.0049
+      "cost_per_page": 0.0049,
+      "timestamp": "2025-07-16T12:55:24"
     }
   ]
 }
 ```
+
+### Benefits of New Structure
+- **📁 Easy access** - All converted files in one place
+- **📅 Date organization** - Files sorted by conversion date
+- **🧹 Auto cleanup** - Old temp files automatically removed
+- **📊 Daily summaries** - Aggregated cost tracking
+- **🔧 Auto-linted** - Files automatically formatted and optimized
 
 ## Troubleshooting
 

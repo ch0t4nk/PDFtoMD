@@ -1,3 +1,31 @@
+# Version: 2.1.0 - Clean Output Structure & Local Linting
+
+## 🚀 Major New Features
+
+### 🔧 Local Linting System (Zero API Cost)
+* **NEW**: `quick_lint.py` - Super-fast local markdown linting and formatting
+* **NEW**: Automatic linting integrated into batch processing workflow
+* **NEW**: 10+ formatting rules fixing PDF conversion artifacts
+* **NEW**: Significant file size optimization (30-40% reduction typical)
+* **NEW**: `utils/linting/markdown_linter.py` - Comprehensive linting engine
+* **FEATURE**: Fixes excessive newlines, header spacing, table formatting, list formatting
+* **FEATURE**: Removes PDF artifacts, cleans whitespace, improves image alt text
+* **FEATURE**: Code block cleanup, section numbering fixes, link formatting
+
+### 📁 Clean Output Structure
+* **NEW**: Simplified output organization: `outputs/converted/`, `outputs/metadata/`, `outputs/temp/`
+* **NEW**: Date-prefixed filenames (YYYYMMDD_filename_batch.md) for easy sorting
+* **NEW**: Daily metadata aggregation replacing scattered session files
+* **NEW**: Automatic temp file cleanup (24-hour lifecycle)
+* **NEW**: All converted files in single `outputs/converted/` folder for easy access
+* **ENHANCED**: Utility commands: `--list-recent`, `--summary`, `--cleanup`
+
+### 🧹 Automatic Cleanup & Maintenance
+* **NEW**: Smart temp file management with automatic 24-hour cleanup
+* **NEW**: Old metadata file removal (configurable retention period)
+* **NEW**: Session folder elimination (no more nested directory clutter)
+* **NEW**: `auto_cleanup_old_files()` method for scheduled maintenance
+
 # Version: 2.0.0 - Auto Batch Processing
 
 ## 🚀 Major New Features

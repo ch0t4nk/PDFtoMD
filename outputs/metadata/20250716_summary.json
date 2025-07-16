@@ -1,0 +1,20 @@
+{
+  "date": "20250716",
+  "sessions": [
+    {
+      "time": "12:55:25",
+      "session_id": "20250716_123822",
+      "batch_id": "batch_6877d5cf9db48190aff4f8e23e5e61c9",
+      "files_processed": 4,
+      "total_cost": 1.1130442499999993,
+      "pages_processed": 189,
+      "avg_cost_per_page": 0.0058891230158730126
+    }
+  ],
+  "daily_totals": {
+    "total_files": 4,
+    "total_cost": 1.1130442499999993,
+    "total_pages": 189,
+    "average_cost_per_page": 0.0058891230158730126
+  }
+}
