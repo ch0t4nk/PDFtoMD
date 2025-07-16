@@ -31,7 +31,8 @@
     "temp/**",
     "converted_markdown/**",
     "examples/outputs/**",
-    ".gitignore"
+    ".gitignore",
+    "vscode-chat-code-block:**"
   ],
   "cSpell.allowCompoundWords": true,
   "cSpell.diagnosticLevel": "Hint",
@@ -43,9 +44,13 @@
     "MD031": false,
     "MD032": false,
     "MD040": false,
+    "MD049": false,
+    "MD036": false,
     "default": true
   },
   "files.associations": {
     "*.md": "markdown"
-  }
+  },
+  "powershell.scriptAnalysis.settingsPath": ".vscode/PSScriptAnalyzerSettings.psd1",
+  "powershell.scriptAnalysis.enable": true
 }

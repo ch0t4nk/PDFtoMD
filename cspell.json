@@ -896,7 +896,8 @@
     "temp/**",
     "converted_markdown/**",
     "examples/outputs/**",
-    ".gitignore"
+    ".gitignore",
+    "vscode-chat-code-block:**"
   ],
   "overrides": [
     {

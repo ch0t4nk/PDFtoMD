@@ -191,6 +191,7 @@ venv/
 .vscode/launch.json
 .vscode/tasks.json
 .vscode/extensions.json
+.vscode/PSScriptAnalyzerSettings.psd1
 
 # Prevent duplicate files in root directory (actual files are in src/)
 # Python files that should only exist in src/
