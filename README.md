@@ -1,17 +1,14 @@
-<div align="center">
+# MarkPDFDown
 
-<h1>MarkPDFDown</h1>
-<p align="center">English</p>
+**English**
 
 [![License](https://img.shields.io/github/license/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
 
-<p>Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.</p>
+Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.
 
 ![markpdfdown](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/markpdfdown.png)
-
-</div>
 
 ## Overview
 
@@ -45,34 +42,32 @@ MarkPDFDown is designed to simplify the process of converting PDF documents into
 ## Installation
 
 ### Using uv (Recommended)
-`bash
-# Install uv if you haven't already
 
+```bash
+# Install uv if you haven't already
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone the repository
-
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Install dependencies and create virtual environment
-
 uv sync
-`
-### Using conda
-`bash
+```
+
+## Using conda
+
+```bash
 conda create -n markpdfdown python=3.9
 conda activate markpdfdown
 
 # Clone the repository
-
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Install dependencies
-
 pip install -e.
-`
+```
 ## Usage
 
 ### 🔧 Initial Setup (REQUIRED)
@@ -188,40 +183,38 @@ docker run -i -e OPENAI_API_KEY=your-api-key -e OPENAI_API_BASE=your-api-base -e
 
 This project uses `ruff` for linting and formatting, and `pre-commit` for automated code quality checks.
 
-#### Install development dependencies
-`bash
-# If using uv
+### Install development dependencies
 
+```bash
+# If using uv
 uv sync --group dev
 
 # If using pip
-
 pip install -e ".[dev]"
-`
-#### Set up pre-commit hooks
-`bash
-# Install pre-commit hooks
+```
 
+### Set up pre-commit hooks
+
+```bash
+# Install pre-commit hooks
 pre-commit install
 
 # Run pre-commit on all files (optional)
-
 pre-commit run --all-files
-`
-#### Code formatting and linting
-`bash
-# Format code with ruff
+```
 
+### Code formatting and linting
+
+```bash
+# Format code with ruff
 ruff format
 
 # Run linting checks
-
 ruff check
 
 # Fix auto-fixable issues
-
 ruff check --fix
-`
+```
 ## Requirements
 
 - Python 3.9+
@@ -260,7 +253,7 @@ This project is licensed under the Apache License 2.0. See the LICENSE file for 
 
 This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdown) by the original MarkPDFDown team.
 
-**Original Project:** https://github.com/MarkPDFdown/markpdfdown  
+**Original Project:** [MarkPDFDown Repository](https://github.com/MarkPDFdown/markpdfdown)  
 **Original License:** Apache License 2.0
 
 **Enterprise Enhancements by Joseph Wright ([@ch0t4nk](https://github.com/ch0t4nk)):**
