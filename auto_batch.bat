@@ -6,14 +6,14 @@ echo 🤖 Auto Batch PDF Converter for Windows
 echo.
 
 if "%1"=="" (
-    echo Using default folders: pdfs -^> converted_markdown
-    python auto_batch.py
+    echo Using default folders: examples\pdfs -^> outputs\converted_markdown
+    python -m batch.auto_batch
 ) else if "%2"=="" (
-    echo Using PDF folder: %1 -^> converted_markdown
-    python auto_batch.py "%1"
+    echo Using PDF folder: %1 -^> outputs\converted_markdown
+    python -m batch.auto_batch "%1"
 ) else (
     echo Using folders: %1 -^> %2
-    python auto_batch.py "%1" "%2"
+    python -m batch.auto_batch "%1" "%2"
 )
 
 if %ERRORLEVEL% EQU 0 (

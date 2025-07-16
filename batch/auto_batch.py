@@ -11,11 +11,11 @@ import json
 import shutil
 from pathlib import Path
 from datetime import datetime
-from master import PDFBatchMaster
-from batch_api import BatchPDFConverter
+from .master import PDFBatchMaster
+from .batch_api import BatchPDFConverter
 
 class AutoBatchProcessor:
-    def __init__(self, pdf_folder="pdfs", output_folder="converted_markdown"):
+    def __init__(self, pdf_folder="examples/pdfs", output_folder="outputs/converted_markdown"):
         self.pdf_folder = Path(pdf_folder)
         self.output_folder = Path(output_folder)
         self.master = PDFBatchMaster()
