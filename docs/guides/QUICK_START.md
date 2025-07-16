@@ -141,4 +141,4 @@ COST_ALERT_THRESHOLD=5.0
 
 ---
 
-**Happy batch processing!** 🚀 For questions, see the [main README](README.md) or [detailed guide](AUTO_BATCH_GUIDE.md).
+**Happy batch processing!** 🚀 For questions, see the [main README](../../README.md) or [detailed guide](AUTO_BATCH_GUIDE.md).

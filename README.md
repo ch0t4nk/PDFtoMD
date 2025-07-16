@@ -1,7 +1,7 @@
 <div align="center">
 
 <h1>MarkPDFDown</h1>
-<p align="center">English | <a href="./README_zh.md">中文</a> </p>
+<p align="center">English</p>
 
 [![Size]][hub_url]
 [![Pulls]][hub_url]
@@ -94,7 +94,7 @@ python config.py
 - 🔄 Easy environment switching (dev/prod/local)
 - 🛡️ Git history cleaned of any exposed keys
 
-See the [SSOT Configuration Guide](SSOT_GUIDE.md) and [Security Guide](SECURITY.md) for complete setup documentation.
+See the [SSOT Configuration Guide](docs/guides/SSOT_GUIDE.md) and [Security Guide](docs/security/SECURITY.md) for complete setup documentation.
 
 ### 🤖 Auto Batch Processing (Recommended)
 
@@ -136,7 +136,7 @@ python quick_lint.py outputs/converted
 
 python quick_lint.py myfile.md
 `
-See the [Auto Batch Guide](AUTO_BATCH_GUIDE.md) for complete documentation.
+See the [Auto Batch Guide](docs/guides/AUTO_BATCH_GUIDE.md) for complete documentation.
 
 ### Single File Processing
 

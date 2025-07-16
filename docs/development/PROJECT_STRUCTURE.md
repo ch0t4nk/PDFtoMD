@@ -2,46 +2,59 @@
 
 ## 📁 Project Organization
 
-This project has been completely reorganized for better maintainability, clarity, and ease of use. Here's the new structure:
-`
+This project has been completely reorganized for better maintainability, clarity, and ease of use. Here's the new structure with **Single Source of Truth (SSOT) Configuration**:
+
+```
 markpdfdown/
-├── 📁 core/ # Core application code
-│ ├── main.py # Single-file PDF converter
-│ ├── main_fast.py # Fast conversion variant
-│ └── workers/ # File processing workers (future)
+├── 🔧 config.py                     # ⭐ SSOT Configuration System
+├── 🔒 .env                          # Environment variables (DO NOT COMMIT)
+├── 📋 .env.template                 # Template for .env file
+├── 🚀 migrate_to_ssot.py           # Migration tool for SSOT
+├── 📊 launcher.py                   # Universal launcher script
+├── 📄 LICENSE                       # Apache 2.0 License
+├── 📝 COPYRIGHT                     # Copyright and attribution notices
+├── 👥 CONTRIBUTORS.md               # Project contributors and attributions
 │
-├── 📁 batch/ # Batch processing system (⭐ NEW!)
-│ ├── auto_batch.py # Main automated batch processor
-│ ├── batch_api.py # OpenAI Batch API interface
-│ ├── master.py # Batch management & analytics
-│ ├── monitor_batch.py # Real-time monitoring tools
-│ ├── track_batch_cost.py # Cost tracking utilities
-│ └── batch_convert.py # Batch conversion utilities
+├── 📁 src/                          # Source code (organized structure)
+│   ├── 📁 core/                     # Core application code
+│   │   ├── main.py                  # Single-file PDF converter
+│   │   ├── main_fast.py             # Fast conversion variant
+│   │   └── workers/                 # File processing workers (future)
+│   │
+│   ├── 📁 batch/                    # Batch processing system (⭐ NEW!)
+│   │   ├── auto_batch.py            # Main automated batch processor
+│   │   ├── batch_api.py             # OpenAI Batch API interface
+│   │   ├── master.py                # Batch management & analytics
+│   │   ├── monitor_batch.py         # Real-time monitoring tools
+│   │   ├── track_batch_cost.py      # Cost tracking utilities
+│   │   └── batch_convert.py         # Batch conversion utilities
+│   │
+│   ├── 📁 scripts/                  # Standalone scripts
+│   │   ├── auto_batch.py            # Entry point for batch processing
+│   │   ├── main.py                  # Entry point for single conversion
+│   │   ├── main_fast.py             # Entry point for fast conversion
+│   │   ├── master.py                # Entry point for batch management
+│   │   └── workspace_lint.py        # Workspace linting tool
+│   │
+│   └── 📁 utils/                    # Utility scripts & tools
+│       ├── conversion/              # Various conversion utilities
+│       │   ├── convert_any.py       # Any format converter
+│       │   ├── convert_direct.py    # Direct conversion
+│       │   ├── convert_fast.py      # Fast conversion
+│       │   └── convert_single.py    # Single file converter
+│       ├── testing/                 # Test utilities
+│       │   ├── test_*.py            # Various test scripts
+│       │   └── simple_llm_test.py
+│       └── combine_pages.py         # Page combination utility
 │
-├── 📁 utils/ # Utility scripts & tools
-│ ├── conversion/ # Various conversion utilities
-│ │ ├── convert_any.py # Any format converter
-│ │ ├── convert_direct.py # Direct conversion
-│ │ ├── convert_fast.py # Fast conversion
-│ │ └── convert_single.py # Single file converter
-│ ├── optimization/ # LM Studio optimization tools
-│ │ ├── lm_studio_optimizer.py
-│ │ ├── optimize_lm_studio.py
-│ │ ├── optimization_steps.py
-│ │ ├── check_lm_settings.py
-│ │ └── find_lm_configs.py
-│ ├── testing/ # Test utilities
-│ │ ├── test_*.py # Various test scripts
-│ │ └── simple_llm_test.py
-│ ├── combine_pages.py # Page combination utility
-│ └── switch_api.py # API switching utility
+├── 📁 tools/                        # External tools & utilities
+│   ├── conversion/                  # Conversion tools
+│   ├── optimization/                # LM Studio optimization tools
+│   └── testing/                     # Testing tools
 │
-├── 📁 config/ # Configuration files
-│ ├──.env.sample # Environment template
-│ ├── auto_batch_config_sample.py # Batch config template
-│ └── templates/ # Additional templates
-│
-├── 📁 docs/ # Documentation
+├── 📁 config/                       # Configuration templates
+│   ├── auto_batch_config_sample.py  # Batch config template
+│   └── templates/                   # Additional templates
 │ ├── README.md # Main documentation
 │ ├── QUICK_START.md # 30-second setup guide
 │ ├── AUTO_BATCH_GUIDE.md # Complete batch guide
@@ -211,4 +224,4 @@ cp config/auto_batch_config_sample.py auto_batch_config.py
 
 - *The new structure makes MarkPDFDown more professional, maintainable, and user-friendly!** 🎉
 
-For detailed usage instructions, see the [Quick Start Guide](docs/QUICK_START.md) and [Complete Documentation](docs/README.md).
+For detailed usage instructions, see the [Quick Start Guide](../guides/QUICK_START.md) and [Complete Documentation](../README.md).

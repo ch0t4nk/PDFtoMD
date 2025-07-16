@@ -456,7 +456,7 @@ master.cleanup()
 ## Support
 
 ### Getting Help
-- Check the [main README](README.md) for general setup
+- Check the [main README](../../README.md) for general setup
 - Review [troubleshooting](#troubleshooting) section above
 - Open an issue on GitHub for bugs or feature requests
 

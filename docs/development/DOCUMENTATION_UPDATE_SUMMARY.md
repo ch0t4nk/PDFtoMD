@@ -94,9 +94,9 @@ docs/
 ## 🚀 **Next Steps for Users**
 
 1. **Review Updated Documentation:**
-   - Start with [README.md](README.md) for overview
-   - Follow [QUICK_START.md](QUICK_START.md) for setup
-   - Read [SECURITY.md](SECURITY.md) for best practices
+   - Start with [README.md](../../README.md) for overview
+   - Follow [QUICK_START.md](../guides/QUICK_START.md) for setup
+   - Read [SECURITY.md](../security/SECURITY.md) for best practices
 
 2. **Migrate to SSOT:**
    - Copy `.env.template` to `.env`

@@ -85,7 +85,7 @@ auto_batch.bat
 - 🗂️ Organized output with timestamped session folders
 - 🧹 Automatic cleanup of temporary files
 
-See the [Auto Batch Guide](AUTO_BATCH_GUIDE.md) for complete documentation.
+See the [Auto Batch Guide](guides/AUTO_BATCH_GUIDE.md) for complete documentation.
 
 ### Single File Processing
 `bash

@@ -42,9 +42,9 @@ This project builds upon the excellent work of the original MarkPDFDown team and
 ## How to Contribute
 
 We welcome contributions! Please see our documentation for:
-- [Quick Start Guide](QUICK_START.md)
-- [SSOT Configuration Guide](SSOT_GUIDE.md) 
-- [Security Guidelines](SECURITY.md)
+- [Quick Start Guide](../guides/QUICK_START.md)
+- [SSOT Configuration Guide](../guides/SSOT_GUIDE.md) 
+- [Security Guidelines](../security/SECURITY.md)
 
 When contributing, please:
 1. Follow the existing code style
