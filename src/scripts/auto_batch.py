@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 """
 Auto Batch PDF Converter - Fully Automated PDF to Markdown Conversion
-Us        print("📊 Processing Estimates:")
-        print(f"   📄 Files: {len(pdf_files)}")
-        print(f"   📦 Total Size: {total_size:.1f} MB")
-        print(f"   📃 Estimated Pages: ~{estimated_pages}")
-        print(f"   🔢 Estimated Tokens: ~{estimated_tokens:,}")
-        print(f"   💰 Estimated Cost: ~${estimated_cost:.2f}")
-        print("   ⏱️  Estimated Time: 5-15 minutes")thon auto_batch.py [pdf_folder] [output_folder] [options]
+Usage: python auto_batch.py [pdf_folder] [output_folder] [options]
 """
 
 import os
@@ -236,11 +230,18 @@ class AutoBatchProcessor:
                     spec.loader.exec_module(linter_module)
                     MarkdownLinter = getattr(linter_module, 'MarkdownLinter', None)
             
-            if not MarkdownLinter:
+            if not MarkdownLinter or not callable(MarkdownLinter):
                 print("⚠️  Markdown linter not available, skipping linting")
                 return None
 
-            linter = MarkdownLinter()
+            try:
+                linter = MarkdownLinter()
+                if not hasattr(linter, 'lint_file') or not callable(getattr(linter, 'lint_file')):
+                    print("⚠️  Markdown linter invalid, skipping linting")
+                    return None
+            except (TypeError, AttributeError, ImportError):
+                print("⚠️  Markdown linter initialization failed, skipping linting")
+                return None
             converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
 
             if not converted_dir.exists():
@@ -318,7 +319,7 @@ class AutoBatchProcessor:
                     spec.loader.exec_module(embedder_module)
                     enhance_converted_files = getattr(embedder_module, 'enhance_converted_files', None)
             
-            if enhance_converted_files:
+            if enhance_converted_files and callable(enhance_converted_files):
                 # Prepare batch data for metadata enhancement
                 batch_data = {
                     'session_id': self.session_id,
@@ -344,8 +345,11 @@ class AutoBatchProcessor:
                         })
 
                 # Apply metadata enhancement
-                enhance_converted_files(str(config.DEFAULT_CONVERTED_FOLDER), batch_data, linting_stats)
-                print("✅ Metadata enhancement completed")
+                try:
+                    enhance_converted_files(str(config.DEFAULT_CONVERTED_FOLDER), batch_data, linting_stats)
+                    print("✅ Metadata enhancement completed")
+                except (TypeError, AttributeError, RuntimeError) as e:
+                    print(f"⚠️  Metadata enhancement failed: {e}")
             else:
                 print("⚠️  Metadata enhancement function not found, skipping")
 

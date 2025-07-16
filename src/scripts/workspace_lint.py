@@ -109,51 +109,63 @@ class WorkspaceLinter:
 
     def fix_markdown_file(self, file_path: Path) -> Dict:
         """Fix common markdown issues"""
+        # Use basic markdown fixes since advanced linter may not be available
+        return self._apply_basic_markdown_fixes(file_path)
+
+    def _apply_basic_markdown_fixes(self, file_path: Path) -> Dict:
+        """Apply basic markdown fixes without external linter"""
+        fixes = []
+        
         try:
-            # Try to import linting functionality dynamically
-            import importlib.util
-            utils_dir = Path(__file__).parent.parent / "utils"
-            linter_path = utils_dir / "linting" / "markdown_linter.py"
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
             
-            MarkdownLinter = None
-            if linter_path.exists():
-                spec = importlib.util.spec_from_file_location("markdown_linter", linter_path)
-                if spec and spec.loader:
-                    linter_module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(linter_module)
-                    MarkdownLinter = getattr(linter_module, 'MarkdownLinter', None)
+            original_content = content
             
-            if not MarkdownLinter or not callable(MarkdownLinter):
-                self.stats['errors'].append(f"Markdown linter not available for {file_path}")
-                return {'success': False, 'error': 'Linter not available'}
+            # Basic markdown fixes
+            lines = content.split('\n')
+            fixed_lines = []
             
-            try:
-                linter = MarkdownLinter()
-                result = linter.lint_file(str(file_path))
-            except (TypeError, AttributeError) as e:
-                self.stats['errors'].append(f"Error initializing markdown linter for {file_path}: {str(e)}")
-                return {'success': False, 'error': f'Linter initialization failed: {str(e)}'}
-
-            if 'error' not in result:
-                fixes_count = len(result.get('fixes', []))
-                if fixes_count > 0:
+            for i, line in enumerate(lines):
+                original_line = line
+                
+                # Remove trailing whitespace
+                line = line.rstrip()
+                if original_line != line:
+                    fixes.append(f"Line {i+1}: Removed trailing whitespace")
+                
+                # Fix excessive blank lines (max 2 consecutive)
+                if i > 0 and not line.strip() and not lines[i-1].strip():
+                    if len(fixed_lines) > 1 and not fixed_lines[-1].strip() and not fixed_lines[-2].strip():
+                        fixes.append(f"Line {i+1}: Removed excessive blank line")
+                        continue
+                
+                fixed_lines.append(line)
+            
+            # Ensure file ends with single newline
+            if fixed_lines and fixed_lines[-1].strip():
+                fixed_lines.append('')
+                fixes.append("Added final newline")
+            
+            new_content = '\n'.join(fixed_lines)
+            
+            # Only write if changes were made
+            if new_content != original_content:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(new_content)
+                
+                if fixes:
                     self.stats['files_with_fixes'] += 1
-                    self.stats['total_fixes'] += fixes_count
-                return {
-                    'success': True,
-                    'fixes': fixes_count,
-                    'size_reduction': result.get('size_reduction', 0),
-                    'fixes_list': result.get('fixes', [])
-                }
-            else:
-                self.stats['errors'].append(f"Markdown lint error in {file_path}: {result['error']}")
-                return {'success': False, 'error': result['error']}
-
-        except ImportError:
-            self.stats['errors'].append(f"Markdown linter not available for {file_path}")
-            return {'success': False, 'error': 'Linter not available'}
-        except (RuntimeError, OSError, ValueError) as e:
-            self.stats['errors'].append(f"Error processing {file_path}: {str(e)}")
+                    self.stats['total_fixes'] += len(fixes)
+            
+            return {
+                'success': True,
+                'fixes': len(fixes),
+                'fixes_list': fixes
+            }
+            
+        except (OSError, IOError, UnicodeError) as e:
+            self.stats['errors'].append(f"Error processing markdown file {file_path}: {str(e)}")
             return {'success': False, 'error': str(e)}
 
     def fix_python_file(self, file_path: Path) -> Dict:
