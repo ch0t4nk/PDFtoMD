@@ -115,55 +115,55 @@ class WorkspaceLinter:
     def _apply_basic_markdown_fixes(self, file_path: Path) -> Dict:
         """Apply basic markdown fixes without external linter"""
         fixes = []
-        
+
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+
             original_content = content
-            
+
             # Basic markdown fixes
             lines = content.split('\n')
             fixed_lines = []
-            
+
             for i, line in enumerate(lines):
                 original_line = line
-                
+
                 # Remove trailing whitespace
                 line = line.rstrip()
                 if original_line != line:
                     fixes.append(f"Line {i+1}: Removed trailing whitespace")
-                
+
                 # Fix excessive blank lines (max 2 consecutive)
                 if i > 0 and not line.strip() and not lines[i-1].strip():
                     if len(fixed_lines) > 1 and not fixed_lines[-1].strip() and not fixed_lines[-2].strip():
                         fixes.append(f"Line {i+1}: Removed excessive blank line")
                         continue
-                
+
                 fixed_lines.append(line)
-            
+
             # Ensure file ends with single newline
             if fixed_lines and fixed_lines[-1].strip():
                 fixed_lines.append('')
                 fixes.append("Added final newline")
-            
+
             new_content = '\n'.join(fixed_lines)
-            
+
             # Only write if changes were made
             if new_content != original_content:
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(new_content)
-                
+
                 if fixes:
                     self.stats['files_with_fixes'] += 1
                     self.stats['total_fixes'] += len(fixes)
-            
+
             return {
                 'success': True,
                 'fixes': len(fixes),
                 'fixes_list': fixes
             }
-            
+
         except (OSError, IOError, UnicodeError) as e:
             self.stats['errors'].append(f"Error processing markdown file {file_path}: {str(e)}")
             return {'success': False, 'error': str(e)}

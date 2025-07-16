@@ -187,6 +187,11 @@ venv/
 # MacOS ds_store files
 .DS_Store
 
+# VS Code workspace settings (keep spell check config)
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/extensions.json
+
 # Prevent duplicate files in root directory (actual files are in src/)
 # Python files that should only exist in src/
 /*.py

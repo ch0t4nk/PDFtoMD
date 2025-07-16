@@ -1,0 +1,47 @@
+{
+  "cSpell.enabled": true,
+  "cSpell.checkLimit": 500,
+  "cSpell.numSuggestions": 8,
+  "cSpell.minWordLength": 4,
+  "cSpell.maxNumberOfProblems": 100,
+  "cSpell.enabledFileTypes": {
+    "markdown": true,
+    "python": true,
+    "json": true,
+    "yaml": true,
+    "plaintext": true
+  },
+  "cSpell.ignorePaths": [
+    "node_modules/**",
+    ".git/**",
+    "dist/**", 
+    "build/**",
+    "coverage/**",
+    "**/*.log",
+    "**/*.pyc",
+    "**/__pycache__/**",
+    "**/.pytest_cache/**",
+    "**/.mypy_cache/**",
+    "**/.ruff_cache/**",
+    "uv.lock",
+    "**/*.lock",
+    "**/*.min.js",
+    "**/*.min.css",
+    "outputs/**",
+    "temp/**",
+    "converted_markdown/**",
+    "examples/outputs/**"
+  ],
+  "cSpell.allowCompoundWords": true,
+  "cSpell.diagnosticLevel": "Information",
+  "cSpell.showCommandsInEditorContextMenu": true,
+  "cSpell.showStatus": true,
+  "cSpell.spellCheckDelayMs": 50,
+  "markdownlint.config": {
+    "MD022": false,
+    "default": true
+  },
+  "files.associations": {
+    "*.md": "markdown"
+  }
+}

@@ -223,7 +223,7 @@ class AutoBatchProcessor:
             import importlib.util
             utils_dir = Path(__file__).parent.parent / "utils"
             linter_path = utils_dir / "linting" / "markdown_linter.py"
-            
+
             linter = None
             if linter_path.exists() and linter_path.stat().st_size > 0:
                 try:
@@ -231,7 +231,7 @@ class AutoBatchProcessor:
                     if spec and spec.loader:
                         linter_module = importlib.util.module_from_spec(spec)
                         spec.loader.exec_module(linter_module)
-                        
+
                         # Use getattr with try-except to handle dynamic instantiation
                         if hasattr(linter_module, 'MarkdownLinter'):
                             try:
@@ -243,7 +243,7 @@ class AutoBatchProcessor:
                                 linter = None
                 except (TypeError, AttributeError, ImportError, RuntimeError):
                     linter = None
-            
+
             if not linter:
                 print("⚠️  Markdown linter not available, skipping linting")
                 return None
@@ -315,7 +315,7 @@ class AutoBatchProcessor:
             import importlib.util
             utils_dir = Path(__file__).parent.parent / "utils"
             embedder_path = utils_dir / "metadata_embedder.py"
-            
+
             enhance_function = None
             if embedder_path.exists():
                 try:
@@ -327,7 +327,7 @@ class AutoBatchProcessor:
                             enhance_function = getattr(embedder_module, 'enhance_converted_files')
                 except (TypeError, AttributeError, ImportError, RuntimeError):
                     enhance_function = None
-            
+
             if enhance_function and callable(enhance_function):
                 # Prepare batch data for metadata enhancement
                 batch_data = {

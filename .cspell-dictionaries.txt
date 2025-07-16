@@ -1,0 +1,140 @@
+# MarkPDFDown Project Dictionary
+# This file contains project-specific terms that should be recognized as correctly spelled
+
+# Project Names and Brands
+markpdfdown
+MarkPDFDown
+pdfs
+PDFs
+
+# Technical Terms - AI/ML
+multimodal
+tokenization
+embeddings
+LLMs
+OpenAI
+langchain
+
+# Technical Terms - Configuration
+ssot
+SSOT
+config
+configs
+pyproject
+toml
+
+# Technical Terms - Development  
+linting
+linter
+docstrings
+async
+asyncio
+subprocess
+pathlib
+
+# Technical Terms - File Processing
+metadata
+preprocessing
+postprocessing
+serialization
+deserialization
+
+# Technical Terms - Security
+oauth
+OAuth
+https
+HTTPS
+csrf
+CSRF
+
+# Technical Terms - Infrastructure
+dockerfile
+Dockerfile
+kubernetes
+Kubernetes
+containerization
+microservices
+
+# API and Web Terms
+restful
+RESTful
+webhook
+webhooks
+endpoint
+endpoints
+
+# Data Terms
+json
+JSON
+yaml
+YAML
+csv
+CSV
+xml
+XML
+
+# Python Ecosystem
+pylint
+pytest
+uvicorn
+gunicorn
+pydantic
+tiktoken
+aiofiles
+
+# Package Managers
+conda
+pip
+pipenv
+poetry
+uv
+uvlock
+
+# Development Tools
+vscode
+VSCode
+github
+GitHub
+gitignore
+changelog
+CHANGELOG
+readme
+README
+
+# File Extensions and Formats
+md
+py
+txt
+log
+yml
+cfg
+ini
+
+# Common Programming Terms
+cli
+CLI
+api
+API
+sdk
+SDK
+url
+URLs
+uri
+URIs
+http
+HTTP
+tcp
+TCP
+ssl
+SSL
+tls
+TLS
+
+# Mathematical and Scientific Terms
+algorithm
+algorithms
+optimization
+optimization
+latency
+throughput
+scalability
