@@ -8,14 +8,14 @@ from pathlib import Path
 
 def convert_file_direct(file_path, output_file):
     """Convert file (PDF or image) directly using Python subprocess with stdin"""
-    
+
     try:
         # Read the file as binary
         with open(file_path, 'rb') as input_file:
             file_data = input_file.read()
-        
+
         print(f"📊 Input file size: {len(file_data):,} bytes")
-        
+
         # Run main.py with the file data as stdin
         start_time = time.time()
         process = subprocess.Popen(
@@ -25,20 +25,20 @@ def convert_file_direct(file_path, output_file):
             stderr=subprocess.PIPE,
             cwd=os.getcwd()
         )
-        
+
         stdout, stderr = process.communicate(input=file_data)
         end_time = time.time()
-        
+
         print(f"🔍 Process return code: {process.returncode}")
         if stderr:
             print(f"🚨 Stderr: {stderr.decode('utf-8', errors='ignore')}")
-        
+
         if process.returncode == 0:
             # Write the markdown output to file
             if stdout:
                 with open(output_file, 'w', encoding='utf-8') as f:
                     f.write(stdout.decode('utf-8', errors='ignore'))
-                
+
                 file_size = os.path.getsize(output_file)
                 return True, end_time - start_time, file_size, ""
             else:
@@ -46,13 +46,13 @@ def convert_file_direct(file_path, output_file):
         else:
             error_msg = stderr.decode('utf-8', errors='ignore') if stderr else "Unknown error"
             return False, end_time - start_time, 0, error_msg
-            
+
     except (OSError, subprocess.SubprocessError, UnicodeDecodeError) as e:
         return False, 0, 0, str(e)
 
 def convert_any_file(filename):
     """Convert any file (PDF or image) to Markdown"""
-    
+
     # Check if file exists in pdfs directory
     file_path = os.path.join("pdfs", filename)
     if not os.path.exists(file_path):
@@ -62,26 +62,26 @@ def convert_any_file(filename):
         for f in sorted(files):
             print(f"   - {f}")
         return False
-    
+
     # Prepare output
     file_name = Path(filename).stem
     output_dir = "converted"
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, f"{file_name}.md")
-    
+
     print(f"🔄 Converting: {filename}")
     print(f"📄 Input: {file_path}")
     print(f"📝 Output: {output_file}")
     print("-" * 40)
-    
+
     success, duration, file_size, error = convert_file_direct(file_path, output_file)
-    
+
     if success:
         print("✅ Conversion successful!")
         print(f"   ⏱️  Time: {duration:.1f} seconds")
         print(f"   📊 Output size: {file_size:,} bytes")
         print(f"   📁 Saved to: {output_file}")
-        
+
         # Show first few lines of output
         if file_size > 0:
             try:
@@ -90,7 +90,7 @@ def convert_any_file(filename):
                     print(f"\n📄 Preview:\n{content}...")
             except Exception as e:
                 print(f"⚠️  Could not preview output: {e}")
-        
+
         return True
     else:
         print("❌ Conversion failed!")
@@ -109,7 +109,7 @@ def main():
         else:
             print("   No pdfs/ directory found!")
         return
-    
+
     filename = sys.argv[1]
     convert_any_file(filename)
 

@@ -12,7 +12,7 @@ from datetime import datetime
 
 def test_metadata():
     print("🔧 Testing Metadata Header Creation...")
-    
+
     embedder = MetadataEmbedder()
     embedder.session_id = '20250716_123456'
     embedder.batch_id = 'batch_6877d5cf9db48190aff4f8e23e5e61c9'
@@ -23,7 +23,7 @@ def test_metadata():
         'fixes': 22,
         'size_reduction': 176683
     }
-    
+
     # Test header creation
     file_info = {
         'source_pdf': 'dm00105823-nucleo-f401re-user-manual.pdf',
@@ -32,12 +32,12 @@ def test_metadata():
         'cost_per_page': 0.0059,
         'tokens': 3424316
     }
-    
+
     header = embedder._create_file_header('20250716_dm00105823-nucleo-f401re-user-manual_batch.md', file_info)
     print("📝 Generated Header:")
     print(header)
     print("\n" + "="*60)
-    
+
     # Create a session summary
     batch_data = {
         'session_id': '20250716_123456',
@@ -52,10 +52,10 @@ def test_metadata():
             {'name': 'x-nucleo-ihm03a1_schematic.pdf', 'pages': 3, 'cost': 0.0189, 'cost_per_page': 0.0063, 'tokens': 115021, 'final_size': '17KB'}
         ]
     }
-    
+
     embedder.files_data = batch_data['files']
     summary = embedder._generate_session_summary_content(batch_data)
-    
+
     print("\n📊 Generated Session Summary Preview:")
     print(summary[:1000] + "..." if len(summary) > 1000 else summary)
 

@@ -71,10 +71,10 @@ def completion_fast(
 def convert_image_to_markdown_fast(image_path):
     """Fast image conversion with shorter prompt"""
     system_prompt = """Convert this image to Markdown. Output only Markdown text content, no image references."""
-    
+
     user_prompt = """Convert this document page to Markdown format:
 1. Extract all text, headings, tables
-2. Use proper Markdown syntax  
+2. Use proper Markdown syntax
 3. Include technical symbols and formulas
 4. DO NOT include any image references like ![](filename.png)
 5. Describe diagrams and images in text instead
@@ -94,22 +94,22 @@ def convert_image_to_markdown_fast(image_path):
 def clean_non_existent_image_references(markdown_content):
     """Remove image references that point to non-existent files"""
     import re
-    
+
     # Pattern to match markdown image references: ![alt text](filename)
     image_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
-    
+
     def check_image_exists(match):
         alt_text = match.group(1)
         image_path = match.group(2)
-        
+
         # Skip if it's already a proper relative path to our images directory
         if image_path.startswith('images/'):
             return match.group(0)  # Keep it
-        
+
         # Skip if it's a web URL
         if image_path.startswith(('http://', 'https://', 'www.')):
             return match.group(0)  # Keep it
-        
+
         # For local file references that don't exist, replace with text
         if not os.path.exists(image_path):
             logger.info(f"Removing non-existent image reference: {image_path}")
@@ -118,22 +118,22 @@ def clean_non_existent_image_references(markdown_content):
                 return f"**{alt_text}**"  # Convert to bold text
             else:
                 return ""  # Remove entirely
-        
+
         return match.group(0)  # Keep existing image if file exists
-    
+
     # Replace all image references
     cleaned_content = re.sub(image_pattern, check_image_exists, markdown_content)
-    
+
     # Clean up any double newlines that might result from removed images
     cleaned_content = re.sub(r'\n\n\n+', '\n\n', cleaned_content)
-    
+
     return cleaned_content
 
 
 if __name__ == "__main__":
     # Get configuration from environment variables set by convert_fast.py
     output_filename = os.environ.get('MARKPDF_OUTPUT_FILE', 'output.md')
-    
+
     start_page = 1
     end_page = 0
     if len(sys.argv) > 2:
@@ -198,57 +198,57 @@ if __name__ == "__main__":
     # convert to markdown with progress tracking
     markdown = ""
     total_pages = len(img_paths)
-    
+
     # Collect processing metadata
     processing_start_time = time.time()
     page_times = []
     total_content_length = 0
     cleaned_images_count = 0
-    
+
     for i, img_path in enumerate(sorted(img_paths), 1):
         img_path = img_path.replace("\\", "/")
         logger.info(f"Converting page {i}/{total_pages}: {os.path.basename(img_path)}")
-        
+
         page_start_time = time.time()
         content = convert_image_to_markdown_fast(img_path)
         page_end_time = time.time()
-        
+
         page_duration = page_end_time - page_start_time
         page_times.append(page_duration)
-        
+
         if content:
             # Clean up non-existent image references from LLM-generated content
             original_content_length = len(content)
             content = clean_non_existent_image_references(content)
             if len(content) < original_content_length:
                 cleaned_images_count += 1
-            
+
             total_content_length += len(content)
-            
+
             # Don't copy page screenshots - we only need the markdown content
             # Page screenshots (page_0001.jpg) are just temporary files for LLM processing
-            
+
             # Write individual page file to temp directory (will be cleaned up)
             page_md_file = os.path.join(output_dir, f"page_{i:04d}.md")
             with open(page_md_file, "w", encoding="utf-8") as f:
                 f.write(f"# Page {i}\n\n")
                 f.write(content)
-            
+
             # Add page to combined markdown without page image reference
             markdown += f"---\n# Page {i}\n---\n\n"
             markdown += content
             markdown += "\n\n"
-            
+
             logger.info(f"Page {i} completed in {page_duration:.1f}s")
-    
+
     processing_end_time = time.time()
     total_processing_time = processing_end_time - processing_start_time
-    
+
     # Add processing metadata to the end of the markdown
     avg_page_time = sum(page_times) / len(page_times) if page_times else 0
     fastest_page = min(page_times) if page_times else 0
     slowest_page = max(page_times) if page_times else 0
-    
+
     metadata = f"""---
 
 ## Processing Metadata
@@ -263,7 +263,7 @@ if __name__ == "__main__":
 - **Processed:** {time.strftime('%Y-%m-%d %H:%M:%S')}
 
 """
-    
+
     markdown += metadata
 
     # Output Markdown to stdout for convert_fast.py
@@ -273,11 +273,11 @@ if __name__ == "__main__":
     except (UnicodeEncodeError, AttributeError):
         # Fallback: write to stderr log only
         logger.info("Unicode encoding issue - markdown saved to files only")
-    
+
     logger.info("Fast conversion completed")
     logger.info(f"Processing completed in {total_processing_time:.1f}s (avg: {avg_page_time:.1f}s/page)")
     logger.info("No page images saved - only markdown content extracted")
-    
+
     # Clean up temporary output directory after copying images
     try:
         if os.path.exists(output_dir):
@@ -286,5 +286,5 @@ if __name__ == "__main__":
             logger.info(f"Temporary files cleaned up ({temp_files_count} files removed)")
     except Exception as e:
         logger.warning(f"Could not clean up temporary files: {e}")
-    
+
     exit(0)

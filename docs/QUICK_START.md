@@ -8,15 +8,14 @@
 4. **Wait**: Processing happens automatically with progress updates
 5. **Done**: Results in `converted_markdown/session_YYYYMMDD_HHMMSS/`
 
-**That's it!** ✨ You get 50% cost savings, automated monitoring, and organized outputs.
+- *That's it!** ✨ You get 50% cost savings, automated monitoring, and organized outputs.
 
----
+- --
 
 ## What Happens Automatically
-
-```
+`
 🤖 AUTO BATCH PROCESSING
-├── 🔍 Scan for PDFs (finds all .pdf files)
+├── 🔍 Scan for PDFs (finds all.pdf files)
 ├── 📊 Estimate costs (shows before processing)
 ├── 🚀 Submit to OpenAI Batch API (50% cheaper)
 ├── ⏰ Monitor progress (automatic status checks)
@@ -24,11 +23,9 @@
 ├── 💰 Analyze costs (detailed breakdown)
 ├── 📁 Organize outputs (timestamped folders)
 └── 🧹 Cleanup (removes temporary files)
-```
-
+`
 ## Example Run
-
-```bash
+`bash
 $ python auto_batch.py
 🚀 AUTOMATED BATCH PDF PROCESSING
 📁 Input Folder: pdfs
@@ -64,51 +61,49 @@ $ python auto_batch.py
 
 🎉 PROCESSING COMPLETE!
 📁 Results: converted_markdown\session_20250715_202045
-```
-
+`
 ## Cost Savings Example
 
 | Method | Cost per Page | 100 Pages | 1000 Pages |
-|--------|---------------|-----------|------------|
+|---|---|---|---|
 | Standard API | ~$0.010 | $1.00 | $10.00 |
 | **Batch API** | **~$0.005** | **$0.50** | **$5.00** |
 | **Savings** | **50%** | **$0.50** | **$5.00** |
 
 ## Output Structure
-
-```
+`
 converted_markdown/
 └── session_20250715_202045/
-    ├── markdown_files/
-    │   ├── document1_batch.md
-    │   ├── document2_batch.md
-    │   └── document3_batch.md
-    ├── cost_analysis.json
-    └── README.md (session summary)
-```
-
+ ├── markdown_files/
+ │ ├── document1_batch.md
+ │ ├── document2_batch.md
+ │ └── document3_batch.md
+ ├── cost_analysis.json
+ └── README.md (session summary)
+`
 ## Configuration (Optional)
 
 Create `auto_batch_config.py` for customization:
-
-```python
+`python
 # Basic settings
-DEFAULT_PDF_FOLDER = "my_pdfs"        # Input folder
-DEFAULT_OUTPUT_FOLDER = "converted"   # Output folder
+
+DEFAULT_PDF_FOLDER = "my_pdfs" # Input folder
+DEFAULT_OUTPUT_FOLDER = "converted" # Output folder
 
 # Quality settings
-TEMPERATURE = 0.05    # 0.0 = consistent, 1.0 = creative
-MAX_TOKENS = 8192     # Output length per page
+
+TEMPERATURE = 0.05 # 0.0 = consistent, 1.0 = creative
+MAX_TOKENS = 8192 # Output length per page
 
 # Cost controls
-COST_WARNING_THRESHOLD = 1.00   # Warn if cost > $1.00
-COST_ALERT_THRESHOLD = 5.00     # Alert if cost > $5.00
-```
 
+COST_WARNING_THRESHOLD = 1.00 # Warn if cost > $1.00
+COST_ALERT_THRESHOLD = 5.00 # Alert if cost > $5.00
+`
 ## Troubleshooting
 
 | Problem | Solution |
-|---------|----------|
+|---|---|
 | "No PDFs found" | Put PDFs in `pdfs/` folder |
 | "API key not set" | `export OPENAI_API_KEY="sk-..."` |
 | "Insufficient quota" | Check OpenAI billing dashboard |
@@ -121,6 +116,6 @@ COST_ALERT_THRESHOLD = 5.00     # Alert if cost > $5.00
 - 📊 Check cost analysis in the session folder
 - 🔄 Run `python monitor_batch.py batch_id` for live monitoring
 
----
+- --
 
-**Happy batch processing!** 🚀 For questions, see the [main README](README.md) or [detailed guide](AUTO_BATCH_GUIDE.md).
+- *Happy batch processing!** 🚀 For questions, see the [main README](README.md) or [detailed guide](AUTO_BATCH_GUIDE.md).

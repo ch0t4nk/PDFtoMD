@@ -7,32 +7,32 @@ from dotenv import load_dotenv
 def test_llm_client():
     """Test LLM client initialization and basic connectivity"""
     load_dotenv()
-    
+
     print("🔧 LLM Client Diagnostic Test")
     print("=" * 50)
-    
+
     try:
         # Import core modules
         from core.LLMClient import LLMClient
         print("✅ Successfully imported LLMClient")
-        
+
         # Get configuration
         api_key = os.getenv("OPENAI_API_KEY")
-        base_url = os.getenv("OPENAI_API_BASE") 
+        base_url = os.getenv("OPENAI_API_BASE")
         model = os.getenv("OPENAI_DEFAULT_MODEL")
-        
+
         if not all([api_key, base_url, model]):
             print("❌ Missing required environment variables")
             return False
-        
+
         print(f"🔗 Base URL: {base_url}")
         print(f"🤖 Model: {model}")
         print(f"🔑 API Key: {api_key}")
-        
+
         # Initialize client
         client = LLMClient(base_url=base_url, api_key=api_key, model=model)
         print("✅ LLM Client initialized successfully")
-        
+
         # Test basic functionality with a simple prompt
         print("\n🧪 Testing simple completion...")
         try:
@@ -46,7 +46,7 @@ def test_llm_client():
         except Exception as e:
             print(f"❌ LLM completion failed: {e}")
             return False
-            
+
     except ImportError as e:
         print(f"❌ Import error: {e}")
         return False

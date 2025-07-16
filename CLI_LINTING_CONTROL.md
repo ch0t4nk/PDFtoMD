@@ -7,38 +7,37 @@ The `auto_batch.py` script now supports several command-line options including *
 ## 🔧 **New CLI Options**
 
 ### **Disable Linting**
-```bash
+`bash
 python batch/auto_batch.py --no-lint
 python batch/auto_batch.py --skip-lint
 python batch/auto_batch.py pdfs output --no-lint
-```
-
+`
 ### **Disable Metadata Enhancement**
-```bash
+`bash
 python batch/auto_batch.py --no-metadata
-```
-
+`
 ### **Combine Options**
-```bash
+`bash
 python batch/auto_batch.py pdfs output --no-lint --no-metadata
-```
-
+`
 ## 📋 **Complete Usage Examples**
-
-```bash
+`bash
 # Default (everything enabled)
+
 python batch/auto_batch.py
 
 # Skip linting for faster processing
+
 python batch/auto_batch.py pdfs --no-lint
 
 # Skip both linting and metadata
+
 python batch/auto_batch.py pdfs output --no-lint --no-metadata
 
 # See all options
-python batch/auto_batch.py --help
-```
 
+python batch/auto_batch.py --help
+`
 ## 🚀 **What Changed**
 
 1. **Enhanced CLI Parser**: Now uses `argparse` for proper option handling

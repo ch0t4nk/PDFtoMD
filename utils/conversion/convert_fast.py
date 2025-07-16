@@ -9,24 +9,24 @@ from pathlib import Path
 
 def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
     """Convert PDF with parallel processing and optimized settings"""
-    
+
     process = None
     try:
         # Read the PDF file as binary
         with open(pdf_path, 'rb') as pdf_file:
             pdf_data = pdf_file.read()
-        
+
         print(f"📊 Input file size: {len(pdf_data):,} bytes")
-        
+
         # Run main.py with optimized environment
         start_time = time.time()
-        
+
         # Set optimized environment variables for faster processing
         env = os.environ.copy()
         env['OPENAI_MAX_TOKENS'] = '4096'  # Reduce max tokens for speed
         env['OPENAI_TEMPERATURE'] = '0.1'  # Lower temperature for speed
         env['MARKPDF_OUTPUT_FILE'] = output_file  # Pass output file name
-        
+
         process = subprocess.Popen(
             [sys.executable, 'main_fast.py'],  # We'll create this optimized version
             stdin=subprocess.PIPE,
@@ -35,19 +35,19 @@ def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
             cwd=os.getcwd(),
             env=env
         )
-        
+
         stdout, stderr = process.communicate(input=pdf_data, timeout=1800)  # 30 min timeout
         end_time = time.time()
-        
+
         print(f"🔍 Process return code: {process.returncode}")
         if stderr:
             print(f"🚨 Stderr: {stderr.decode('utf-8', errors='ignore')[:500]}...")
-        
+
         if process.returncode == 0:
             if stdout:
                 with open(output_file, 'w', encoding='utf-8') as f:
                     f.write(stdout.decode('utf-8', errors='ignore'))
-                
+
                 file_size = os.path.getsize(output_file)
                 return True, end_time - start_time, file_size, ""
             else:
@@ -55,7 +55,7 @@ def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
         else:
             error_msg = stderr.decode('utf-8', errors='ignore') if stderr else "Unknown error"
             return False, end_time - start_time, 0, error_msg
-            
+
     except subprocess.TimeoutExpired:
         if process:
             process.kill()
@@ -65,27 +65,27 @@ def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
 
 def convert_optimized(filename):
     """Convert with optimized settings"""
-    
+
     # Check if file exists
     file_path = os.path.join("pdfs", filename)
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
         return False
-    
+
     # Prepare output directories
     file_name = Path(filename).stem
     output_dir = "converted"
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, f"{file_name}_fast.md")
-    
+
     print(f"🚀 Fast Converting: {filename}")
     print(f"📄 Input: {file_path}")
     print(f"📝 Output: {output_file}")
     print("⚡ Using optimized settings...")
     print("-" * 50)
-    
+
     success, duration, file_size, error = convert_pdf_optimized(file_path, output_file)
-    
+
     if success:
         print("✅ Fast conversion successful!")
         print(f"   ⏱️  Time: {duration:.1f} seconds")
@@ -108,7 +108,7 @@ def main():
             for f in sorted(files):
                 print(f"   - {f}")
         return
-    
+
     filename = sys.argv[1]
     convert_optimized(filename)
 

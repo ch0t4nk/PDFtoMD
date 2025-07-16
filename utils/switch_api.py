@@ -41,26 +41,26 @@ def show_current():
     try:
         with open('.env', 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         if 'OPENAI_API_KEY="sk-' in content and not content.startswith('#'):
             print("🌐 Currently using: OpenAI API (Cloud)")
         elif 'OPENAI_API_KEY="lm-studio"' in content and not content.startswith('#'):
             print("🖥️  Currently using: LM Studio (Local)")
         else:
             print("❓ Configuration unclear")
-            
+
     except FileNotFoundError:
         print("❌ No .env file found")
 
 if __name__ == "__main__":
     import sys
-    
+
     print("🔄 API Provider Switcher")
     print("=" * 30)
-    
+
     show_current()
     print()
-    
+
     if len(sys.argv) > 1:
         if sys.argv[1].lower() in ['openai', 'cloud']:
             switch_to_openai()

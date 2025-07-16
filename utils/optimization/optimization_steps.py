@@ -54,7 +54,7 @@ print()
 
 print("✨ Configuration Files Modified:")
 print("   - C:\\Users\\joeyw\\.lmstudio\\.internal\\http-server-config.json")
-print("   - C:\\Users\\joeyw\\.lmstudio\\.internal\\conversation-config.json") 
+print("   - C:\\Users\\joeyw\\.lmstudio\\.internal\\conversation-config.json")
 print("   - Model-specific configs for all your models")
 print("   - Created: Performance_Optimized.preset.json")
 print()

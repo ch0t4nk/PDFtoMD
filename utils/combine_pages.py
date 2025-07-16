@@ -26,7 +26,7 @@ print(f"📄 Found {len(md_files)} page files")
 combined_content = ""
 for i, md_file in enumerate(md_files, 1):
     print(f"📝 Processing page {i}: {os.path.basename(md_file)}")
-    
+
     try:
         with open(md_file, 'r', encoding='utf-8') as f:
             content = f.read().strip()
@@ -43,11 +43,11 @@ os.makedirs("converted", exist_ok=True)
 try:
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(combined_content)
-    
+
     file_size = os.path.getsize(output_file)
     print(f"✅ Successfully created: {output_file}")
     print(f"📊 File size: {file_size:,} bytes")
     print(f"📄 Total pages: {len(md_files)}")
-    
+
 except Exception as e:
     print(f"❌ Error writing output file: {e}")
