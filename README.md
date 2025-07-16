@@ -3,8 +3,9 @@
 <h1>MarkPDFDown</h1>
 <p align="center">English</p>
 
-[![Tag]][tag_url]
-[![License]][license_url]
+[![License](https://img.shields.io/github/license/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
 
 <p>Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.</p>
 
@@ -274,9 +275,3 @@ This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdow
 
 - Thanks to the developers of the multimodal AI models that power this tool
 - Inspired by the need for better PDF to Markdown conversion tools
-
-[tag_url]: https://github.com/ch0t4nk/PDFtoMD/releases
-[license_url]: https://github.com/ch0t4nk/PDFtoMD/blob/main/LICENSE
-
-[Tag]: https://img.shields.io/github/release/ch0t4nk/PDFtoMD.svg
-[License]: https://img.shields.io/github/license/ch0t4nk/PDFtoMD
