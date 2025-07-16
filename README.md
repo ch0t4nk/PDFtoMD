@@ -3,14 +3,12 @@
 <h1>MarkPDFDown</h1>
 <p align="center">English</p>
 
-[![Size]][hub_url]
-[![Pulls]][hub_url]
 [![Tag]][tag_url]
 [![License]][license_url]
 
 <p>Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.</p>
 
-![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
+![markpdfdown](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/markpdfdown.png)
 
 </div>
 
@@ -40,7 +38,8 @@ MarkPDFDown is designed to simplify the process of converting PDF documents into
 - **🧹 Automatic Cleanup**: Smart temp file management and old file removal
 - **Customizable Model**: Configure the model to suit your needs
 
-## Demo![Image](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/demo_02.png)
+## Demo
+![Demo Image](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/demo_02.png)
 
 ## Installation
 
@@ -173,11 +172,14 @@ python src/scripts/main.py page_start page_end < tests/input.pdf > output.md
 ## Docker Usage
 
 ```bash
+# Build local Docker image first
+docker build -t markpdfdown .
+
 # Using SSOT configuration (mount .env file)
-docker run -i -v $(pwd)/.env:/app/.env jorbenzhu/markpdfdown < input.pdf > output.md
+docker run -i -v $(pwd)/.env:/app/.env markpdfdown < input.pdf > output.md
 
 # Legacy method (manual environment variables)
-docker run -i -e OPENAI_API_KEY=your-api-key -e OPENAI_API_BASE=your-api-base -e OPENAI_DEFAULT_MODEL=your-model jorbenzhu/markpdfdown < input.pdf > output.md
+docker run -i -e OPENAI_API_KEY=your-api-key -e OPENAI_API_BASE=your-api-base -e OPENAI_DEFAULT_MODEL=your-model markpdfdown < input.pdf > output.md
 ```
 ## Development Setup
 
@@ -273,11 +275,8 @@ This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdow
 - Thanks to the developers of the multimodal AI models that power this tool
 - Inspired by the need for better PDF to Markdown conversion tools
 
-[hub_url]: https://hub.docker.com/r/jorbenzhu/markpdfdown/
 [tag_url]: https://github.com/ch0t4nk/PDFtoMD/releases
 [license_url]: https://github.com/ch0t4nk/PDFtoMD/blob/main/LICENSE
 
-[Size]: https://img.shields.io/docker/image-size/jorbenzhu/markpdfdown/latest?color=066da5&label=size
-[Pulls]: https://img.shields.io/docker/pulls/jorbenzhu/markpdfdown.svg?style=flat&label=pulls&logo=docker
 [Tag]: https://img.shields.io/github/release/ch0t4nk/PDFtoMD.svg
 [License]: https://img.shields.io/github/license/ch0t4nk/PDFtoMD
