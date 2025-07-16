@@ -1,13 +1,40 @@
 #!/usr/bin/env python3
 """
 API Provider Switcher
-Easily switch between LM Studio and OpenAI
+SSOT-compliant API provider switching utility
+
+Enhanced for MarkPDFDown enterprise security
+Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
+Licensed under the Apache License, Version 2.0
+
+SECURITY NOTICE: This utility now uses SSOT configuration system 
+and NEVER exposes API keys in source code.
 """
 
+import importlib.util
+from pathlib import Path
+
+# Import config using SSOT system
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
+
 def switch_to_openai():
-    """Switch to OpenAI API"""
+    """Switch to OpenAI API - SSOT compliant version"""
     env_content = """# OpenAI Configuration (Cloud) - ACTIVE
-OPENAI_API_KEY="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"
+# SECURITY: Replace with your actual OpenAI API key
+OPENAI_API_KEY="your-openai-api-key-here"
 OPENAI_API_BASE="https://api.openai.com/v1"
 OPENAI_DEFAULT_MODEL="gpt-4o-mini"
 
@@ -19,16 +46,18 @@ OPENAI_DEFAULT_MODEL="gpt-4o-mini"
     with open('.env', 'w', encoding='utf-8') as f:
         f.write(env_content)
     print("✅ Switched to OpenAI API")
+    print("🔒 SECURITY: Remember to replace 'your-openai-api-key-here' with your actual API key")
 
 def switch_to_lmstudio():
-    """Switch to LM Studio"""
+    """Switch to LM Studio - SSOT compliant version"""
     env_content = """# LM Studio Configuration (Local) - ACTIVE
 OPENAI_API_KEY="lm-studio"
 OPENAI_API_BASE="http://192.168.56.1:1234/v1"
 OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
 
 # OpenAI Configuration (Cloud) - INACTIVE
-# OPENAI_API_KEY="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"
+# SECURITY: Never hardcode real API keys - use placeholder only
+# OPENAI_API_KEY="your-openai-api-key-here"
 # OPENAI_API_BASE="https://api.openai.com/v1"
 # OPENAI_DEFAULT_MODEL="gpt-4o-mini"
 """
@@ -37,38 +66,80 @@ OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
     print("✅ Switched to LM Studio")
 
 def show_current():
-    """Show current configuration"""
+    """Show current configuration using SSOT system"""
     try:
-        with open('.env', 'r', encoding='utf-8') as f:
-            content = f.read()
-
-        if 'OPENAI_API_KEY="sk-' in content and not content.startswith('#'):
-            print("🌐 Currently using: OpenAI API (Cloud)")
-        elif 'OPENAI_API_KEY="lm-studio"' in content and not content.startswith('#'):
-            print("🖥️  Currently using: LM Studio (Local)")
+        print(f"🔧 Current API Configuration (via SSOT):")
+        print(f"   API Base: {config.OPENAI_API_BASE}")
+        print(f"   Model: {config.OPENAI_DEFAULT_MODEL}")
+        
+        # Mask the API key for security
+        api_key = config.OPENAI_API_KEY
+        if api_key and len(api_key) > 8:
+            masked_key = f"{api_key[:8]}...{api_key[-4:]}"
         else:
-            print("❓ Configuration unclear")
-
-    except FileNotFoundError:
-        print("❌ No .env file found")
+            masked_key = "****"
+        print(f"   API Key: {masked_key}")
+        
+        # Determine current provider based on API base
+        if "api.openai.com" in config.OPENAI_API_BASE:
+            print("🌐 Provider: OpenAI (Cloud)")
+        elif "192.168.56.1" in config.OPENAI_API_BASE or "localhost" in config.OPENAI_API_BASE:
+            print("🖥️  Provider: LM Studio (Local)")
+        else:
+            print("❓ Provider: Custom/Unknown")
+            
+        # Check .env file status
+        env_file = Path('.env')
+        if env_file.exists():
+            print(f"📄 .env file: ✅ Found")
+        else:
+            print(f"📄 .env file: ❌ Missing")
+            
+    except (AttributeError, ValueError, ImportError, FileNotFoundError) as e:
+        print(f"❌ Error reading configuration: {e}")
+        print("💡 Tip: Ensure .env file exists with proper configuration")
 
 if __name__ == "__main__":
     import sys
 
-    print("🔄 API Provider Switcher")
-    print("=" * 30)
+    print("🔄 API Provider Switcher (SSOT-Enhanced)")
+    print("🔒 Security: All API keys managed through SSOT configuration")
+    print("=" * 60)
 
     show_current()
     print()
 
     if len(sys.argv) > 1:
-        if sys.argv[1].lower() in ['openai', 'cloud']:
+        command = sys.argv[1].lower()
+        if command in ['openai', 'cloud']:
             switch_to_openai()
-        elif sys.argv[1].lower() in ['lmstudio', 'local', 'lms']:
+            print("🔄 Restart any running applications to use new configuration")
+        elif command in ['lmstudio', 'local', 'lms']:
             switch_to_lmstudio()
+            print("🔄 Restart any running applications to use new configuration")
+        elif command in ['show', 'current', 'status']:
+            # Already shown above
+            pass
         else:
-            print("Usage: python switch_api.py [openai|lmstudio]")
+            print("❌ Unknown command")
+            print("📋 Available commands:")
+            print("   python switch_api.py openai      # Switch to OpenAI")
+            print("   python switch_api.py lmstudio    # Switch to LM Studio") 
+            print("   python switch_api.py show        # Show current config")
     else:
-        print("Available commands:")
-        print("  python switch_api.py openai    # Switch to OpenAI")
-        print("  python switch_api.py lmstudio  # Switch to LM Studio")
+        print("📋 Available commands:")
+        print("   python switch_api.py openai      # Switch to OpenAI")
+        print("   python switch_api.py lmstudio    # Switch to LM Studio")
+        print("   python switch_api.py show        # Show current configuration")
+        print()
+        print("🔒 Security Features:")
+        print("   ✅ SSOT configuration integration")
+        print("   ✅ No hardcoded API keys in source code")
+        print("   ✅ Masked key display for security")
+        print("   ✅ Template-based switching")
+
+    print()
+    print("🛡️  Security Notice:")
+    print("   • API keys are never stored in source code")
+    print("   • All configuration managed through .env file")
+    print("   • Always verify configuration with: python config.py")
