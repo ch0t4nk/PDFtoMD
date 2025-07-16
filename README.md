@@ -21,8 +21,12 @@ MarkPDFDown is designed to simplify the process of converting PDF documents into
 
 - **PDF to Markdown Conversion**: Transform any PDF document into well-formatted Markdown
 - **Image to Markdown Conversion**: Transform image into well-formatted Markdown
+- **🤖 Auto Batch Processing**: Fully automated batch conversion with OpenAI Batch API (50% cost savings)
 - **Multimodal Understanding**: Leverages AI to comprehend document structure and content
 - **Format Preservation**: Maintains headings, lists, tables, and other formatting elements
+- **💰 Cost Optimization**: Advanced cost tracking and optimization with detailed analytics
+- **📊 Progress Monitoring**: Real-time batch processing status and intelligent monitoring
+- **🗂️ Session Organization**: Timestamped output folders with comprehensive cost analysis
 - **Customizable Model**: Configure the model to suit your needs
 
 ## Demo
@@ -59,6 +63,33 @@ cd markpdfdown
 pip install -e .
 ```
 ## Usage
+
+### 🤖 Auto Batch Processing (Recommended)
+
+For processing multiple PDFs with **50% cost savings** using OpenAI Batch API:
+
+```bash
+# Quick start - process all PDFs in pdfs/ folder
+python auto_batch.py
+
+# Custom folders
+python auto_batch.py documents converted_docs
+
+# Windows users can double-click
+auto_batch.bat
+```
+
+**Features:**
+- ✅ Fully automated workflow (set it and forget it)
+- 💰 50% cost savings with OpenAI Batch API
+- 📊 Real-time progress monitoring and cost tracking  
+- 🗂️ Organized output with timestamped session folders
+- 🧹 Automatic cleanup of temporary files
+
+See the [Auto Batch Guide](AUTO_BATCH_GUIDE.md) for complete documentation.
+
+### Single File Processing
+
 ```bash
 # Set up your OpenAI API key
 export OPENAI_API_KEY="your-api-key"
