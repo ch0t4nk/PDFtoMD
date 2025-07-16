@@ -4,15 +4,26 @@
 
 The easiest way to convert multiple PDFs to Markdown using the OpenAI Batch API with **50% cost savings**:
 
+### Prerequisites
+1. **Configure API Key** (SSOT system):
+   ```bash
+   # Copy template and add your API key
+   cp .env.template .env
+   # Edit .env: OPENAI_API_KEY="sk-your-key"
+   
+   # Test configuration
+   python config.py
+   ```
+
 ### Windows Users
-Double-click `auto_batch.bat` or run:
+Double-click `auto_batch_launcher.bat` or run:
 ```cmd
-auto_batch.bat
+auto_batch_launcher.bat
 ```
 
 ### All Platforms
 ```bash
-python auto_batch.py
+python src/batch/auto_batch.py
 ```
 
 That's it! The system will automatically:

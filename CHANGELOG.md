@@ -1,3 +1,43 @@
+# Version: 3.0.0 - Single Source of Truth (SSOT) Configuration System
+
+## 🔧 MAJOR SECURITY & CONFIGURATION OVERHAUL
+
+### 🔒 **CRITICAL SECURITY IMPROVEMENTS**
+* **NEW**: Single Source of Truth (SSOT) configuration system via `config.py`
+* **NEW**: Centralized API key management - keys never hardcoded in source files
+* **NEW**: Secure `.env` template system for sharing configuration structure
+* **NEW**: API key removed from git history - complete security audit and cleanup
+* **NEW**: Environment switching support (development/production/LM Studio)
+
+### 🎯 **CENTRALIZED CONFIGURATION MANAGEMENT**
+* **NEW**: `config.py` - Complete SSOT system managing all settings from one location
+* **NEW**: `.env.template` - Secure template for environment variable setup
+* **NEW**: `migrate_to_ssot.py` - Automated migration tool for existing installations
+* **NEW**: All 35 Python files migrated to use centralized configuration (193 changes)
+* **NEW**: Eliminated all hardcoded paths and scattered os.getenv() calls
+
+### 📁 **COMPREHENSIVE SETTINGS MANAGEMENT**
+* **NEW**: API Configuration (key, base URL, model selection)
+* **NEW**: Directory Management (PDF input, outputs, temp, config folders)
+* **NEW**: Processing Settings (temperature, max tokens, DPI, timeouts)
+* **NEW**: Cost Management (warning/alert thresholds, tracking)
+* **NEW**: Feature Flags (linting, metadata, cleanup, session organization)
+
+### 🛡️ **SECURITY FEATURES**
+* **NEW**: API keys isolated to `.env` file only - never in source code
+* **NEW**: `.env` in `.gitignore` - never committed to version control
+* **NEW**: Template system for secure configuration sharing
+* **NEW**: Git history cleaned of exposed API keys
+* **NEW**: Migration from legacy environment variable setup
+
+### 🚀 **MIGRATION & COMPATIBILITY**
+* **NEW**: Automated migration tool updates all existing code
+* **NEW**: Backward compatibility maintained for existing workflows
+* **NEW**: All import paths updated for new `src/` structure
+* **NEW**: Launcher system enhanced for SSOT integration
+
+---
+
 # Version: 2.0.0 - Auto Batch Processing
 
 ## 🚀 Major New Features

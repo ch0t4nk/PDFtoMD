@@ -28,10 +28,19 @@ markpdfdown/
 
 ### 1. Configure Your API Key
 
-Edit `.env` file with your actual API key:
+**SECURE SETUP (Recommended):**
 ```bash
-# Copy your API key from .env.backup
-OPENAI_API_KEY="sk-your-actual-api-key-here"
+# Copy the template to create your .env file
+cp .env.template .env
+
+# Edit .env file and add your OpenAI API key
+# OPENAI_API_KEY="sk-your-actual-api-key-here"
+```
+
+**Alternative Setup:**
+```bash
+# Direct edit of .env file
+echo 'OPENAI_API_KEY="sk-your-actual-api-key-here"' > .env
 ```
 
 ### 2. Test Configuration
@@ -40,7 +49,7 @@ OPENAI_API_KEY="sk-your-actual-api-key-here"
 python config.py
 ```
 
-Should show:
+**Expected Output:**
 ```
 🔧 MarkPDFDown Configuration Summary
 ==================================================
@@ -48,6 +57,19 @@ Should show:
 📁 Output Folder: C:\Users\...\markpdfdown\outputs
 📁 Temp Folder: C:\Users\...\markpdfdown\temp
 🤖 Model: gpt-4o-mini
+🌡️  Temperature: 0.05
+🔢 Max Tokens: 8192
+💰 Cost Warning: $1.0
+🚨 Cost Alert: $5.0
+🔑 API Key: ✅ Configured
+🌐 API Base: https://api.openai.com/v1
+==================================================
+✅ Configuration test complete!
+```
+
+### 3. You're Ready!
+
+All tools now automatically use the SSOT configuration. No more manual environment variable setup!
 🌡️  Temperature: 0.05
 🔢 Max Tokens: 8192
 💰 Cost Warning: $1.0

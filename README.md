@@ -64,6 +64,30 @@ pip install -e.
 `
 ## Usage
 
+### 🔧 Initial Setup (REQUIRED)
+
+**Before first use, configure your API key using our secure SSOT system:**
+
+```bash
+# 1. Copy the template to create your .env file
+cp .env.template .env
+
+# 2. Edit .env and add your OpenAI API key
+# OPENAI_API_KEY="sk-your-actual-api-key-here"
+
+# 3. Test configuration
+python config.py
+```
+
+✅ **Security Features:**
+- 🔒 API keys never stored in source code
+- 📋 Template system for easy setup  
+- 🎯 Single Source of Truth for all settings
+- 🔄 Easy environment switching (dev/prod/local)
+- 🛡️ Git history cleaned of any exposed keys
+
+See the [SSOT Configuration Guide](SSOT_GUIDE.md) and [Security Guide](SECURITY.md) for complete setup documentation.
+
 ### 🤖 Auto Batch Processing (Recommended)
 
 For processing multiple PDFs with **50% cost savings** using OpenAI Batch API:
@@ -107,35 +131,43 @@ python quick_lint.py myfile.md
 See the [Auto Batch Guide](AUTO_BATCH_GUIDE.md) for complete documentation.
 
 ### Single File Processing
-`bash
-# Set up your OpenAI API key
 
+**Using the SSOT Configuration System:**
+```bash
+# Configuration is automatically loaded from .env file
+# No need to manually set environment variables!
+
+# PDF to markdown
+python src/scripts/main.py < tests/input.pdf > output.md
+
+# Image to markdown  
+python src/scripts/main.py < input_image.png > output.md
+```
+
+**Legacy Method (not recommended):**
+```bash
+# Manual environment variable setup (use SSOT instead)
 export OPENAI_API_KEY="your-api-key"
-
-# Optionally, set up your OpenAI API base
-
-export OPENAI_API_BASE="your-api-base"
-
-# Optionally, set up your OpenAI API model
-
+export OPENAI_API_BASE="your-api-base" 
 export OPENAI_DEFAULT_MODEL="your-model"
 
-# pdf to markdown
-
-python main.py < tests/input.pdf > output.md
-
-# image to markdown
-
-python main.py < input_image.png > output.md
-`
+python src/scripts/main.py < tests/input.pdf > output.md
+```
 ## Advanced Usage
-`bash
-python main.py page_start page_end < tests/input.pdf > output.md
-`
+
+```bash
+python src/scripts/main.py page_start page_end < tests/input.pdf > output.md
+```
+
 ## Docker Usage
-`bash
+
+```bash
+# Using SSOT configuration (mount .env file)
+docker run -i -v $(pwd)/.env:/app/.env jorbenzhu/markpdfdown < input.pdf > output.md
+
+# Legacy method (manual environment variables)
 docker run -i -e OPENAI_API_KEY=your-api-key -e OPENAI_API_BASE=your-api-base -e OPENAI_DEFAULT_MODEL=your-model jorbenzhu/markpdfdown < input.pdf > output.md
-`
+```
 ## Development Setup
 
 ### Code Quality Tools

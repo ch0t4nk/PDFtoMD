@@ -2,11 +2,17 @@
 
 ## TL;DR - 30 Second Setup
 
-1. **Set API Key**: `export OPENAI_API_KEY="sk-your-key"`
-2. **Add PDFs**: Put your PDFs in the `pdfs/` folder
-3. **Run**: `python auto_batch.py` (or double-click `auto_batch.bat` on Windows)
-4. **Wait**: Processing happens automatically with progress updates
-5. **Done**: Results in `converted_markdown/session_YYYYMMDD_HHMMSS/`
+1. **Configure API Key**: 
+   ```bash
+   # Copy template and edit with your API key
+   cp .env.template .env
+   # Edit .env: OPENAI_API_KEY="sk-your-key"
+   ```
+2. **Test Configuration**: `python config.py`
+3. **Add PDFs**: Put your PDFs in the `pdfs/` folder
+4. **Run**: `python src/batch/auto_batch.py` (or double-click `auto_batch_launcher.bat` on Windows)
+5. **Wait**: Processing happens automatically with progress updates
+6. **Done**: Results in `outputs/converted/session_YYYYMMDD_HHMMSS/`
 
 **That's it!** ✨ You get 50% cost savings, automated monitoring, and organized outputs.
 
@@ -77,32 +83,42 @@ $ python auto_batch.py
 ## Output Structure
 
 ```
-converted_markdown/
-└── session_20250715_202045/
-    ├── markdown_files/
-    │   ├── document1_batch.md
-    │   ├── document2_batch.md
-    │   └── document3_batch.md
-    ├── cost_analysis.json
-    └── README.md (session summary)
+outputs/
+├── converted/
+│   └── session_20250715_202045/
+│       ├── document1_batch.md
+│       ├── document2_batch.md
+│       └── document3_batch.md
+├── metadata/
+│   └── 20250715_summary.json
+└── temp/ (automatically cleaned up)
 ```
 
 ## Configuration (Optional)
 
-Create `auto_batch_config.py` for customization:
+All settings are managed through the SSOT configuration system in `config.py`:
 
 ```python
-# Basic settings
-DEFAULT_PDF_FOLDER = "my_pdfs"        # Input folder
-DEFAULT_OUTPUT_FOLDER = "converted"   # Output folder
+# Configuration is automatically loaded from .env
+# To customize, edit .env file:
 
-# Quality settings
-TEMPERATURE = 0.05    # 0.0 = consistent, 1.0 = creative
-MAX_TOKENS = 8192     # Output length per page
+# API Configuration
+OPENAI_API_KEY="sk-your-key"
+OPENAI_API_BASE="https://api.openai.com/v1" 
+OPENAI_DEFAULT_MODEL="gpt-4o-mini"
 
-# Cost controls
-COST_WARNING_THRESHOLD = 1.00   # Warn if cost > $1.00
-COST_ALERT_THRESHOLD = 5.00     # Alert if cost > $5.00
+# Directory Settings  
+PDF_FOLDER="pdfs"
+OUTPUT_FOLDER="outputs"
+TEMP_FOLDER="temp"
+
+# Processing Settings
+TEMPERATURE=0.05
+MAX_TOKENS=8192
+
+# Cost Controls
+COST_WARNING_THRESHOLD=1.0
+COST_ALERT_THRESHOLD=5.0
 ```
 
 ## Troubleshooting
@@ -110,15 +126,17 @@ COST_ALERT_THRESHOLD = 5.00     # Alert if cost > $5.00
 | Problem | Solution |
 |---------|----------|
 | "No PDFs found" | Put PDFs in `pdfs/` folder |
-| "API key not set" | `export OPENAI_API_KEY="sk-..."` |
+| "API key not set" | Run `python config.py` to check, edit `.env` file |
+| "Configuration error" | Copy `.env.template` to `.env` and configure |
 | "Insufficient quota" | Check OpenAI billing dashboard |
 | "Batch failed" | Check internet connection, try again |
 
 ## Next Steps
 
-- 📖 Read the [complete guide](AUTO_BATCH_GUIDE.md) for advanced features
-- ⚙️ Customize settings in `auto_batch_config.py`
-- 📊 Check cost analysis in the session folder
+- 📖 Read the [SSOT Configuration Guide](SSOT_GUIDE.md) for detailed setup
+- 📖 Read the [complete batch guide](AUTO_BATCH_GUIDE.md) for advanced features  
+- ⚙️ Customize settings in `.env` file
+- 📊 Check cost analysis in the outputs/metadata/ folder
 - 🔄 Run `python monitor_batch.py batch_id` for live monitoring
 
 ---

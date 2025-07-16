@@ -10,6 +10,10 @@ import sys
 import shutil
 from pathlib import Path
 from typing import Dict
+
+# Add project root to path for config import
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 from config import config
 
 # Add utils to path for importing
