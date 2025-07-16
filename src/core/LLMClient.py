@@ -84,10 +84,6 @@ class LLMClient:
                 messages=messages,  # type: ignore
                 temperature=temperature,
                 max_tokens=max_tokens,
-                extra_headers={
-                    "X-Title": "MarkPDFdown",
-                    "HTTP-Referer": "https://github.com/MarkPDFdown/markpdfdown.git",
-                },
             )
             return response.choices[0].message.content or ""
 
