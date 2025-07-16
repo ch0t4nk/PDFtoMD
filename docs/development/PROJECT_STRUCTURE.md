@@ -93,19 +93,19 @@ markpdfdown/
 ## 🚀 Quick Start (Updated Paths)
 
 ### Auto Batch Processing (Recommended)
-`bash
+```bash
 # Windows users - double click:
 
-auto_batch.bat
+auto_batch_launcher.bat
 
 # All platforms:
 
-python batch/auto_batch.py
+python src/batch/auto_batch.py
 
 # Custom folders:
 
-python batch/auto_batch.py "my_pdfs" "my_output"
-`
+python src/batch/auto_batch.py "my_pdfs" "my_output"
+```
 ### Single File Processing
 `bash
 # Core application:

@@ -39,8 +39,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone the repository
 
-git clone https://github.com/MarkPDFdown/markpdfdown.git
-cd markpdfdown
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
 
 # Install dependencies and create virtual environment
 
@@ -53,8 +53,8 @@ conda activate markpdfdown
 
 # Clone the repository
 
-git clone https://github.com/MarkPDFdown/markpdfdown.git
-cd markpdfdown
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
 
 # Install dependencies
 
@@ -197,10 +197,10 @@ This project is licensed under the Apache License 2.0. See the LICENSE file for 
 - Inspired by the need for better PDF to Markdown conversion tools
 
 [hub_url]: https://hub.docker.com/r/jorbenzhu/markpdfdown/
-[tag_url]: https://github.com/markpdfdown/markpdfdown/releases
-[license_url]: https://github.com/markpdfdown/markpdfdown/blob/main/LICENSE
+[tag_url]: https://github.com/ch0t4nk/PDFtoMD/releases
+[license_url]: https://github.com/ch0t4nk/PDFtoMD/blob/main/LICENSE
 
 [Size]: https://img.shields.io/docker/image-size/jorbenzhu/markpdfdown/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/jorbenzhu/markpdfdown.svg?style=flat&label=pulls&logo=docker
-[Tag]: https://img.shields.io/github/release/markpdfdown/markpdfdown.svg
-[License]: https://img.shields.io/github/license/markpdfdown/markpdfdown
+[Tag]: https://img.shields.io/github/release/ch0t4nk/PDFtoMD.svg
+[License]: https://img.shields.io/github/license/ch0t4nk/PDFtoMD

@@ -4,7 +4,14 @@
 <p align="center">English</p>
 
 [![Size]][hub_url]
-[![Pulls]][hub_url]
+[!```bash
+# Quick start - process all PDFs in examples/pdfs/ folder
+
+python src/batch/auto_batch.py
+
+# Custom folders
+
+python src/batch/auto_batch.py documents outputs[hub_url]
 [![Tag]][tag_url]
 [![License]][license_url]
 <p>Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.</p>![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
@@ -112,22 +119,22 @@ python batch/auto_batch.py documents outputs
 
 auto_batch.bat
 `
-- *Batch Processing Features:**
+- **Batch Processing Features:**
 - ✅ Fully automated workflow (set it and forget it)
 - 💰 50% cost savings with OpenAI Batch API
 - 📊 Real-time progress monitoring and cost tracking
-- � Clean output structure: converted/, metadata/, temp/
+- 🗂️ Clean output structure: converted/, metadata/, temp/
 - 🔧 Automatic markdown linting and formatting
 - 🧹 Smart cleanup of temporary files and old sessions
 
-- *Utility Commands:**
-`bash
-python batch/auto_batch.py --list-recent # Show recent conversions
-python batch/auto_batch.py --summary # Daily cost summary
-python batch/auto_batch.py --cleanup # Manual cleanup
-`
-- *Local Linting (Zero API Cost):**
-`bash
+- **Utility Commands:**
+```bash
+python src/batch/auto_batch.py --list-recent # Show recent conversions
+python src/batch/auto_batch.py --summary # Daily cost summary
+python src/batch/auto_batch.py --cleanup # Manual cleanup
+```
+- **Local Linting (Zero API Cost):**
+```bash
 # Lint all converted files
 
 python quick_lint.py outputs/converted
@@ -135,7 +142,7 @@ python quick_lint.py outputs/converted
 # Lint single file
 
 python quick_lint.py myfile.md
-`
+```
 See the [Auto Batch Guide](docs/guides/AUTO_BATCH_GUIDE.md) for complete documentation.
 
 ### Single File Processing

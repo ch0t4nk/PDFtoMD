@@ -94,7 +94,7 @@ set OPENAI_API_KEY=your-api-key-here
 
 ### 2. Verify Installation
 ```bash
-python auto_batch.py --help
+python src/batch/auto_batch.py --help
 ```
 
 Should display the usage information and confirm everything is working.
@@ -104,17 +104,17 @@ Should display the usage information and confirm everything is working.
 ### Default Processing
 Process all PDFs in the `pdfs` folder:
 ```bash
-python auto_batch.py
+python src/batch/auto_batch.py
 ```
 
 ### Custom Input Folder
 ```bash
-python auto_batch.py documents
+python src/batch/auto_batch.py documents
 ```
 
 ### Custom Input and Output
 ```bash
-python auto_batch.py documents converted_docs
+python src/batch/auto_batch.py documents converted_docs
 ```
 
 ### Example Complete Workflow
@@ -123,7 +123,7 @@ python auto_batch.py documents converted_docs
 cp *.pdf pdfs/
 
 # 2. Run the auto batch processor
-python auto_batch.py
+python src/batch/auto_batch.py
 
 # 3. Wait for completion (will show progress)
 # Results will be in: converted_markdown/session_YYYYMMDD_HHMMSS/
@@ -161,10 +161,10 @@ COST_WARNING_THRESHOLD = 2.00  # Alert at $2.00
 ### Processing Specific File Types
 ```bash
 # Process only files matching pattern
-python auto_batch.py --pattern "*.pdf"
+python src/batch/auto_batch.py --pattern "*.pdf"
 
 # Skip certain files
-python auto_batch.py --exclude "draft_*.pdf"
+python src/batch/auto_batch.py --exclude "draft_*.pdf"
 ```
 
 ### Monitoring Long-Running Batches
@@ -356,7 +356,7 @@ print(status)
 
 4. **View Detailed Logs**:
    ```bash
-   python auto_batch.py --verbose
+   python src/batch/auto_batch.py --verbose
    ```
 
 ### Performance Tips
