@@ -1,15 +1,14 @@
-<div align="center">
+# MarkPDFDown
 
-<h1>MarkPDFDown</h1>
-<p align="center"><a href="./README.md">English</a> | 中文 </p>
+[English](../README.md) | **中文**
 
-[![Size]][hub_url]
-[![Pulls]][hub_url]
-[![Tag]][tag_url]
-[![License]][license_url]
-<p>基于多模态大语言模型的PDF转Markdown工具，高质量实现文档结构化转换</p>![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
 
-</div>
+基于多模态大语言模型的PDF转Markdown工具，高质量实现文档结构化转换
+
+![markpdfdown](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/markpdfdown.png)
 
 ## 项目概述
 
@@ -23,39 +22,39 @@ MarkPDFDown 是一款智能PDF转换Markdown工具，通过先进的多模态AI�
 - **格式保留**：完整保留标题、列表、表格等排版元素
 - **模型定制**：支持自定义AI模型参数配置
 
-## 示例演示![Image](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/demo.png)
+## 示例演示
+
+![Demo Image](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/demo_02.png)
 
 ## 安装指南
 
 ### 使用 uv（推荐）
-`bash
-# 安装 uv（如果尚未安装）
 
+```bash
+# 安装 uv（如果尚未安装）
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 克隆仓库
-
-git clone https://github.com/MarkPDFdown/markpdfdown.git
-cd markpdfdown
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
 
 # 安装依赖并创建虚拟环境
-
 uv sync
-`
-### 使用 conda
-`bash
+```
+
+## 使用 conda
+
+```bash
 conda create -n markpdfdown python=3.9
 conda activate markpdfdown
 
 # 克隆仓库
-
-git clone https://github.com/MarkPDFdown/markpdfdown.git
-cd markpdfdown
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
 
 # 安装依赖
-
 pip install -e.
-`
+```
 ## 使用指南
 `bash
 # 设置OpenAI API密钥
@@ -163,15 +162,5 @@ ruff check --fix
 本项目采用 Apache License 2.0 开源协议，详见 LICENSE 文件。
 
 ## 致谢
-
 - 感谢多模态AI模型的技术支持
 - 受PDF转Markdown工具需求启发而开发
-
-[hub_url]: https://hub.docker.com/r/jorbenzhu/markpdfdown/
-[tag_url]: https://github.com/markpdfdown/markpdfdown/releases
-[license_url]: https://github.com/markpdfdown/markpdfdown/blob/main/LICENSE
-
-[Size]: https://img.shields.io/docker/image-size/jorbenzhu/markpdfdown/latest?color=066da5&label=size
-[Pulls]: https://img.shields.io/docker/pulls/jorbenzhu/markpdfdown.svg?style=flat&label=pulls&logo=docker
-[Tag]: https://img.shields.io/github/release/markpdfdown/markpdfdown.svg
-[License]: https://img.shields.io/github/license/markpdfdown/markpdfdown

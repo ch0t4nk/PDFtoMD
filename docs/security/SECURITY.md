@@ -135,7 +135,7 @@ grep "OPENAI_API_KEY" .env
 ```bash
 # New team member setup:
 # 1. Clone repository
-git clone https://github.com/your-org/markpdfdown.git
+git clone https://github.com/ch0t4nk/PDFtoMD.git
 
 # 2. Copy template
 cp .env.template .env

@@ -1,15 +1,14 @@
-<div align="center">
+# MarkPDFDown
 
-<h1>MarkPDFDown</h1>
-<p align="center">English | <a href="./README_zh.md">中文</a> </p>
+[English](../README.md) | [中文](./README_zh.md)
 
-[![Size]][hub_url]
-[![Pulls]][hub_url]
-[![Tag]][tag_url]
-[![License]][license_url]
-<p>A powerful tool that leverages multimodal large language models to transcribe PDF files into Markdown format.</p>![markpdfdown](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/markpdfdown.png)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
 
-</div>
+A powerful tool that leverages multimodal large language models to transcribe PDF files into Markdown format.
+
+![markpdfdown](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/markpdfdown.png)
 
 ## Overview
 
@@ -27,7 +26,9 @@ MarkPDFDown is designed to simplify the process of converting PDF documents into
 - **🗂️ Session Organization**: Timestamped output folders with comprehensive cost analysis
 - **Customizable Model**: Configure the model to suit your needs
 
-## Demo![Image](https://raw.githubusercontent.com/markpdfdown/markpdfdown/refs/heads/master/tests/demo_02.png)
+## Demo
+
+![Demo Image](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/demo_02.png)
 
 ## Installation
 
