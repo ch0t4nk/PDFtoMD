@@ -139,7 +139,7 @@ class AutoBatchProcessor:
         print(f"   📦 Total Size: {total_size_mb:.1f} MB")
         print(f"   📃 Estimated Pages: ~{estimated_pages}")
         print(f"   🔢 Estimated Tokens: ~{estimated_tokens:,}")
-        print(f"   💰 Estimated Cost: ~${estimated_cost:.2f}")
+        print(f"   💰 Estimated Cost: ~${estimated_cost:.4f}")
         print(f"   ⏱️  Estimated Time: 5-15 minutes")
 
         return {
@@ -468,37 +468,49 @@ class AutoBatchProcessor:
         """Clean up temporary files"""
         print(f"\n🧹 Cleaning up workspace...")
 
-        # Remove temp files but keep pdfs if they were copied
+        cleaned = 0
+        
+        # Clean up temp directory structure
+        temp_dir = config.DEFAULT_TEMP_FOLDER
+        if temp_dir and Path(temp_dir).exists():
+            temp_batch_dir = Path(temp_dir) / "temp_batch"
+            if temp_batch_dir.exists():
+                try:
+                    shutil.rmtree(temp_batch_dir)
+                    cleaned += 1
+                    print(f"   🗑️  Removed temp batch directory")
+                except (OSError, PermissionError):
+                    print(f"   ⚠️  Could not remove temp batch directory")
+
+        # Remove any remaining files in root (legacy cleanup)
         cleanup_patterns = [
-            "temp_batch",
             "batch_info_*.json",
-            "usage_stats_*.json",
-            str(config.DEFAULT_CONVERTED_FOLDER)
+            "usage_stats_*.json", 
+            "page_*.jpg"
         ]
 
-        cleaned = 0
         for pattern in cleanup_patterns:
-            if "*" in pattern:
-                for item in Path(".").glob(pattern):
-                    try:
-                        if item.is_dir():
-                            shutil.rmtree(item)
-                        else:
-                            item.unlink()
-                        cleaned += 1
-                    except (OSError, PermissionError):
-                        pass
-            else:
-                item = Path(pattern)
-                if item.exists():
-                    try:
-                        if item.is_dir():
-                            shutil.rmtree(item)
-                        else:
-                            item.unlink()
-                        cleaned += 1
-                    except (OSError, PermissionError):
-                        pass
+            for item in Path(".").glob(pattern):
+                try:
+                    if item.is_dir():
+                        shutil.rmtree(item)
+                    else:
+                        item.unlink()
+                    cleaned += 1
+                    print(f"   🗑️  Removed {item.name}")
+                except (OSError, PermissionError):
+                    print(f"   ⚠️  Could not remove {item.name}")
+
+        # Clean up converted directory (moved to session)
+        converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
+        if converted_dir.exists() and any(converted_dir.iterdir()):
+            try:
+                shutil.rmtree(converted_dir)
+                converted_dir.mkdir(exist_ok=True)  # Recreate empty
+                cleaned += 1
+                print(f"   🗑️  Cleaned converted directory")
+            except (OSError, PermissionError):
+                print(f"   ⚠️  Could not clean converted directory")
 
         print(f"✅ Cleaned up {cleaned} temporary items")
 

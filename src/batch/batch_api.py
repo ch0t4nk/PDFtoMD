@@ -206,7 +206,12 @@ Focus on creating clean, professional documentation that preserves all informati
             "submitted_at": time.time()
         }
 
-        with open(f"batch_info_{batch.id}.json", 'w') as f:
+        # Save batch info to temp directory instead of root
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        temp_batch_dir.mkdir(parents=True, exist_ok=True)
+        batch_info_file = temp_batch_dir / f"batch_info_{batch.id}.json"
+        
+        with open(batch_info_file, 'w') as f:
             json.dump(batch_info, f, indent=2)
 
         # Clean up local batch file
@@ -236,11 +241,12 @@ Focus on creating clean, professional documentation that preserves all informati
 
     def retrieve_results(self, batch_id):
         """Retrieve and process batch results"""
-        # Load batch info
-        batch_info_file = f"batch_info_{batch_id}.json"
+        # Load batch info from temp directory
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        batch_info_file = temp_batch_dir / f"batch_info_{batch_id}.json"
         file_mapping = {}
 
-        if os.path.exists(batch_info_file):
+        if batch_info_file.exists():
             try:
                 with open(batch_info_file, 'r') as f:
                     batch_info = json.load(f)
@@ -477,13 +483,17 @@ def main():
         converter.retrieve_results(batch_id)
 
     elif command == "list":
-        # List all batch info files
-        batch_files = Path(".").glob("batch_info_*.json")
-        for batch_file in batch_files:
-            batch_id = batch_file.name.replace("batch_info_", "").replace(".json", "")
-            print(f"📋 Found batch: {batch_id}")
-            converter.check_batch_status(batch_id)
-            print()
+        # List all batch info files from temp directory
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        if temp_batch_dir.exists():
+            batch_files = temp_batch_dir.glob("batch_info_*.json")
+            for batch_file in batch_files:
+                batch_id = batch_file.name.replace("batch_info_", "").replace(".json", "")
+                print(f"📋 Found batch: {batch_id}")
+                converter.check_batch_status(batch_id)
+                print()
+        else:
+            print("📋 No batch files found")
 
 if __name__ == "__main__":
     main()

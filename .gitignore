@@ -213,3 +213,12 @@ venv/
 /core/
 /utils/
 /tools/conversion/*_clean.py
+
+# Output directories and temporary files
+outputs/
+converted_markdown/
+temp/
+*.jpg
+page_*.jpg
+batch_info_batch_*.json
+test_report*.json
