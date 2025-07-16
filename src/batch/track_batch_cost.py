@@ -4,7 +4,7 @@ Batch Cost Tracker - Monitor batch progress and calculate exact costs
 """
 import time
 import json
-from master import PDFBatchMaster
+from .master import PDFBatchMaster
 
 def track_batch_cost():
     master = PDFBatchMaster()
@@ -72,7 +72,7 @@ def track_batch_cost():
         except KeyboardInterrupt:
             print("\n⏹️  Monitoring stopped by user")
             break
-        except Exception as e:
+        except (RuntimeError, OSError, ValueError) as e:
             print(f"❌ Error: {e}")
             time.sleep(30)
 

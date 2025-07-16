@@ -6,12 +6,19 @@ Fast access to local markdown linting
 
 import sys
 import os
+from pathlib import Path
 
-# Add utils to path for importing
-utils_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'utils')
-sys.path.insert(0, utils_path)
+# Add parent directories to path
+script_dir = Path(__file__).parent
+root_dir = script_dir.parent.parent
+sys.path.insert(0, str(root_dir))
 
-from utils.linting.markdown_linter import MarkdownLinter
+# Try to import the linter
+try:
+    from src.utils.linting.markdown_linter import MarkdownLinter
+except ImportError:
+    print("⚠️  Markdown linter not available")
+    sys.exit(1)
 
 def main():
     """Quick lint command"""
@@ -24,44 +31,44 @@ def main():
         print("\nThis will:")
         print("  ✅ Fix excessive newlines and spacing")
         print("  ✅ Clean up table formatting")
-        print("  ✅ Fix header spacing") 
+        print("  ✅ Fix header spacing")
         print("  ✅ Improve list formatting")
         print("  ✅ Remove PDF artifacts")
         print("  ✅ Clean up whitespace issues")
         print("  💾 Create .backup files automatically")
         return
-    
+
     target = sys.argv[1]
     linter = MarkdownLinter()
-    
+
     print(f"🚀 Quick linting: {target}")
-    
+
     if os.path.isfile(target):
         # Lint single file
         result = linter.lint_file(target)
         if 'error' in result:
             print(f"❌ {result['error']}")
             return
-        
+
         if result['fixes']:
             print(f"✅ Applied {len(result['fixes'])} fixes:")
             for fix in result['fixes']:
                 print(f"   • {fix}")
         else:
             print("ℹ️ No fixes needed - file looks good!")
-    
+
     elif os.path.isdir(target):
         # Lint directory
         result = linter.lint_directory(target)
         if 'error' in result:
             print(f"❌ {result['error']}")
             return
-        
+
         print(f"✅ Processed {result['files_processed']} files")
         print(f"✅ Applied {result['total_fixes']} total fixes")
         if result['total_size_reduction'] > 0:
             print(f"📉 Reduced size by {result['total_size_reduction']:,} bytes")
-    
+
     else:
         print(f"❌ Path not found: {target}")
 

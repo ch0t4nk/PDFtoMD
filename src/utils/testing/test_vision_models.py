@@ -4,7 +4,24 @@ from dotenv import load_dotenv
 import os
 from core.LLMClient import LLMClient
 import requests
-from config import config
+import importlib.util
+from pathlib import Path
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 load_dotenv()
 

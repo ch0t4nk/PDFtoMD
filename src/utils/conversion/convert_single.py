@@ -1,12 +1,31 @@
-# Single PDF to Markdown Converter
-# Usage: python convert_single.py <pdf_filename>
+"""
+Single PDF to Markdown Converter.
+
+Usage: python convert_single.py <pdf_filename>
+"""
 
 import os
 import sys
 import subprocess
 import time
 from pathlib import Path
-from config import config
+import importlib.util
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 def convert_single_pdf(pdf_filename):
     """Convert a single PDF file to Markdown"""
@@ -36,7 +55,8 @@ def convert_single_pdf(pdf_filename):
         # Use PowerShell to pipe the PDF content to main.py
         cmd = [
             "powershell", "-Command",
-            f'Get-Content "{pdf_path}" -Encoding Byte -Raw | C:/Python313/python.exe main.py > "{output_file}"'
+            f'Get-Content "{pdf_path}" -Encoding Byte -Raw | '
+            f'C:/Python313/python.exe src/core/main.py > "{output_file}"'
         ]
 
         start_time = time.time()
@@ -61,11 +81,15 @@ def convert_single_pdf(pdf_filename):
         return False
 
 def main():
+    """Main function for command-line usage."""
     if len(sys.argv) != 2:
         print("Usage: python convert_single.py <pdf_filename>")
         print("\nAvailable PDF files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
-            pdf_files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith('.pdf')]
+            pdf_files = [
+                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith('.pdf')
+            ]
             for f in sorted(pdf_files):
                 print(f"   - {f}")
         else:
@@ -74,6 +98,7 @@ def main():
 
     pdf_filename = sys.argv[1]
     convert_single_pdf(pdf_filename)
+
 
 if __name__ == "__main__":
     main()

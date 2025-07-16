@@ -1,15 +1,33 @@
-# Optimized Fast PDF Converter with parallel processing
+"""
+Optimized Fast PDF Converter with parallel processing.
+"""
 
 import os
 import sys
 import subprocess
 import time
-import concurrent.futures
 from pathlib import Path
-from config import config
+import importlib.util
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
-    """Convert PDF with parallel processing and optimized settings"""
+    """Convert PDF with parallel processing and optimized settings."""
+    # max_workers parameter kept for API compatibility but not used in current implementation
 
     process = None
     try:
@@ -29,7 +47,7 @@ def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
         env['MARKPDF_OUTPUT_FILE'] = output_file  # Pass output file name
 
         process = subprocess.Popen(
-            [sys.executable, 'main_fast.py'],  # We'll create this optimized version
+            [sys.executable, 'src/core/main_fast.py'],  # We'll create this optimized version
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -101,17 +119,22 @@ def convert_optimized(filename):
         return False
 
 def main():
+    """Main function for command-line usage."""
     if len(sys.argv) != 2:
         print("Usage: python convert_fast.py <pdf_filename>")
         print("\nAvailable PDF files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
-            files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith('.pdf')]
+            files = [
+                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith('.pdf')
+            ]
             for f in sorted(files):
                 print(f"   - {f}")
         return
 
     filename = sys.argv[1]
     convert_optimized(filename)
+
 
 if __name__ == "__main__":
     main()

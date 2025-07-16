@@ -1,0 +1,31 @@
+[MESSAGES CONTROL]
+# Disable less critical warnings
+disable=trailing-whitespace,
+        missing-final-newline,
+        line-too-long,
+        missing-module-docstring,
+        missing-class-docstring,
+        missing-function-docstring,
+        invalid-name,
+        unused-import,
+        unused-argument,
+        import-outside-toplevel,
+        wrong-import-order,
+        wrong-import-position,
+        f-string-without-interpolation,
+        unspecified-encoding,
+        logging-fstring-interpolation,
+        reimported,
+        redefined-outer-name
+
+[FORMAT]
+# Maximum number of characters on a single line
+max-line-length=120
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=10
+# Maximum number of locals for function / method body
+max-locals=20
+# Maximum number of return / yield for function / method body
+max-returns=10

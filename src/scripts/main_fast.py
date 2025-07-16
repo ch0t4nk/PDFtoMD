@@ -7,11 +7,55 @@ import sys
 import time
 
 from dotenv import load_dotenv
+import importlib.util
+from pathlib import Path
 
-from core import LLMClient
-from core.FileWorker import create_worker
-from core.Util import remove_markdown_warp
-from config import config
+# Import core modules using importlib for proper path resolution
+script_dir = Path(__file__).parent
+src_dir = script_dir.parent
+core_dir = src_dir / "core"
+
+# Import LLMClient module
+spec = importlib.util.spec_from_file_location("LLMClient", core_dir / "LLMClient.py")
+if spec and spec.loader:
+    LLMClient = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(LLMClient)
+else:
+    raise ImportError("Failed to load LLMClient")
+
+# Import FileWorker module
+spec = importlib.util.spec_from_file_location("FileWorker", core_dir / "FileWorker.py")
+if spec and spec.loader:
+    FileWorker = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(FileWorker)
+    create_worker = FileWorker.create_worker
+else:
+    raise ImportError("Failed to load FileWorker")
+
+# Import Util module
+spec = importlib.util.spec_from_file_location("Util", core_dir / "Util.py")
+if spec and spec.loader:
+    Util = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(Util)
+    remove_markdown_warp = Util.remove_markdown_warp
+else:
+    raise ImportError("Failed to load Util")
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -62,8 +106,8 @@ def completion_fast(
                 max_tokens=max_tokens,
             )
             return response
-        except Exception as e:
-            logger.error(f"LLM call failed: {str(e)}")
+        except (RuntimeError, ValueError, ConnectionError) as e:
+            logger.error("LLM call failed: %s", str(e))
             # If retry fails, wait for a while before retrying
             time.sleep(0.3)  # Reduced retry delay
     return ""
@@ -72,10 +116,10 @@ def completion_fast(
 def convert_image_to_markdown_fast(image_path):
     """Fast image conversion with shorter prompt"""
     system_prompt = """Convert this image to Markdown. Output only Markdown text content, no image references."""
-    
+
     user_prompt = """Convert this document page to Markdown format:
 1. Extract all text, headings, tables
-2. Use proper Markdown syntax  
+2. Use proper Markdown syntax
 3. Include technical symbols and formulas
 4. DO NOT include any image references like ![](filename.png)
 5. Describe diagrams and images in text instead
@@ -95,22 +139,22 @@ def convert_image_to_markdown_fast(image_path):
 def clean_non_existent_image_references(markdown_content):
     """Remove image references that point to non-existent files"""
     import re
-    
+
     # Pattern to match markdown image references: ![alt text](filename)
     image_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
-    
+
     def check_image_exists(match):
         alt_text = match.group(1)
         image_path = match.group(2)
-        
+
         # Skip if it's already a proper relative path to our images directory
         if image_path.startswith('images/'):
             return match.group(0)  # Keep it
-        
+
         # Skip if it's a web URL
         if image_path.startswith(('http://', 'https://', 'www.')):
             return match.group(0)  # Keep it
-        
+
         # For local file references that don't exist, replace with text
         if not os.path.exists(image_path):
             logger.info(f"Removing non-existent image reference: {image_path}")
@@ -119,22 +163,22 @@ def clean_non_existent_image_references(markdown_content):
                 return f"**{alt_text}**"  # Convert to bold text
             else:
                 return ""  # Remove entirely
-        
+
         return match.group(0)  # Keep existing image if file exists
-    
+
     # Replace all image references
     cleaned_content = re.sub(image_pattern, check_image_exists, markdown_content)
-    
+
     # Clean up any double newlines that might result from removed images
     cleaned_content = re.sub(r'\n\n\n+', '\n\n', cleaned_content)
-    
+
     return cleaned_content
 
 
 if __name__ == "__main__":
     # Get configuration from environment variables set by convert_fast.py
     output_filename = os.environ.get('MARKPDF_OUTPUT_FILE', 'output.md')
-    
+
     start_page = 1
     end_page = 0
     if len(sys.argv) > 2:
@@ -154,8 +198,8 @@ if __name__ == "__main__":
         exit(1)
 
     # Create output directory
-    output_dir = f"output/{time.strftime('%Y%m%d%H%M%S')}_fast"
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = config.DEFAULT_TEMP_FOLDER / f"output/{time.strftime('%Y%m%d%H%M%S')}_fast"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # File type detection (same as original)
     input_filename = os.path.basename(sys.stdin.buffer.name)
@@ -199,57 +243,57 @@ if __name__ == "__main__":
     # convert to markdown with progress tracking
     markdown = ""
     total_pages = len(img_paths)
-    
+
     # Collect processing metadata
     processing_start_time = time.time()
     page_times = []
     total_content_length = 0
     cleaned_images_count = 0
-    
+
     for i, img_path in enumerate(sorted(img_paths), 1):
         img_path = img_path.replace("\\", "/")
         logger.info(f"Converting page {i}/{total_pages}: {os.path.basename(img_path)}")
-        
+
         page_start_time = time.time()
         content = convert_image_to_markdown_fast(img_path)
         page_end_time = time.time()
-        
+
         page_duration = page_end_time - page_start_time
         page_times.append(page_duration)
-        
+
         if content:
             # Clean up non-existent image references from LLM-generated content
             original_content_length = len(content)
             content = clean_non_existent_image_references(content)
             if len(content) < original_content_length:
                 cleaned_images_count += 1
-            
+
             total_content_length += len(content)
-            
+
             # Don't copy page screenshots - we only need the markdown content
             # Page screenshots (page_0001.jpg) are just temporary files for LLM processing
-            
+
             # Write individual page file to temp directory (will be cleaned up)
             page_md_file = os.path.join(output_dir, f"page_{i:04d}.md")
             with open(page_md_file, "w", encoding="utf-8") as f:
                 f.write(f"# Page {i}\n\n")
                 f.write(content)
-            
+
             # Add page to combined markdown without page image reference
             markdown += f"---\n# Page {i}\n---\n\n"
             markdown += content
             markdown += "\n\n"
-            
+
             logger.info(f"Page {i} completed in {page_duration:.1f}s")
-    
+
     processing_end_time = time.time()
     total_processing_time = processing_end_time - processing_start_time
-    
+
     # Add processing metadata to the end of the markdown
     avg_page_time = sum(page_times) / len(page_times) if page_times else 0
     fastest_page = min(page_times) if page_times else 0
     slowest_page = max(page_times) if page_times else 0
-    
+
     metadata = f"""---
 
 ## Processing Metadata
@@ -264,7 +308,7 @@ if __name__ == "__main__":
 - **Processed:** {time.strftime('%Y-%m-%d %H:%M:%S')}
 
 """
-    
+
     markdown += metadata
 
     # Output Markdown to stdout for convert_fast.py
@@ -274,18 +318,18 @@ if __name__ == "__main__":
     except (UnicodeEncodeError, AttributeError):
         # Fallback: write to stderr log only
         logger.info("Unicode encoding issue - markdown saved to files only")
-    
+
     logger.info("Fast conversion completed")
     logger.info(f"Processing completed in {total_processing_time:.1f}s (avg: {avg_page_time:.1f}s/page)")
     logger.info("No page images saved - only markdown content extracted")
-    
+
     # Clean up temporary output directory after copying images
     try:
         if os.path.exists(output_dir):
             temp_files_count = len([f for f in os.listdir(output_dir) if os.path.isfile(os.path.join(output_dir, f))])
             shutil.rmtree(output_dir)
-            logger.info(f"Temporary files cleaned up ({temp_files_count} files removed)")
-    except Exception as e:
-        logger.warning(f"Could not clean up temporary files: {e}")
-    
+            logger.info("Temporary files cleaned up (%d files removed)", temp_files_count)
+    except (OSError, PermissionError) as e:
+        logger.warning("Could not clean up temporary files: %s", e)
+
     exit(0)

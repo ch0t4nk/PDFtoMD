@@ -3,13 +3,57 @@ import os
 import shutil
 import sys
 import time
+import importlib.util
+from pathlib import Path
 
 from dotenv import load_dotenv
 
-from core import LLMClient
-from core.FileWorker import create_worker
-from core.Util import remove_markdown_warp
-from config import config
+# Import core modules using importlib for proper path resolution
+script_dir = Path(__file__).parent
+src_dir = script_dir.parent
+core_dir = src_dir / "core"
+
+# Import LLMClient module
+spec = importlib.util.spec_from_file_location("LLMClient", core_dir / "LLMClient.py")
+if spec and spec.loader:
+    LLMClient = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(LLMClient)
+else:
+    raise ImportError("Failed to load LLMClient")
+
+# Import FileWorker module
+spec = importlib.util.spec_from_file_location("FileWorker", core_dir / "FileWorker.py")
+if spec and spec.loader:
+    FileWorker = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(FileWorker)
+    create_worker = FileWorker.create_worker
+else:
+    raise ImportError("Failed to load FileWorker")
+
+# Import Util module
+spec = importlib.util.spec_from_file_location("Util", core_dir / "Util.py")
+if spec and spec.loader:
+    Util = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(Util)
+    remove_markdown_warp = Util.remove_markdown_warp
+else:
+    raise ImportError("Failed to load Util")
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -72,8 +116,8 @@ def completion(
                 max_tokens=max_tokens,
             )
             return response
-        except Exception as e:
-            logger.error(f"LLM call failed: {str(e)}")
+        except (RuntimeError, ValueError, ConnectionError) as e:
+            logger.error("LLM call failed: %s", str(e))
             # If retry fails, wait for a while before retrying
             time.sleep(0.5)
     return ""
@@ -133,8 +177,8 @@ if __name__ == "__main__":
         exit(1)
 
     # Create output directory
-    output_dir = f"output/{time.strftime('%Y%m%d%H%M%S')}"
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = config.DEFAULT_TEMP_FOLDER / f"output/{time.strftime('%Y%m%d%H%M%S')}"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # Try to get extension from file name
     input_filename = os.path.basename(sys.stdin.buffer.name)

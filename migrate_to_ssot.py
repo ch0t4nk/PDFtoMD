@@ -70,7 +70,7 @@ def analyze_file(file_path: Path) -> Dict[str, List[str]]:
         if (issues["env_access"] or issues["hardcoded_paths"]) and not has_config_import:
             issues["missing_config_import"].append("File needs config import")
             
-    except Exception as e:
+    except (OSError, IOError, RuntimeError, ValueError) as e:
         print(f"Error analyzing {file_path}: {e}")
     
     return issues
@@ -117,7 +117,7 @@ def create_migration_plan(file_path: Path, issues: Dict[str, List[str]]) -> List
                     replacement
                 ))
         
-    except Exception as e:
+    except (OSError, IOError, RuntimeError, ValueError) as e:
         print(f"Error creating migration plan for {file_path}: {e}")
     
     return migrations
@@ -155,7 +155,7 @@ def apply_migrations(file_path: Path, migrations: List[Tuple[str, str, str]], ba
             file_path.write_text(content, encoding='utf-8')
             return True
         
-    except Exception as e:
+    except (OSError, IOError, RuntimeError, ValueError) as e:
         print(f"  ❌ Error applying migrations to {file_path}: {e}")
         return False
     

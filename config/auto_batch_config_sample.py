@@ -1,9 +1,9 @@
 # Auto Batch Configuration
 # Copy this to auto_batch_config.py and customize as needed
 
-# Default folders
-DEFAULT_PDF_FOLDER = "pdfs"
-DEFAULT_OUTPUT_FOLDER = "converted_markdown"
+# Default folders - these override the SSOT configuration if uncommented
+# DEFAULT_PDF_FOLDER = "examples/pdfs"
+# DEFAULT_OUTPUT_FOLDER = "outputs/converted"
 
 # Processing settings
 TEMPERATURE = 0.05  # Lower = more consistent

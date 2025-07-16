@@ -1,13 +1,7 @@
-#!/usr/bin/env python3
 """
-Auto Batch PDF Converter - Fully Automated PDF to Markdown Conversion
-Us        print("📊 Processing Estimates:")
-        print(f"   📄 Files: {len(pdf_files)}")
-        print(f"   📦 Total Size: {total_size:.1f} MB")
-        print(f"   📃 Estimated Pages: ~{estimated_pages}")
-        print(f"   🔢 Estimated Tokens: ~{estimated_tokens:,}")
-        print(f"   💰 Estimated Cost: ~${estimated_cost:.2f}")
-        print("   ⏱️  Estimated Time: 5-15 minutes")thon auto_batch.py [pdf_folder] [output_folder] [options]
+Auto Batch PDF Converter - Fully Automated PDF to Markdown Conversion.
+
+Usage: python auto_batch.py [pdf_folder] [output_folder] [options]
 """
 
 import os
@@ -16,9 +10,25 @@ import time
 import json
 import shutil
 import argparse
+import importlib.util
 from pathlib import Path
 from datetime import datetime
-from config import config
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 # Handle imports whether running as module or script
 try:
@@ -31,9 +41,11 @@ except ImportError:
     from batch.batch_api import BatchPDFConverter
 
 class AutoBatchProcessor:
-    def __init__(self, pdf_folder="examples/pdfs", output_folder="outputs/converted_markdown", enable_linting=True):
-        self.pdf_folder = Path(pdf_folder)
-        self.output_folder = Path(output_folder)
+    """Automated batch PDF processing with SSOT configuration compliance."""
+
+    def __init__(self, pdf_folder=None, output_folder=None, enable_linting=True):
+        self.pdf_folder = Path(pdf_folder) if pdf_folder else Path(str(config.DEFAULT_PDF_FOLDER))
+        self.output_folder = Path(output_folder) if output_folder else Path(str(config.DEFAULT_CONVERTED_FOLDER))
         self.enable_linting = enable_linting
         self.master = PDFBatchMaster()
         self.converter = BatchPDFConverter()
@@ -107,13 +119,13 @@ class AutoBatchProcessor:
         estimated_tokens = estimated_pages * 31000  # ~31k tokens per page
         estimated_cost = estimated_tokens * (0.150 / 1_000_000) * 1.1  # Input cost + small output cost
 
-        print(f"📊 Processing Estimates:")
+        print("📊 Processing Estimates:")
         print(f"   📄 Files: {len(pdf_files)}")
         print(f"   📦 Total Size: {total_size_mb:.1f} MB")
         print(f"   📃 Estimated Pages: ~{estimated_pages}")
         print(f"   🔢 Estimated Tokens: ~{estimated_tokens:,}")
         print(f"   💰 Estimated Cost: ~${estimated_cost:.2f}")
-        print(f"   ⏱️  Estimated Time: 5-15 minutes")
+        print("   ⏱️  Estimated Time: 5-15 minutes")
 
         return {
             "files": len(pdf_files),
@@ -174,7 +186,7 @@ class AutoBatchProcessor:
             if status == "completed":
                 print(f"✅ Batch completed in {elapsed/60:.1f} minutes!")
                 return True
-            elif status == "failed":
+            if status == "failed":
                 print("❌ Batch failed!")
                 return False
             else:
@@ -204,10 +216,13 @@ class AutoBatchProcessor:
         self.print_step("7a", "Applying markdown linting to converted files")
 
         try:
-            # Import linting functionality
-            from utils.linting.markdown_linter import MarkdownLinter
-
-            linter = MarkdownLinter()
+            # Try to import linting functionality
+            try:
+                from src.utils.linting.markdown_linter import MarkdownLinter
+                linter = MarkdownLinter()
+            except ImportError:
+                print("⚠️  Markdown linter not available, skipping linting")
+                return {}
             converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
 
             if not converted_dir.exists():
@@ -259,7 +274,7 @@ class AutoBatchProcessor:
         except ImportError:
             print("⚠️  Linting module not available, skipping")
             return None
-        except Exception as e:
+        except (OSError, RuntimeError, ValueError) as e:
             print(f"⚠️  Linting failed: {e}")
             return None
 
@@ -272,7 +287,11 @@ class AutoBatchProcessor:
         self.print_step("7c", "Adding metadata to converted files")
 
         try:
-            from utils.metadata_embedder import enhance_converted_files
+            try:
+                from src.utils.metadata_embedder import enhance_converted_files
+            except ImportError:
+                print("⚠️  Metadata embedder not available, skipping metadata enhancement")
+                return
 
             # Prepare batch data for metadata enhancement
             batch_data = {
@@ -305,7 +324,7 @@ class AutoBatchProcessor:
 
         except ImportError:
             print("⚠️  Metadata enhancement module not available, skipping")
-        except Exception as e:
+        except (RuntimeError, OSError, ValueError) as e:
             print(f"⚠️  Metadata enhancement failed: {e}")
 
     def analyze_costs(self, batch_id, estimates):
@@ -339,8 +358,8 @@ class AutoBatchProcessor:
             }
         }
 
-        print(f"\n📊 COST ANALYSIS SUMMARY")
-        print(f"{'='*50}")
+        print("\n📊 COST ANALYSIS SUMMARY")
+        print("=" * 50)
         print(f"💰 Estimated Cost: ${estimated_cost:.4f}")
         print(f"💰 Actual Cost: ${actual_cost:.4f}")
         print(f"💰 Difference: ${cost_diff:+.4f} ({cost_diff_pct:+.1f}%)")
@@ -415,7 +434,7 @@ class AutoBatchProcessor:
                         else:
                             item.unlink()
                         cleaned += 1
-                    except Exception:
+                    except (OSError, PermissionError):
                         pass
             else:
                 item = Path(pattern)
@@ -426,7 +445,7 @@ class AutoBatchProcessor:
                         else:
                             item.unlink()
                         cleaned += 1
-                    except Exception:
+                    except (OSError, PermissionError):
                         pass
 
         print(f"✅ Cleaned up {cleaned} temporary items")
@@ -455,11 +474,11 @@ class AutoBatchProcessor:
 
             # Step 5: Monitor batch
             if not self.monitor_batch(batch_id):
-                raise Exception("Batch processing failed")
+                raise RuntimeError("Batch processing failed")
 
             # Step 6: Retrieve results
             if not self.retrieve_results(batch_id):
-                raise Exception("Failed to retrieve results")
+                raise RuntimeError("Failed to retrieve results")
 
             # Step 7a: Apply linting (if enabled)
             linting_stats = self.apply_linting()
@@ -488,7 +507,7 @@ class AutoBatchProcessor:
 
             return True
 
-        except Exception as e:
+        except (RuntimeError, OSError, ValueError, TypeError) as e:
             self.print_banner("PROCESSING FAILED ❌", "❌")
             print(f"Error: {e}")
             print(f"Manual cleanup may be required.")
@@ -512,9 +531,9 @@ Safety:
 """)
 
     parser.add_argument('pdf_folder', nargs='?', default=str(config.DEFAULT_PDF_FOLDER),
-                       help='Input folder containing PDF files (default: pdfs)')
-    parser.add_argument('output_folder', nargs='?', default='converted_markdown',
-                       help='Output folder for converted files (default: converted_markdown)')
+                       help=f'Input folder containing PDF files (default: {config.DEFAULT_PDF_FOLDER})')
+    parser.add_argument('output_folder', nargs='?', default=str(config.DEFAULT_CONVERTED_FOLDER),
+                       help=f'Output folder for converted files (default: {config.DEFAULT_CONVERTED_FOLDER})')
     parser.add_argument('--no-lint', '--skip-lint', action='store_true',
                        help='Skip the markdown linting step (faster processing)')
     parser.add_argument('--no-metadata', action='store_true',

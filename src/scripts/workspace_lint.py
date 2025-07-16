@@ -14,7 +14,23 @@ from typing import Dict
 # Add project root to path for config import
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
-from config import config
+import importlib.util
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 # Add utils to path for importing
 utils_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'utils')
@@ -94,9 +110,29 @@ class WorkspaceLinter:
     def fix_markdown_file(self, file_path: Path) -> Dict:
         """Fix common markdown issues"""
         try:
-            from utils.linting.markdown_linter import MarkdownLinter
-            linter = MarkdownLinter()
-            result = linter.lint_file(str(file_path))
+            # Try to import linting functionality dynamically
+            import importlib.util
+            utils_dir = Path(__file__).parent.parent / "utils"
+            linter_path = utils_dir / "linting" / "markdown_linter.py"
+            
+            MarkdownLinter = None
+            if linter_path.exists():
+                spec = importlib.util.spec_from_file_location("markdown_linter", linter_path)
+                if spec and spec.loader:
+                    linter_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(linter_module)
+                    MarkdownLinter = getattr(linter_module, 'MarkdownLinter', None)
+            
+            if not MarkdownLinter or not callable(MarkdownLinter):
+                self.stats['errors'].append(f"Markdown linter not available for {file_path}")
+                return {'success': False, 'error': 'Linter not available'}
+            
+            try:
+                linter = MarkdownLinter()
+                result = linter.lint_file(str(file_path))
+            except (TypeError, AttributeError) as e:
+                self.stats['errors'].append(f"Error initializing markdown linter for {file_path}: {str(e)}")
+                return {'success': False, 'error': f'Linter initialization failed: {str(e)}'}
 
             if 'error' not in result:
                 fixes_count = len(result.get('fixes', []))
@@ -116,7 +152,7 @@ class WorkspaceLinter:
         except ImportError:
             self.stats['errors'].append(f"Markdown linter not available for {file_path}")
             return {'success': False, 'error': 'Linter not available'}
-        except Exception as e:
+        except (RuntimeError, OSError, ValueError) as e:
             self.stats['errors'].append(f"Error processing {file_path}: {str(e)}")
             return {'success': False, 'error': str(e)}
 
@@ -186,7 +222,7 @@ class WorkspaceLinter:
             else:
                 return {'success': True, 'fixes': 0, 'fixes_list': []}
 
-        except Exception as e:
+        except (OSError, IOError, UnicodeError) as e:
             self.stats['errors'].append(f"Error processing Python file {file_path}: {str(e)}")
             return {'success': False, 'error': str(e)}
 
@@ -323,7 +359,7 @@ def main():
         print("\n\n⚠️  Linting interrupted by user")
         linter.print_summary()
         sys.exit(1)
-    except Exception as e:
+    except (RuntimeError, OSError) as e:
         print(f"\n\n❌ Fatal error: {e}")
         linter.print_summary()
         sys.exit(1)

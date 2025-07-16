@@ -8,12 +8,28 @@ import os
 import json
 import time
 import uuid
+import sys
+import importlib.util
 from pathlib import Path
 from openai import OpenAI
 import base64
 from dotenv import load_dotenv
-import sys
-from config import config
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 # Load environment variables
 load_dotenv()
@@ -40,7 +56,7 @@ class BatchPDFConverter:
 
         # Create temporary directory for this PDF
         pdf_name = Path(pdf_path).stem
-        temp_dir = Path(f"temp_batch/{pdf_name}")
+        temp_dir = config.DEFAULT_TEMP_FOLDER / f"temp_batch/{pdf_name}"
         temp_dir.mkdir(parents=True, exist_ok=True)
 
         # Extract PDF pages
@@ -131,7 +147,7 @@ Focus on creating clean, professional documentation that preserves all informati
                     }
                     batch_requests.append(request)
 
-            except Exception as e:
+            except (OSError, IOError, ValueError) as e:
                 print(f"❌ Error processing {pdf_file}: {e}")
                 continue
 
@@ -202,7 +218,7 @@ Focus on creating clean, professional documentation that preserves all informati
                 print(f"❌ Failed: {batch.failed_at}")
 
             return batch
-        except Exception as e:
+        except (RuntimeError, ValueError, KeyError) as e:
             print(f"❌ Error checking batch: {e}")
             return None
 
@@ -217,7 +233,7 @@ Focus on creating clean, professional documentation that preserves all informati
                 with open(batch_info_file, 'r') as f:
                     batch_info = json.load(f)
                 file_mapping = batch_info.get("file_mapping", {})
-            except (json.JSONDecodeError, Exception) as e:
+            except (json.JSONDecodeError, OSError, IOError) as e:
                 print(f"⚠️  Corrupted batch info file, will reconstruct from results: {e}")
                 file_mapping = {}
 
@@ -282,7 +298,7 @@ Focus on creating clean, professional documentation that preserves all informati
                                     page_num = int(parts[1])
                                     file_mapping[custom_id] = (pdf_name, page_num, f"temp_batch/{pdf_name}")
 
-                    except Exception as e:
+                    except (json.JSONDecodeError, KeyError, ValueError, IndexError) as e:
                         print(f"⚠️  Error parsing result line: {e}")
 
             # Group results by PDF and create final markdown files
@@ -378,7 +394,7 @@ Focus on creating clean, professional documentation that preserves all informati
                         if temp_dir.exists():
                             import shutil
                             shutil.rmtree(temp_dir, ignore_errors=True)
-                    except Exception:
+                    except (OSError, PermissionError, RuntimeError):
                         continue  # Skip cleanup errors
 
             # Cleanup temp_batch directory if empty
@@ -389,7 +405,7 @@ Focus on creating clean, professional documentation that preserves all informati
             print(f"🎉 Batch processing completed! Generated {len(pdf_contents)} markdown files.")
             return True
 
-        except Exception as e:
+        except (OSError, RuntimeError, ValueError) as e:
             print(f"❌ Error retrieving results: {e}")
             return False
 

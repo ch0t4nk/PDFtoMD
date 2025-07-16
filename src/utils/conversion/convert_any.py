@@ -1,11 +1,29 @@
-# Universal File Converter (PDF/Image to Markdown)
+"""
+Universal File Converter (PDF/Image to Markdown).
+"""
 
 import os
 import sys
 import subprocess
 import time
 from pathlib import Path
-from config import config
+import importlib.util
+
+# Import config using relative path
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+config_path = root_dir / "config.py"
+
+if config_path.exists():
+    spec = importlib.util.spec_from_file_location("config", config_path)
+    if spec and spec.loader:
+        config_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config_module)
+        config = config_module.config
+    else:
+        raise ImportError("Failed to load config spec")
+else:
+    raise ImportError("Config file not found")
 
 def convert_file_direct(file_path, output_file):
     """Convert file (PDF or image) directly using Python subprocess with stdin"""
@@ -20,7 +38,7 @@ def convert_file_direct(file_path, output_file):
         # Run main.py with the file data as stdin
         start_time = time.time()
         process = subprocess.Popen(
-            [sys.executable, 'main.py'],
+            [sys.executable, 'src/core/main.py'],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -89,7 +107,7 @@ def convert_any_file(filename):
                 with open(output_file, 'r', encoding='utf-8') as f:
                     content = f.read()[:500]  # First 500 characters
                     print(f"\n📄 Preview:\n{content}...")
-            except Exception as e:
+            except (OSError, subprocess.SubprocessError, UnicodeDecodeError) as e:
                 print(f"⚠️  Could not preview output: {e}")
 
         return True
@@ -100,11 +118,15 @@ def convert_any_file(filename):
         return False
 
 def main():
+    """Main function for command-line usage."""
     if len(sys.argv) != 2:
         print("Usage: python convert_any.py <filename>")
         print("\nAvailable files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
-            files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))]
+            files = [
+                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))
+            ]
             for f in sorted(files):
                 print(f"   - {f}")
         else:
@@ -113,6 +135,7 @@ def main():
 
     filename = sys.argv[1]
     convert_any_file(filename)
+
 
 if __name__ == "__main__":
     main()
