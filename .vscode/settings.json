@@ -30,10 +30,11 @@
     "outputs/**",
     "temp/**",
     "converted_markdown/**",
-    "examples/outputs/**"
+    "examples/outputs/**",
+    ".gitignore"
   ],
   "cSpell.allowCompoundWords": true,
-  "cSpell.diagnosticLevel": "Information",
+  "cSpell.diagnosticLevel": "Hint",
   "cSpell.showCommandsInEditorContextMenu": true,
   "cSpell.showStatus": true,
   "cSpell.spellCheckDelayMs": 50,
