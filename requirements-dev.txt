@@ -1,0 +1,12 @@
+# MarkPDFDown - Development Dependencies
+# 
+# Additional tools for development, testing, and code quality
+# Install with: pip install -r requirements-dev.txt
+
+# Include production dependencies
+-r requirements.txt
+
+# Development and testing tools
+pre-commit>=4.2.0
+pytest==8.3.5
+ruff>=0.11.11

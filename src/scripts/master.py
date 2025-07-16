@@ -97,7 +97,7 @@ class PDFBatchMaster:
                 print(result.stderr)
                 return None
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             self.print_status(f"Error submitting batch: {e}", "ERROR")
             return None
 
@@ -125,7 +125,7 @@ class PDFBatchMaster:
                 'failed_at': batch.failed_at,
                 'usage': usage_info
             }
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             self.print_status(f"Error checking batch {batch_id}: {e}", "ERROR")
             return None
 
@@ -215,7 +215,7 @@ class PDFBatchMaster:
             self.print_status(f"Usage analysis saved to {usage_file}", "SUCCESS")
             return usage_stats
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             self.print_status(f"Error analyzing batch usage: {e}", "ERROR")
             return None
 
@@ -266,7 +266,7 @@ class PDFBatchMaster:
                 self.print_status(f"Failed to retrieve results: {result.stderr}", "ERROR")
                 return False
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             self.print_status(f"Error retrieving results: {e}", "ERROR")
             return False
 
@@ -281,7 +281,7 @@ class PDFBatchMaster:
                 status_info = self.check_batch_status(batch_id)
                 if status_info:
                     active_batches.append(status_info)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-except
                 self.print_status(f"Error processing {batch_file}: {e}", "WARNING")
 
         return active_batches
@@ -387,7 +387,7 @@ class PDFBatchMaster:
                     master_content.append(content)
                     master_content.append("\n\n---\n\n")
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-except
                 self.print_status(f"Error reading {batch_file}: {e}", "ERROR")
                 master_content.append(f"*Error reading {pdf_name}: {e}*\n\n")
 
@@ -410,7 +410,7 @@ class PDFBatchMaster:
             self.print_status(f"Master document created: {master_file} ({file_size:,} bytes)", "SUCCESS")
             return True
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             self.print_status(f"Error creating master document: {e}", "ERROR")
             return False
 
@@ -435,7 +435,7 @@ class PDFBatchMaster:
                         else:
                             item.unlink()
                         cleaned += 1
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-except
                         self.print_status(f"Could not remove {item}: {e}", "WARNING")
             else:
                 # Direct path
@@ -447,7 +447,7 @@ class PDFBatchMaster:
                         else:
                             item.unlink()
                         cleaned += 1
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-except
                         self.print_status(f"Could not remove {item}: {e}", "WARNING")
 
         self.print_status(f"Cleaned up {cleaned} items", "SUCCESS")

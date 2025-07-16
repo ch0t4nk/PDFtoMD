@@ -55,7 +55,25 @@ cd PDFtoMD
 uv sync
 ```
 
-## Using conda
+### Using pip
+
+```bash
+# Clone the repository
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
+
+# Create virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install production dependencies
+pip install -r requirements.txt
+
+# OR install development dependencies (includes testing tools)
+pip install -r requirements-dev.txt
+```
+
+### Using conda
 
 ```bash
 conda create -n markpdfdown python=3.9
@@ -66,7 +84,7 @@ git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Install dependencies
-pip install -e.
+pip install -r requirements.txt
 ```
 ## Usage
 

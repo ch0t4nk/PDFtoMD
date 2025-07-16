@@ -1,0 +1,15 @@
+# MarkPDFDown - Enterprise PDF to Markdown Conversion Tool
+# Production Dependencies
+# 
+# Core AI and PDF processing libraries for enterprise deployment
+# Compatible with Python 3.9+
+
+# OpenAI API client for multimodal AI processing
+openai==1.66.3
+
+# PDF processing and manipulation
+pymupdf==1.25.3
+pypdf2==3.0.1
+
+# Environment variable management for secure configuration
+python-dotenv>=1.1.0
