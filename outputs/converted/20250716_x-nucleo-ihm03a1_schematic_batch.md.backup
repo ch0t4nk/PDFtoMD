@@ -1,0 +1,215 @@
+---
+# Page 1
+---
+
+# X-NUCLEO-IHM03A1
+## Schematic (1/1)
+
+### Description
+This document contains the schematic for the X-NUCLEO-IHM03A1 evaluation board. The schematic includes various components, connections, and specifications necessary for understanding the board's functionality.
+
+### Components
+- **Microcontroller**: U1
+- **Power Supply**: Vin (50V MAX)
+- **LED Indicators**: D7 (Yellow), D8 (Green), D9 (Red)
+- **Resistors**: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23
+- **Capacitors**: C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22
+- **Diodes**: D1, D2, D3, D4, D5, D6, D10
+- **Connectors**: CON1, CON2, CON3, CON4, CON5, CON6, CON7, CON8, CON9, CON10, CON11, CON12, CON13, CON14, CON15, CON16, CON17, CON18, CON19, CON20, CON21, CON22
+
+### Connections
+- **Power Connections**: 
+  - VDD connected to various components
+  - Ground connections labeled as GND
+- **SPI Interface**: 
+  - SPI_CS, SPI_CLK, SPI_MISO, SPI_MOSI
+- **Motor Control**: 
+  - Single Motor: R3-R8
+
+### Technical Specifications
+- **Voltage Ratings**: 
+  - Vin: 50V MAX
+- **Resistor Values**: 
+  - R1: 330Ω
+  - R2: 330Ω
+  - R3: 10kΩ
+  - R4: 10kΩ
+  - R5: 10kΩ
+  - R6: 10kΩ
+  - R7: 10kΩ
+  - R8: 10kΩ
+  - R9: 10kΩ
+  - R10: 10kΩ
+  - R11: 10kΩ
+  - R12: 10kΩ
+  - R13: 10kΩ
+  - R14: 10kΩ
+  - R15: 10kΩ
+  - R16: 10kΩ
+  - R17: 10kΩ
+  - R18: 10kΩ
+  - R19: 10kΩ
+  - R20: 10kΩ
+  - R21: 10kΩ
+  - R22: 10kΩ
+- **Capacitor Values**: 
+  - C1: 100nF
+  - C2: 100nF
+  - C3: 100nF
+  - C4: 100nF
+  - C5: 100nF
+  - C6: 100nF
+  - C7: 220µF
+  - C8: 220µF
+  - C9: 220µF
+  - C10: 220µF
+  - C11: 220µF
+  - C12: 220µF
+  - C13: 220nF
+  - C14: 220nF
+  - C15: 220nF
+  - C16: 220nF
+  - C17: 220nF
+  - C18: 220nF
+  - C19: 220nF
+  - C20: 220nF
+  - C21: 220nF
+  - C22: 220nF
+
+### Notes
+- **Radial instead of SMD**: C16 & C17 instead of C14 & C15
+- **Single Motor Configuration**: R3-R8
+
+### Disclaimer
+Any information contained herein is provided subject to the evaluation board license agreement attached hereto and is provided "as is" and STMicroelectronics Group and its licensors make no warranty, whether expressed or implied, including but not limited to the quality, completeness, or fitness for a particular purpose.
+
+---
+# Page 2
+---
+
+# STMicroelectronics
+## EVALUATION BOARD LICENSE AGREEMENT
+
+By using this evaluation board or kit (together with all related software, firmware, components, and documentation provided by ST, "Evaluation Board"), You ("You") are agreeing to be bound by the terms and conditions of this Evaluation Board License Agreement ("Agreement"). Do not use the Evaluation Board until You have read and agreed to this Agreement. Your use of the Evaluation Board constitutes Your acceptance of this Agreement.
+
+## LICENSE
+STMicroelectronics ("ST") grants You the right to use the enclosed Evaluation Board offering limited features only to evaluate and test ST products solely for Your evaluation and testing purposes in a research and development setting. The Evaluation Board shall not be, in any case, directly or indirectly assembled as part in any production of Yours as it is solely developed to serve evaluation purposes and has no direct function and is not a finished product. If software and/or firmware is accompanied by a separate end user license agreement ("EULA"), then such software and/or firmware shall be governed by such EULA.
+
+## EVALUATION BOARD STATUS
+The Evaluation Board offers limited features allowing You only to evaluate and test the ST products. The Evaluation Board is not intended for consumer or household use. You are not authorized to use the Evaluation Board in any production system, and it may not be offered for sale or lease, or sold, leased or otherwise distributed for commercial purposes. If the Evaluation Board is incorporated in an evaluation system, the evaluation system may be used by You solely for Your evaluation and testing purposes. Such evaluation system may not be offered for sale or lease, sold, or otherwise distributed for commercial purposes and must be accompanied by a conspicuous notice as follows: "This device is not, and may not be, offered for sale or lease, or sold or leased or otherwise distributed for commercial purposes".
+
+## OWNERSHIP AND COPYRIGHT
+Title to the Evaluation Board remains with ST and/or its licensors. You may not remove any copyright or other proprietary rights notices without prior authorization from ST. You may make one copy of the software and/or firmware of the Evaluation Board for back up or archival purposes provided that You reproduce and apply to such copy any copyright or other proprietary rights notices included on or embedded in the software and/or firmware. You agree to prevent any unauthorized copying in whole or in part of the Evaluation Board.
+
+## RESTRICTIONS AND WARNINGS
+Before You handle or use the Evaluation Board, you must carefully review any related documentation provided by ST. Such documentation may contain important warnings. You shall comply with all such warnings and other instructions and employ reasonable safety precautions in using the Evaluation Board. Failure to do so may result in death, personal injury, or property damage. If You have any questions regarding the safe usage of the Evaluation Board, You should contact ST for guidance.
+
+You may not sell, assign, sublicense, lease, rent or otherwise distribute the Evaluation Board for commercial purposes, in whole or in part, or use Evaluation Board in a production system, with the exception that if You are an authorized ST distributor, you may resell the Evaluation Board in compliance with the applicable terms and conditions. Except as provided in this Agreement or as explicitly permitted in the documentation of the Evaluation Board, You may not reproduce the Evaluation Board or modify, reverse-engineer, de-compile or disassemble its software and/or firmware, in whole or in part.
+
+You shall not use the Evaluation Board in any safety critical or functional safety testing, including but not limited to testing of life supporting, military or nuclear applications. ST expressly disclaims any responsibility for such usage which shall be made at Your sole risk, even if ST has been informed in writing of such usage. Unless expressly designated in writing by ST as suitable for use in testing automotive or aerospace applications, you shall not use the Evaluation Boards in such testing.
+
+According to European Semiconductor Industry Association (ESIA) letter, "ESIA Response on WEEE Review (May 2008) of the Directive 2002/96/EC on Waste Electrical and Electronic Equipment (WEEE)"; Semiconductor products and evaluation and demonstration boards are not in the scope of the Directive 2002/96/EC of the European Parliament and of the Council on waste electrical and electronic equipment (WEEE). Consequently aforementioned products do not have to be registered nor are they subject to the subsequent obligations.
+
+## Notice applicable to Evaluation Boards not FCC-Approved
+This kit is designed to allow:
+1. Product developers to evaluate electronic components, circuitry, or software associated with the kit to determine whether to incorporate such items in a finished product and
+2. Software developers to write software applications for use with the product.
+
+This kit is not a finished product and when assembled may not be resold or otherwise marketed unless all required FCC equipment authorizations are first obtained. Operation is subject to the condition that this product not cause harmful interference to licensed radio stations and that it protects against harmful interference. Unless the assembled kit is designed to operate under part 15, part 18 or part 95 of 47 CFR, Chapter I ("FCC Rules"), the operator of the kit must operate under the authority of an FCC license holder or must secure an experimental authorization under part 5 of this chapter.
+
+## For Evaluation Boards annotated as FEDERAL COMMUNICATIONS COMMISSION (FCC) Part 15 Compliant
+- **FCC Interference Statement for Class A Evaluation Boards**: This equipment has been tested and found to comply with the limits for a Class A digital device, pursuant to part 15 of the FCC Rules. These limits are designed to provide reasonable protection against harmful interference when the equipment is operated in a commercial environment. This equipment generates, uses, and can radiate radio frequency energy and, if not installed and used in accordance with the instruction manual, may cause harmful interference to radio communications. Operation of this equipment in a residential area is likely to cause harmful interference in which case the user will be required to correct the interference at his own expense.
+
+- **FCC Interference Statement for Class B Evaluation Boards**: This equipment has been tested and found to comply with the limits for a Class B digital device, pursuant to part 15 of the FCC Rules. These limits are designed to provide reasonable protection against harmful interference in a residential installation. This equipment generates, uses and can radiate radio frequency energy and, if not installed and used in accordance with the instructions, may cause harmful interference to radio communications. There is no guarantee that interference will not occur in a particular installation. If this equipment does cause harmful interference to radio or television reception, which can be determined by turning the equipment off and on, the user is encouraged to try to correct the interference by one or more of the following measures:
+  - Increase the separation between the equipment and receiver.
+  - Connect the equipment to an outlet on a circuit different from that to which the receiver is connected.
+  - Consult the dealer or an experienced radio/TV technician for help.
+
+- This device complies with part 15 of the FCC Rules. Operation is subject to the following two conditions: (1) This device may not cause harmful interference, and (2) this device must accept any interference received, including interference that may cause
+
+---
+# Page 3
+---
+
+# STMicroelectronics Evaluation Board License Agreement (December 2014)
+
+## WARRANTY
+
+ST WARRANTS THAT IT HAS THE RIGHT TO PROVIDE THE EVALUATION BOARD TO YOU. THIS WARRANTY IS PROVIDED BY ST IN LIEU OF ALL OTHER WARRANTIES, WRITTEN OR ORAL, STATUTORY, EXPRESS OR IMPLIED, INCLUDING ANY WARRANTY AS TO MERCHANTABILITY, NON-INFRINGEMENT, FITNESS FOR ANY PARTICULAR PURPOSE, OR UNINTERRUPTED OR ERROR-FREE OPERATION, ALL OF WHICH ARE EXPRESSLY DISCLAIMED. THE EVALUATION BOARD IS PROVIDED "AS IS."
+
+YOU WARRANT TO ST THAT YOU WILL ENSURE THE EVALUATION BOARD IS USED ONLY BY ELECTRONICS EXPERTS WHO UNDERSTAND THE DANGERS OF HANDLING AND USING SUCH ITEMS; YOU ASSUME ALL RESPONSIBILITY AND LIABILITY FOR ANY IMPROPER OR UNSAFE HANDLING OR USE OF THE EVALUATION BOARD BY YOU, YOUR EMPLOYEES, AFFILIATES, CONTRACTORS, AND DESIGNERS.
+
+## LIMITATION OF LIABILITIES
+
+IN NO EVENT SHALL ST BE LIABLE TO YOU, WHETHER IN CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, OR ANY OTHER LEGAL THEORY, FOR ANY INDIRECT, SPECIAL, CONSEQUENTIAL, INCIDENTAL, PUNITIVE, OR EXEMPLARY DAMAGES WITH RESPECT TO ANY MATTERS RELATING TO THIS AGREEMENT, REGARDLESS OF WHETHER ST HAS BEEN ADVISED OF THE POSSIBILITY OF THE SAME. IN NO EVENT SHALL ST'S LIABILITY ARISING OUT OF THIS AGREEMENT IN THE AGGREGATE EXCEED THE AMOUNT PAID BY YOU UNDER THIS AGREEMENT FOR THE PURCHASE OF THE EVALUATION BOARD, OR TEN UNITED STATES DOLLARS ($10.00) IF NO PURCHASE PRICE WAS PAID.
+
+## INDEMNIFICATION
+
+You shall indemnify ST and its Affiliates against a claim or action brought by a third party for infringement or misappropriation of any patent, copyright, trade secret or other intellectual property right of a third party to the extent resulting from (1) Your combination of the Evaluation Board with any other component, system, software, or firmware, (2) Your modification of the Evaluation Board, or (3) Your use of the Evaluation Board in a manner not permitted under this Agreement. You shall indemnify ST and its Affiliates against any resulting costs and damages finally awarded against ST or its Affiliates or agreed to in any settlement, provided that You have sole control of the defense and settlement of the claim or action, and ST cooperates in the defense and furnishes all related evidence under its control at Your expense. ST will be entitled to participate in the defense of such claim or action and to employ counsel at its own expense.
+
+"Affiliates" means any corporation or other entity directly or indirectly controlled by, controlling or under common control with the entity in question, for so long as such ownership exists. "Control" means the direct or indirect beneficial ownership of more than fifty percent (50%) percent of the stock or other equity interests entitled to vote for the election of directors or an equivalent governing body. Any such corporation or other legal entity shall be deemed to be an Affiliate of such Party only as long as such Control exists.
+
+## TERMINATION
+
+ST may terminate this Agreement without notice if You breach this Agreement. Upon termination, You shall immediately destroy or return all copies of the software, firmware, and documentation of the Evaluation Board to ST and certify in writing to ST that You have done so.
+
+## APPLICABLE LAW AND JURISDICTION
+
+This Agreement shall be governed, construed and enforced in accordance with the laws of Switzerland, without regard to its conflict of laws rules. The UN Convention on Contracts for the International Sale of Goods shall not apply to this Agreement. In case of dispute and in the absence of an amicable settlement, the only competent jurisdiction shall be the Courts of Geneva, Switzerland. Any breach of this Agreement by You may result in irreparable damage to ST for which ST will not have an adequate remedy at law. Accordingly, in addition to any other remedies and damages available, You acknowledge and agree that ST may immediately seek enforcement of this Agreement in any jurisdiction by means of specific performance or injunction, without any requirement to post a bond or other security.
+
+## SEVERABILITY
+
+If any provision of this agreement is or becomes, at any time or for any reason, unenforceable or invalid, no other provision of this agreement shall be affected thereby, and the remaining provisions of this agreement shall continue with the same force and effect as if such unenforceable or invalid provisions had not been inserted in this Agreement. In addition, any unenforceable or invalid provision shall be deemed replaced by a provision that is valid and enforceable and that comes closest to expressing the intention of the unenforceable or invalid provision.
+
+## WAIVER
+
+The waiver by either party of any breach of any provision of this Agreement shall not operate or be construed as a waiver of any other or a subsequent breach of the same or a different provision.
+
+## RELATIONSHIP OF THE PARTIES
+
+Nothing in this Agreement shall create, or be deemed to create, any joint venture, partnership, principal-agent, employer-employee or other relationship between the Parties, except that of independent contractors. Neither Party has the authority or power to bind, to contract in the name of, or to create a liability for the other in any way or for any purpose.
+
+## SURVIVAL
+
+Any provision of this Agreement which imposes an obligation after termination of this Agreement shall survive the termination of this Agreement.
+
+## SECTION HEADINGS
+
+Section headings are inserted for convenience only and shall not be used to interpret this Agreement.
+
+## RECYCLING
+
+The Evaluation Board is not to be disposed of as an urban waste. At the end of its life cycle, differentiated waste collection must be followed, as stated in the directive 2002/96/EC. In all the countries belonging to the European Union (EU Dir. 2002/96/EC) and those following differentiated recycling, the Evaluation Board is subject to differentiated recycling at the end of its life cycle; therefore, it is forbidden to dispose the Evaluation Board as an undifferentiated waste or with other domestic wastes. Consult the local authorities for more information on the proper disposal channels. It is mandatory to sort the Evaluation Board and deliver it to the appropriate collection centers, or, when possible, return the Evaluation Board to the seller. An incorrect Evaluation Board disposal may cause damage to the environment and is punishable by the law.
+
+---
+
+## Processing Metadata
+
+- **Document:** x-nucleo-ihm03a1_schematic
+- **Total Pages:** 3
+- **Processing Method:** OpenAI Batch API
+- **Model:** gpt-4o-mini
+- **Batch ID:** batch_6877d5cf9db48190aff4f8e23e5e61c9
+- **Processed:** 2025-07-16 12:55:24
+
+### 📊 Processing Statistics
+
+- **Total Tokens Used:** 115,021
+- **Prompt Tokens:** 111,261
+- **Completion Tokens:** 3,760
+- **Total Processing Cost:** $0.0189
+- **Average Tokens per Page:** 38340
+- **Average Cost per Page:** $0.0063
+
+### 💰 Cost Breakdown
+
+- **Input Processing:** $0.0167 (vision + text)
+- **Output Generation:** $0.0023 (markdown text)
+- **Batch API Discount:** 50% off regular pricing
+- **Estimated Regular Cost:** $0.0379
+
+### ⚡ Efficiency Metrics
+
+- **Tokens per Dollar:** 6071264
+- **Pages per Dollar:** 158.4
+- **Processing Method:** Batch API (cost-optimized)

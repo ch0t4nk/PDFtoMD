@@ -25,6 +25,18 @@ That's it! The system will automatically:
 - 🔧 Auto-lint for better formatting
 - 🧹 Clean up temporary files
 
+## 🛡️ Safety Guarantee
+
+**⚠️ IMPORTANT: Original PDF files are NEVER deleted or modified**
+
+- ✅ **Safe for any directory** - Point to your personal document library without fear
+- ✅ **Read-only processing** - PDFs are only read, never changed
+- ✅ **Only creates new files** - Generates .md outputs in separate folders
+- ✅ **Temporary cleanup only** - Only removes processing temp files
+- ✅ **No data loss risk** - Your original documents remain untouched
+
+You can safely run this on directories containing thousands of valuable PDFs.
+
 ## Table of Contents
 
 - [Features](#features)

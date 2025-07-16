@@ -376,6 +376,8 @@ def main():
         print("  6. 💰 Generate cost analysis")
         print("  7. 📁 Organize outputs in timestamped session folder")
         print("  8. 🧹 Clean up temporary files")
+        print("\n⚠️  SAFETY: Original PDF files are NEVER deleted or modified")
+        print("   This tool only creates new .md files and cleans temporary processing files")
         return
     
     # Parse arguments
