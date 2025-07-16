@@ -12,15 +12,15 @@ from pathlib import Path
 def main():
     # Get the script path
     script_path = Path(__file__).parent / "src" / "scripts" / "workspace_lint.py"
-
+    
     if not script_path.exists():
         print("❌ Error: workspace_lint.py not found at expected location")
         print(f"   Expected: {script_path}")
         sys.exit(1)
-
+    
     # Run the actual linter with all arguments
     try:
-        result = subprocess.run([sys.executable, str(script_path)] + sys.argv[1:],
+        result = subprocess.run([sys.executable, str(script_path)] + sys.argv[1:], 
                                cwd=Path(__file__).parent)
         sys.exit(result.returncode)
     except Exception as e:
