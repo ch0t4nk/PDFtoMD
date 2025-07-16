@@ -830,7 +830,14 @@
     "mapper",
     "filtration",
     "barcode",
-    "persistence diagram"
+    "persistence diagram",
+    "xml",
+    "XML",
+    "csv",
+    "CSV",
+    "vscode",
+    "VSCode",
+    "Visual Studio Code"
   ],
   "flagWords": [],
   "ignorePaths": [
