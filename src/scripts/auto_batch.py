@@ -12,6 +12,7 @@ import shutil
 import argparse
 from pathlib import Path
 from datetime import datetime
+from typing import Any, Optional
 
 # Add root directory to path for config import
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -38,8 +39,9 @@ try:
     from ..batch.master import PDFBatchMaster
     from ..batch.batch_api import BatchPDFConverter
 except ImportError:
-    # Running as script, add parent directory to path
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # Running as script, add src directory to path
+    src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.insert(0, src_dir)
     from batch.master import PDFBatchMaster
     from batch.batch_api import BatchPDFConverter
 
@@ -222,25 +224,28 @@ class AutoBatchProcessor:
             utils_dir = Path(__file__).parent.parent / "utils"
             linter_path = utils_dir / "linting" / "markdown_linter.py"
             
-            MarkdownLinter = None
-            if linter_path.exists():
-                spec = importlib.util.spec_from_file_location("markdown_linter", linter_path)
-                if spec and spec.loader:
-                    linter_module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(linter_module)
-                    MarkdownLinter = getattr(linter_module, 'MarkdownLinter', None)
+            linter = None
+            if linter_path.exists() and linter_path.stat().st_size > 0:
+                try:
+                    spec = importlib.util.spec_from_file_location("markdown_linter", linter_path)
+                    if spec and spec.loader:
+                        linter_module = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(linter_module)
+                        
+                        # Use getattr with try-except to handle dynamic instantiation
+                        if hasattr(linter_module, 'MarkdownLinter'):
+                            try:
+                                linter = getattr(linter_module, 'MarkdownLinter')()
+                                # Test if the linter has the required method
+                                if not hasattr(linter, 'lint_file'):
+                                    linter = None
+                            except (TypeError, AttributeError, RuntimeError, ImportError):
+                                linter = None
+                except (TypeError, AttributeError, ImportError, RuntimeError):
+                    linter = None
             
-            if not MarkdownLinter or not callable(MarkdownLinter):
+            if not linter:
                 print("⚠️  Markdown linter not available, skipping linting")
-                return None
-
-            try:
-                linter = MarkdownLinter()
-                if not hasattr(linter, 'lint_file') or not callable(getattr(linter, 'lint_file')):
-                    print("⚠️  Markdown linter invalid, skipping linting")
-                    return None
-            except (TypeError, AttributeError, ImportError):
-                print("⚠️  Markdown linter initialization failed, skipping linting")
                 return None
             converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
 
@@ -262,7 +267,7 @@ class AutoBatchProcessor:
 
             for md_file in md_files:
                 if "_batch.md" in md_file.name:  # Only lint batch files
-                    result = linter.lint_file(str(md_file))
+                    result = linter.lint_file(str(md_file))  # type: ignore
 
                     if 'error' not in result:
                         fixes_applied = len(result.get('fixes', []))
@@ -311,15 +316,19 @@ class AutoBatchProcessor:
             utils_dir = Path(__file__).parent.parent / "utils"
             embedder_path = utils_dir / "metadata_embedder.py"
             
-            enhance_converted_files = None
+            enhance_function = None
             if embedder_path.exists():
-                spec = importlib.util.spec_from_file_location("metadata_embedder", embedder_path)
-                if spec and spec.loader:
-                    embedder_module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(embedder_module)
-                    enhance_converted_files = getattr(embedder_module, 'enhance_converted_files', None)
+                try:
+                    spec = importlib.util.spec_from_file_location("metadata_embedder", embedder_path)
+                    if spec and spec.loader:
+                        embedder_module = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(embedder_module)
+                        if hasattr(embedder_module, 'enhance_converted_files'):
+                            enhance_function = getattr(embedder_module, 'enhance_converted_files')
+                except (TypeError, AttributeError, ImportError, RuntimeError):
+                    enhance_function = None
             
-            if enhance_converted_files and callable(enhance_converted_files):
+            if enhance_function and callable(enhance_function):
                 # Prepare batch data for metadata enhancement
                 batch_data = {
                     'session_id': self.session_id,
@@ -346,7 +355,7 @@ class AutoBatchProcessor:
 
                 # Apply metadata enhancement
                 try:
-                    enhance_converted_files(str(config.DEFAULT_CONVERTED_FOLDER), batch_data, linting_stats)
+                    enhance_function(str(config.DEFAULT_CONVERTED_FOLDER), batch_data, linting_stats)
                     print("✅ Metadata enhancement completed")
                 except (TypeError, AttributeError, RuntimeError) as e:
                     print(f"⚠️  Metadata enhancement failed: {e}")
