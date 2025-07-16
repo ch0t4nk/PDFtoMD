@@ -1,5 +1,18 @@
+"""
+LLM Client - OpenAI API compatible client functionality
+
+Original MarkPDFDown Project
+Copyright (c) MarkPDFDown Team
+Licensed under the Apache License, Version 2.0
+Original project: https://github.com/MarkPDFdown/markpdfdown
+
+Enhanced by Joseph Wright (github: ch0t4nk) for enterprise use
+Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
+Licensed under the Apache License, Version 2.0
+"""
+
 import logging
-from typing import Optional
+from typing import Optional, Any
 
 import openai
 
@@ -45,18 +58,18 @@ class LLMClient:
             str: Model generated response content
         """
         # Create the message content
-        user_content = [{"type": "text", "text": user_message}]
+        user_content: list[dict[str, Any]] = [{"type": "text", "text": user_message}]
         if image_paths:
             for img_path in image_paths:
                 base64_image = self.encode_image(img_path)
                 user_content.append(
                     {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                        "type": "image_url", 
+                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
                     }
                 )
 
-        messages = []
+        messages: list[dict[str, Any]] = []
         if system_prompt:
             messages = [
                 {"role": "system", "content": system_prompt},
@@ -68,7 +81,7 @@ class LLMClient:
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
-                messages=messages,
+                messages=messages,  # type: ignore
                 temperature=temperature,
                 max_tokens=max_tokens,
                 extra_headers={
@@ -76,7 +89,7 @@ class LLMClient:
                     "HTTP-Referer": "https://github.com/MarkPDFdown/markpdfdown.git",
                 },
             )
-            return response.choices[0].message.content
+            return response.choices[0].message.content or ""
 
         except Exception as e:
             logger.error(f"API request failed: {str(e)}")

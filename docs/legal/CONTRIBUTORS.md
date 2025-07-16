@@ -3,8 +3,10 @@
 This project builds upon the excellent work of the original MarkPDFDown team and includes significant enhancements and improvements.
 
 ## Original Authors
+
 **MarkPDFDown Team**
-- Original project: https://github.com/MarkPDFdown/markpdfdown
+
+- Original project: <https://github.com/MarkPDFdown/markpdfdown>
 - License: Apache License 2.0
 
 ## Major Contributors
@@ -36,14 +38,14 @@ This project builds upon the excellent work of the original MarkPDFDown team and
   - Enhanced error handling and validation
   - Enterprise-grade configuration management
 
-**Contact:** joey.wright@outlook.com  
+**Contact:** <joey.wright@outlook.com>  
 **GitHub:** [@ch0t4nk]
 
 ## How to Contribute
 
 We welcome contributions! Please see our documentation for:
 - [Quick Start Guide](../guides/QUICK_START.md)
-- [SSOT Configuration Guide](../guides/SSOT_GUIDE.md) 
+- [SSOT Configuration Guide](../guides/SSOT_GUIDE.md)
 - [Security Guidelines](../security/SECURITY.md)
 
 When contributing, please:
@@ -58,5 +60,29 @@ When using or modifying this project, please maintain attribution to:
 1. The original MarkPDFDown project and team
 2. Contributors who have made significant enhancements
 3. The Apache License 2.0 requirements
+
+### Third-Party Components
+
+This project incorporates the following open-source components:
+
+**PyPDF2** - PDF processing library
+- License: BSD License
+- Copyright: Mathieu Fenniak and contributors
+- Usage: Core PDF reading and manipulation functionality
+
+**OpenAI Python Library** - AI model integration
+- License: Apache License 2.0
+- Copyright: OpenAI
+- Usage: API client for AI-powered text generation
+
+**PyMuPDF (fitz)** - Advanced PDF processing
+- License: GNU AGPL v3.0 / Commercial License
+- Copyright: Artifex Software, Inc.
+- Usage: PDF to image conversion and advanced processing
+
+**python-dotenv** - Environment variable management
+- License: BSD License
+- Copyright: Saurabh Kumar
+- Usage: Secure environment variable loading
 
 Thank you to all contributors who have helped make this project better!

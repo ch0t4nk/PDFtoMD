@@ -1,0 +1,31 @@
+# MarkPDFDown - Enterprise PDF to Markdown Conversion Tool
+
+Copyright 2025 Joseph Wright (github: ch0t4nk)
+
+This product includes software developed by the original MarkPDFDown team.
+Original project: <https://github.com/MarkPDFdown/markpdfdown>
+Original license: Apache License 2.0
+
+This product includes the following third-party software:
+
+## PyPDF2
+
+Copyright (c) 2006-2008, Mathieu Fenniak
+Licensed under the BSD License
+
+## OpenAI Python Library
+
+Copyright (c) OpenAI
+Licensed under the Apache License 2.0
+
+## PyMuPDF (fitz)
+
+Copyright (c) 2015-2024, Artifex Software, Inc.
+Licensed under GNU AGPL v3.0 / Commercial License
+
+## python-dotenv
+
+Copyright (c) 2014 Saurabh Kumar
+Licensed under the BSD License
+
+For complete license information, see the LICENSE file and individual component licenses.

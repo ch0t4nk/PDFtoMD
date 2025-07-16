@@ -74,7 +74,7 @@ class PDFBatchMaster:
         try:
             result = subprocess.run([
                 sys.executable, "batch_api.py", "submit"
-            ], capture_output=True, text=True, encoding='utf-8', errors='replace')
+            ], capture_output=True, text=True, encoding='utf-8', errors='replace', check=False)
 
             if result.returncode == 0:
                 # Extract batch ID from output
@@ -251,7 +251,7 @@ class PDFBatchMaster:
         try:
             result = subprocess.run([
                 sys.executable, "batch_api.py", "retrieve", batch_id
-            ], capture_output=True, text=True, encoding='utf-8', errors='replace')
+            ], capture_output=True, text=True, encoding='utf-8', errors='replace', check=False)
 
             if result.returncode == 0:
                 self.print_status("Results retrieved successfully", "SUCCESS")

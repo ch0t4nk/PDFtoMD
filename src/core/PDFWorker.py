@@ -1,3 +1,16 @@
+"""
+PDF Worker - PDF file processing functionality
+
+Original MarkPDFDown Project
+Copyright (c) MarkPDFDown Team
+Licensed under the Apache License, Version 2.0
+Original project: https://github.com/MarkPDFdown/markpdfdown
+
+Enhanced by Joseph Wright (github: ch0t4nk) for enterprise use
+Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
+Licensed under the Apache License, Version 2.0
+"""
+
 import logging
 import os
 
@@ -52,7 +65,7 @@ class PDFWorker(FileWorker):
         return self.total_pages
 
     def extract_pages(
-        self, start_page: int, end_page: int, output_name: str = None
+        self, start_page: int, end_page: int, output_name: str | None = None
     ) -> str:
         """
         Extract PDF content from a specified page range
@@ -93,17 +106,22 @@ class PDFWorker(FileWorker):
 
             return output_path
 
-        except Exception as e:
+        except (FileNotFoundError, OSError) as e:
             logger.error(f"Page extraction failed: {str(e)}")
             return ""
+        except Exception as e:  # pylint: disable=broad-except
+            logger.error(f"Unexpected error during page extraction: {str(e)}")
+            return ""
 
-    def convert_to_images(self, dpi: int = 300, fmt: str = "jpg") -> list[str]:
+    def convert_to_images(self, output_dir: str = ".", dpi: int = 300, fmt: str = "jpg", **kwargs) -> list[str]:
         """
         Convert each PDF page to a high-quality image
 
         Args:
+            output_dir (str): Output directory for images
             dpi (int): Output image resolution (default 300)
             fmt (str): Image format (supports jpg/png, default jpg)
+            **kwargs: Additional parameters
 
         Returns:
             List[str]: List of generated image paths
@@ -111,21 +129,30 @@ class PDFWorker(FileWorker):
         try:
             import fitz  # PyMuPDF
 
-            os.makedirs(self.output_dir, exist_ok=True)
+            os.makedirs(output_dir, exist_ok=True)
             img_paths = []
 
             doc = fitz.open(self.input_path)
             for page_num in range(len(doc)):
                 page = doc.load_page(page_num)
-                pix = page.get_pixmap(dpi=dpi)
+                # Convert DPI to zoom factor (72 DPI is baseline)
+                zoom = dpi / 72.0
+                mat = fitz.Matrix(zoom, zoom)
+                pix = page.get_pixmap(matrix=mat)  # type: ignore
                 output_path = os.path.join(
-                    self.output_dir, f"page_{page_num + 1:04d}.{fmt}"
+                    output_dir, f"page_{page_num + 1:04d}.{fmt}"
                 )
                 pix.save(output_path)
                 img_paths.append(output_path)
 
             return img_paths
 
-        except Exception as e:
+        except ImportError:
+            logger.error("PyMuPDF not installed. Cannot convert PDF to images.")
+            return []
+        except (FileNotFoundError, OSError) as e:
             logger.error(f"PDF conversion to images failed: {str(e)}")
+            return []
+        except Exception as e:  # pylint: disable=broad-except
+            logger.error(f"Unexpected error during PDF conversion: {str(e)}")
             return []
