@@ -176,3 +176,28 @@ cython_debug/
 
 # MacOS ds_store files
 .DS_Store
+
+# Prevent duplicate files in root directory (actual files are in src/)
+# Python files that should only exist in src/
+/*.py
+!/config.py
+!/migrate_to_ssot.py
+!/launcher.py
+
+# Markdown files that should only exist in docs/
+/*.md
+!/README.md
+
+# Batch files that should only exist in root as launchers
+/*.bat
+!/auto_batch_launcher.bat
+
+# Prevent duplicate directories that should only exist in src/
+/batch/
+/core/
+/utils/
+/tools/conversion/*_clean.py
+
+# Zero-byte files protection
+**/*
+!**/*[!.]
