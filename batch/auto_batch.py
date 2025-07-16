@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """
 Auto Batch PDF Converter - Fully Automated PDF to Markdown Conversion
-Usage: python auto_batch.py [pdf_folder] [output_folder]
+Us        print("📊 Processing Estimates:")
+        print(f"   📄 Files: {len(pdf_files)}")
+        print(f"   📦 Total Size: {total_size:.1f} MB")
+        print(f"   📃 Estimated Pages: ~{estimated_pages}")
+        print(f"   🔢 Estimated Tokens: ~{estimated_tokens:,}")
+        print(f"   💰 Estimated Cost: ~${estimated_cost:.2f}")
+        print("   ⏱️  Estimated Time: 5-15 minutes")thon auto_batch.py [pdf_folder] [output_folder] [options]
 """
 
 import os
@@ -9,15 +15,25 @@ import sys
 import time
 import json
 import shutil
+import argparse
 from pathlib import Path
 from datetime import datetime
-from .master import PDFBatchMaster
-from .batch_api import BatchPDFConverter
+
+# Handle imports whether running as module or script
+try:
+    from .master import PDFBatchMaster
+    from .batch_api import BatchPDFConverter
+except ImportError:
+    # Running as script, add parent directory to path
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from batch.master import PDFBatchMaster
+    from batch.batch_api import BatchPDFConverter
 
 class AutoBatchProcessor:
-    def __init__(self, pdf_folder="examples/pdfs", output_folder="outputs/converted_markdown"):
+    def __init__(self, pdf_folder="examples/pdfs", output_folder="outputs/converted_markdown", enable_linting=True):
         self.pdf_folder = Path(pdf_folder)
         self.output_folder = Path(output_folder)
+        self.enable_linting = enable_linting
         self.master = PDFBatchMaster()
         self.converter = BatchPDFConverter()
         self.session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -68,9 +84,8 @@ class AutoBatchProcessor:
         temp_pdfs = Path("pdfs")
         if not temp_pdfs.exists() or temp_pdfs != self.pdf_folder:
             temp_pdfs.mkdir(exist_ok=True)
-            
-            # Copy PDFs to workspace
-            print(f"📂 Copying PDFs to workspace...")
+                  # Copy PDFs to workspace
+        print("📂 Copying PDFs to workspace...")
             for pdf_file in pdf_files:
                 dest = temp_pdfs / pdf_file.name
                 if not dest.exists():
@@ -178,10 +193,123 @@ class AutoBatchProcessor:
         
         print("✅ Results retrieved successfully")
         return True
-    
+
+    def apply_linting(self):
+        """Apply linting to converted files if enabled"""
+        if not self.enable_linting:
+            self.print_step("7a", "Skipping linting (disabled)")
+            return None
+            
+        self.print_step("7a", "Applying markdown linting to converted files")
+        
+        try:
+            # Import linting functionality
+            from utils.linting.markdown_linter import MarkdownLinter
+            
+            linter = MarkdownLinter()
+            converted_dir = Path("converted")
+            
+            if not converted_dir.exists():
+                print("⚠️  No converted directory found, skipping linting")
+                return None
+            
+            # Get all markdown files
+            md_files = list(converted_dir.glob("*.md"))
+            if not md_files:
+                print("⚠️  No markdown files found, skipping linting")
+                return None
+            
+            total_fixes = 0
+            total_size_reduction = 0
+            files_processed = 0
+            
+            print(f"🔧 Linting {len(md_files)} files...")
+            
+            for md_file in md_files:
+                if "_batch.md" in md_file.name:  # Only lint batch files
+                    result = linter.lint_file(str(md_file))
+                    
+                    if 'error' not in result:
+                        fixes_applied = len(result.get('fixes', []))
+                        size_reduction = result.get('size_reduction', 0)
+                        
+                        total_fixes += fixes_applied
+                        total_size_reduction += size_reduction
+                        files_processed += 1
+                        
+                        if fixes_applied > 0:
+                            print(f"   ✅ {md_file.name}: {fixes_applied} fixes, {size_reduction} bytes saved")
+                        else:
+                            print(f"   ✅ {md_file.name}: Already clean")
+                    else:
+                        print(f"   ❌ {md_file.name}: {result['error']}")
+            
+            linting_stats = {
+                'total_fixes': total_fixes,
+                'total_size_reduction': total_size_reduction,
+                'files_processed': files_processed,
+                'avg_fixes_per_file': total_fixes / max(files_processed, 1),
+                'avg_size_reduction': total_size_reduction / max(files_processed, 1)
+            }
+            
+            print(f"✅ Linting complete: {total_fixes} total fixes, {total_size_reduction:,} bytes saved")
+            return linting_stats
+            
+        except ImportError:
+            print("⚠️  Linting module not available, skipping")
+            return None
+        except Exception as e:
+            print(f"⚠️  Linting failed: {e}")
+            return None
+
+    def enhance_with_metadata(self, report, linting_stats):
+        """Add metadata headers and session summaries to converted files"""
+        if not report:
+            print("⚠️  No report data available, skipping metadata enhancement")
+            return
+            
+        self.print_step("7c", "Adding metadata to converted files")
+        
+        try:
+            from utils.metadata_embedder import enhance_converted_files
+            
+            # Prepare batch data for metadata enhancement
+            batch_data = {
+                'session_id': self.session_id,
+                'batch_id': report.get('batch_id'),
+                'total_cost': report.get('actual_results', {}).get('total_cost', 0),
+                'total_files': report.get('actual_results', {}).get('total_requests', 0),
+                'total_pages': report.get('actual_results', {}).get('total_pages', 0),
+                'session_start': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),  # Approximate
+                'session_end': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'files': []
+            }
+            
+            # Add file details if available
+            if 'file_details' in report:
+                for file_detail in report['file_details']:
+                    batch_data['files'].append({
+                        'name': file_detail.get('file', 'unknown.pdf'),
+                        'pages': file_detail.get('pages', 0),
+                        'cost': file_detail.get('cost', 0),
+                        'cost_per_page': file_detail.get('cost_per_page', 0),
+                        'tokens': file_detail.get('tokens', 0),
+                        'final_size': file_detail.get('final_size', 'unknown')
+                    })
+            
+            # Apply metadata enhancement
+            enhance_converted_files("converted", batch_data, linting_stats)
+            
+            print("✅ Metadata enhancement completed")
+            
+        except ImportError:
+            print("⚠️  Metadata enhancement module not available, skipping")
+        except Exception as e:
+            print(f"⚠️  Metadata enhancement failed: {e}")
+
     def analyze_costs(self, batch_id, estimates):
         """Analyze final costs and compare to estimates"""
-        self.print_step(7, "Analyzing costs and generating report")
+        self.print_step("7b", "Analyzing costs and generating report")
         
         # Get usage statistics
         usage_stats = self.master.analyze_batch_usage(batch_id)
@@ -331,13 +459,19 @@ class AutoBatchProcessor:
             # Step 6: Retrieve results
             if not self.retrieve_results(batch_id):
                 raise Exception("Failed to retrieve results")
-            
-            # Step 7: Analyze costs
+
+            # Step 7a: Apply linting (if enabled)
+            linting_stats = self.apply_linting()
+
+            # Step 7b: Analyze costs
             report = self.analyze_costs(batch_id, estimates)
-            
+
+            # Step 7c: Apply metadata enhancement
+            self.enhance_with_metadata(report, linting_stats)
+
             # Step 8: Organize outputs
             final_folder = self.organize_outputs(session_folder, report)
-            
+
             # Step 9: Cleanup
             self.cleanup_workspace()
             
@@ -360,32 +494,63 @@ class AutoBatchProcessor:
             return False
 
 def main():
-    """Main entry point"""
-    if len(sys.argv) == 1:
-        print("🤖 Auto Batch PDF Converter")
-        print("\nUsage:")
-        print("  python auto_batch.py                     # Use default folders (pdfs -> converted_markdown)")
-        print("  python auto_batch.py <pdf_folder>        # Specify input folder")
-        print("  python auto_batch.py <pdf_folder> <output_folder>  # Specify both folders")
-        print("\nThis script will:")
-        print("  1. 🔍 Scan for PDFs in the input folder")
-        print("  2. 📊 Estimate processing costs")
-        print("  3. 🚀 Submit batch to OpenAI")
-        print("  4. ⏰ Monitor progress automatically")
-        print("  5. 📥 Retrieve results when complete")
-        print("  6. 💰 Generate cost analysis")
-        print("  7. 📁 Organize outputs in timestamped session folder")
-        print("  8. 🧹 Clean up temporary files")
-        print("\n⚠️  SAFETY: Original PDF files are NEVER deleted or modified")
-        print("   This tool only creates new .md files and cleans temporary processing files")
-        return
+    """Main entry point with proper argument parsing"""
+    parser = argparse.ArgumentParser(
+        description="🤖 Auto Batch PDF Converter - Fully Automated PDF to Markdown Conversion",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python auto_batch.py                          # Use default folders
+  python auto_batch.py pdfs                     # Specify input folder
+  python auto_batch.py pdfs output --no-lint    # Skip linting step
+  python auto_batch.py /path/to/pdfs /path/to/output
+
+Safety:
+  ⚠️  Original PDF files are NEVER deleted or modified
+  This tool only creates new .md files and cleans temporary processing files
+""")
+    
+    parser.add_argument('pdf_folder', nargs='?', default='pdfs',
+                       help='Input folder containing PDF files (default: pdfs)')
+    parser.add_argument('output_folder', nargs='?', default='converted_markdown',
+                       help='Output folder for converted files (default: converted_markdown)')
+    parser.add_argument('--no-lint', '--skip-lint', action='store_true',
+                       help='Skip the markdown linting step (faster processing)')
+    parser.add_argument('--no-metadata', action='store_true',
+                       help='Skip metadata enhancement (embedded headers and summaries)')
     
     # Parse arguments
-    pdf_folder = sys.argv[1] if len(sys.argv) > 1 else "pdfs"
-    output_folder = sys.argv[2] if len(sys.argv) > 2 else "converted_markdown"
+    args = parser.parse_args()
+    
+    # Show configuration
+    print("🤖 Auto Batch PDF Converter")
+    print(f"📁 Input Folder: {args.pdf_folder}")
+    print(f"📁 Output Folder: {args.output_folder}")
+    print(f"🔧 Linting: {'Disabled' if args.no_lint else 'Enabled'}")
+    print(f"📊 Metadata: {'Disabled' if args.no_metadata else 'Enabled'}")
+    print()
+    
+    print("This script will:")
+    print("  1. 🔍 Scan for PDFs in the input folder")
+    print("  2. 📊 Estimate processing costs")
+    print("  3. 🚀 Submit batch to OpenAI")
+    print("  4. ⏰ Monitor progress automatically")
+    print("  5. 📥 Retrieve results when complete")
+    if not args.no_lint:
+        print("  6. 🔧 Apply markdown linting")
+    if not args.no_metadata:
+        print("  7. 📊 Add metadata headers and session summaries")
+    print("  8. 💰 Generate cost analysis")
+    print("  9. 📁 Organize outputs in timestamped session folder")
+    print("  10. 🧹 Clean up temporary files")
+    print()
     
     # Run automation
-    processor = AutoBatchProcessor(pdf_folder, output_folder)
+    processor = AutoBatchProcessor(
+        pdf_folder=args.pdf_folder,
+        output_folder=args.output_folder,
+        enable_linting=not args.no_lint
+    )
     success = processor.run_full_automation()
     
     sys.exit(0 if success else 1)

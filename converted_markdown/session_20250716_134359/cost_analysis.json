@@ -1,0 +1,35 @@
+{
+  "session_id": "20250716_134359",
+  "batch_id": "batch_6877e4e6cb90819091bc0a04dd0a80bc",
+  "timestamp": "2025-07-16T13:45:38.890171",
+  "estimates": {
+    "files": 1,
+    "size_mb": 1.2231636047363281,
+    "estimated_pages": 0,
+    "estimated_tokens": 0,
+    "estimated_cost": 0.0
+  },
+  "actual_results": {
+    "batch_id": "batch_6877e4e6cb90819091bc0a04dd0a80bc",
+    "total_requests": 14,
+    "total_tokens": 524645,
+    "total_cost": 0.08113890000000001,
+    "avg_tokens_per_page": 37474.642857142855,
+    "avg_cost_per_page": 0.005795635714285715,
+    "token_breakdown": {
+      "prompt_tokens": 519218,
+      "completion_tokens": 5427,
+      "total_tokens": 524645
+    },
+    "cost_breakdown": {
+      "input_cost": 0.07788269999999999,
+      "output_cost": 0.0032562000000000003
+    }
+  },
+  "comparison": {
+    "cost_difference": 0.08113890000000001,
+    "cost_difference_pct": 0,
+    "pages_difference": 14,
+    "tokens_difference": 524645
+  }
+}

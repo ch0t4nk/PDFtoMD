@@ -11,7 +11,7 @@ import os
 utils_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'utils')
 sys.path.insert(0, utils_path)
 
-from linting.markdown_linter import MarkdownLinter
+from utils.linting.markdown_linter import MarkdownLinter
 
 def main():
     """Quick lint command"""
