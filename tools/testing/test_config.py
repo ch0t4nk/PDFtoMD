@@ -2,14 +2,15 @@
 
 import os
 from dotenv import load_dotenv
+from config import config
 
 def test_environment():
     """Test if environment variables are properly configured"""
     load_dotenv()
     
-    api_key = os.getenv("OPENAI_API_KEY")
-    base_url = os.getenv("OPENAI_API_BASE") 
-    model = os.getenv("OPENAI_DEFAULT_MODEL")
+    api_key = config.OPENAI_API_KEY
+    base_url = config.OPENAI_API_BASE 
+    model = config.OPENAI_DEFAULT_MODEL
     
     print("🔧 Environment Configuration Test")
     print("=" * 40)

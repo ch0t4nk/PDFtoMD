@@ -5,6 +5,7 @@ import sys
 import subprocess
 import time
 from pathlib import Path
+from config import config
 
 def convert_file_direct(file_path, output_file):
     """Convert file (PDF or image) directly using Python subprocess with stdin"""
@@ -54,18 +55,18 @@ def convert_any_file(filename):
     """Convert any file (PDF or image) to Markdown"""
 
     # Check if file exists in pdfs directory
-    file_path = os.path.join("pdfs", filename)
+    file_path = os.path.join(str(config.DEFAULT_PDF_FOLDER), filename)
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
         print("Available files:")
-        files = [f for f in os.listdir("pdfs") if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))]
+        files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))]
         for f in sorted(files):
             print(f"   - {f}")
         return False
 
     # Prepare output
     file_name = Path(filename).stem
-    output_dir = "converted"
+    output_dir = str(config.DEFAULT_CONVERTED_FOLDER)
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, f"{file_name}.md")
 
@@ -102,8 +103,8 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: python convert_any.py <filename>")
         print("\nAvailable files:")
-        if os.path.exists("pdfs"):
-            files = [f for f in os.listdir("pdfs") if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))]
+        if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
+            files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))]
             for f in sorted(files):
                 print(f"   - {f}")
         else:

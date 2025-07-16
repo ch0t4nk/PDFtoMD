@@ -13,6 +13,7 @@ from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
 import shutil
+from config import config
 
 # Load environment variables
 load_dotenv()
@@ -20,10 +21,10 @@ load_dotenv()
 class PDFBatchMaster:
     def __init__(self):
         self.client = OpenAI(
-            api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
+            api_key=config.OPENAI_API_KEY,
+            base_url=config.OPENAI_API_BASE
         )
-        self.model = os.getenv("OPENAI_DEFAULT_MODEL", "gpt-4o-mini")
+        self.model = config.OPENAI_DEFAULT_MODEL
         
     def print_status(self, message, level="INFO"):
         """Print formatted status messages"""
@@ -315,7 +316,7 @@ class PDFBatchMaster:
         """Create a master document combining all batch results"""
         self.print_status("Creating master document from all batch results", "PROGRESS")
         
-        converted_dir = Path("converted")
+        converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
         if not converted_dir.exists():
             self.print_status("No converted directory found", "WARNING")
             return False

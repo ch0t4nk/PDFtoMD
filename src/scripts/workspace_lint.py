@@ -10,6 +10,7 @@ import sys
 import shutil
 from pathlib import Path
 from typing import Dict
+from config import config
 
 # Add utils to path for importing
 utils_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'utils')
@@ -30,7 +31,7 @@ class WorkspaceLinter:
         # Directories and files to ignore
         self.ignore_patterns = {
             'directories': {
-                'outputs',
+                str(config.DEFAULT_OUTPUT_FOLDER),
                 'converted_markdown',
                 '__pycache__',
                 '.git',
@@ -39,7 +40,7 @@ class WorkspaceLinter:
                 'env',
                 '.vscode',
                 'temp_batch',
-                'converted'
+                str(config.DEFAULT_CONVERTED_FOLDER)
             },
             'file_extensions': {
                 '.pyc',

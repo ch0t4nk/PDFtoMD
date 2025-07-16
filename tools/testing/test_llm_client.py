@@ -3,6 +3,7 @@
 import os
 import sys
 from dotenv import load_dotenv
+from config import config
 
 def test_llm_client():
     """Test LLM client initialization and basic connectivity"""
@@ -17,9 +18,9 @@ def test_llm_client():
         print("✅ Successfully imported LLMClient")
         
         # Get configuration
-        api_key = os.getenv("OPENAI_API_KEY")
-        base_url = os.getenv("OPENAI_API_BASE") 
-        model = os.getenv("OPENAI_DEFAULT_MODEL")
+        api_key = config.OPENAI_API_KEY
+        base_url = config.OPENAI_API_BASE 
+        model = config.OPENAI_DEFAULT_MODEL
         
         if not all([api_key, base_url, model]):
             print("❌ Missing required environment variables")

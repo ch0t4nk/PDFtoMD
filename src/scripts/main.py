@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from core import LLMClient
 from core.FileWorker import create_worker
 from core.Util import remove_markdown_warp
+from config import config
 
 logging.basicConfig(
     level=logging.INFO,
@@ -44,17 +45,17 @@ def completion(
     """
 
     # Get API key and API base URL from environment variables
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = config.OPENAI_API_KEY
     if not api_key:
         logger.error("Please set the OPENAI_API_KEY environment variables")
         exit(1)
-    base_url = os.getenv("OPENAI_API_BASE")
+    base_url = config.OPENAI_API_BASE
     if not base_url:
         base_url = "https://api.openai.com/v1/"
 
     # If no model is specified, use the default model
     if not model:
-        model = os.getenv("OPENAI_DEFAULT_MODEL")
+        model = config.OPENAI_DEFAULT_MODEL
         if not model:
             model = "gpt-4o"
 

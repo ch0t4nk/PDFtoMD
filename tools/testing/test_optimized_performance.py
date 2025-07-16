@@ -10,6 +10,7 @@ import json
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+from config import config
 
 # Load environment variables
 load_dotenv()
@@ -20,14 +21,14 @@ def test_api_speed(prompt: str, description: str) -> float:
     
     client = OpenAI(
         api_key="lm-studio",
-        base_url=os.getenv("OPENAI_API_BASE", "http://192.168.56.1:1234/v1")
+        base_url=config.OPENAI_API_BASE
     )
     
     start_time = time.time()
     
     try:
         response = client.chat.completions.create(
-            model=os.getenv("OPENAI_DEFAULT_MODEL", "Qwen2-VL-7B-Instruct"),
+            model=config.OPENAI_DEFAULT_MODEL,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.2,
             max_tokens=100,

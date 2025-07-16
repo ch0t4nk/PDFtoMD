@@ -2,6 +2,7 @@
 
 import os
 import glob
+from config import config
 
 # Get the most recent output directory
 output_dirs = glob.glob("output/202*")
@@ -38,7 +39,7 @@ for i, md_file in enumerate(md_files, 1):
 
 # Write to final output file
 output_file = "converted/CAN-MAX485-combined.md"
-os.makedirs("converted", exist_ok=True)
+os.makedirs(str(config.DEFAULT_CONVERTED_FOLDER), exist_ok=True)
 
 try:
     with open(output_file, 'w', encoding='utf-8') as f:

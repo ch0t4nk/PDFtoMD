@@ -13,6 +13,7 @@ from openai import OpenAI
 import base64
 from dotenv import load_dotenv
 import sys
+from config import config
 
 # Load environment variables
 load_dotenv()
@@ -20,10 +21,10 @@ load_dotenv()
 class BatchPDFConverter:
     def __init__(self):
         self.client = OpenAI(
-            api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
+            api_key=config.OPENAI_API_KEY,
+            base_url=config.OPENAI_API_BASE
         )
-        self.model = os.getenv("OPENAI_DEFAULT_MODEL", "gpt-4o-mini")
+        self.model = config.OPENAI_DEFAULT_MODEL
 
     def encode_image(self, image_path):
         """Convert image to base64 for API"""
@@ -34,7 +35,7 @@ class BatchPDFConverter:
         """Extract pages from PDF as images"""
         # Import the core modules from converted directory
         import sys
-        sys.path.append('converted')
+        sys.path.append(str(config.DEFAULT_CONVERTED_FOLDER))
         from core.PDFWorker import PDFWorker
 
         # Create temporary directory for this PDF
@@ -83,7 +84,7 @@ class BatchPDFConverter:
 Focus on creating clean, professional documentation that preserves all information from the original page."""
 
         for pdf_file in pdf_files:
-            pdf_path = Path("pdfs") / pdf_file
+            pdf_path = Path(str(config.DEFAULT_PDF_FOLDER)) / pdf_file
             if not pdf_path.exists():
                 print(f"❌ PDF not found: {pdf_file}")
                 continue
@@ -314,7 +315,7 @@ Focus on creating clean, professional documentation that preserves all informati
                         pdf_usage_stats[pdf_name]['page_count'] += 1
 
             # Create final markdown files
-            os.makedirs("converted", exist_ok=True)
+            os.makedirs(str(config.DEFAULT_CONVERTED_FOLDER), exist_ok=True)
 
             for pdf_name, pages in pdf_contents.items():
                 output_file = f"converted/{pdf_name}_batch.md"
@@ -407,7 +408,7 @@ def main():
 
     if command == "submit":
         # Get all PDF files
-        pdf_dir = Path("pdfs")
+        pdf_dir = Path(str(config.DEFAULT_PDF_FOLDER))
         if not pdf_dir.exists():
             print("❌ PDFs directory not found!")
             return

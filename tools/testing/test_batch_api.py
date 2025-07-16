@@ -11,6 +11,7 @@ from openai import OpenAI
 import base64
 from dotenv import load_dotenv
 import sys
+from config import config
 
 # Load environment variables
 load_dotenv()
@@ -19,8 +20,8 @@ def test_single_pdf():
     """Test batch API with just the schematic file (small, 1 page)"""
     
     client = OpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
-        base_url=os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
+        api_key=config.OPENAI_API_KEY,
+        base_url=config.OPENAI_API_BASE
     )
     
     # Create a simple test request

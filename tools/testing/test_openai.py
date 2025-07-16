@@ -6,13 +6,14 @@ OpenAI API Test - Check if your credits work
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+from config import config
 
 load_dotenv()
 
 def test_openai_api():
     """Test OpenAI API connection and credits"""
     
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = config.OPENAI_API_KEY
     if not api_key:
         print("❌ No OPENAI_API_KEY found in .env file")
         return False

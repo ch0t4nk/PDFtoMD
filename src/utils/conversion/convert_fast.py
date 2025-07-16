@@ -6,6 +6,7 @@ import subprocess
 import time
 import concurrent.futures
 from pathlib import Path
+from config import config
 
 def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
     """Convert PDF with parallel processing and optimized settings"""
@@ -67,14 +68,14 @@ def convert_optimized(filename):
     """Convert with optimized settings"""
 
     # Check if file exists
-    file_path = os.path.join("pdfs", filename)
+    file_path = os.path.join(str(config.DEFAULT_PDF_FOLDER), filename)
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
         return False
 
     # Prepare output directories
     file_name = Path(filename).stem
-    output_dir = "converted"
+    output_dir = str(config.DEFAULT_CONVERTED_FOLDER)
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, f"{file_name}_fast.md")
 
@@ -103,8 +104,8 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: python convert_fast.py <pdf_filename>")
         print("\nAvailable PDF files:")
-        if os.path.exists("pdfs"):
-            files = [f for f in os.listdir("pdfs") if f.lower().endswith('.pdf')]
+        if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
+            files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith('.pdf')]
             for f in sorted(files):
                 print(f"   - {f}")
         return

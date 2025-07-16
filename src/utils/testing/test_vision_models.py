@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from core.LLMClient import LLMClient
 import requests
+from config import config
 
 load_dotenv()
 
@@ -11,8 +12,8 @@ def test_model_vision_support(model_name):
     """Test if a model supports vision by checking its capabilities"""
 
     try:
-        base_url = os.getenv("OPENAI_API_BASE")
-        api_key = os.getenv("OPENAI_API_KEY")
+        base_url = config.OPENAI_API_BASE
+        api_key = config.OPENAI_API_KEY
 
         print(f"🧪 Testing model: {model_name}")
 

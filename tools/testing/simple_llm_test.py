@@ -2,6 +2,7 @@
 
 from dotenv import load_dotenv
 import os
+from config import config
 
 load_dotenv()
 
@@ -10,9 +11,9 @@ def test_llm_simple():
         from core.LLMClient import LLMClient
         
         # Get config
-        api_key = os.getenv("OPENAI_API_KEY")
-        base_url = os.getenv("OPENAI_API_BASE")
-        model = os.getenv("OPENAI_DEFAULT_MODEL")
+        api_key = config.OPENAI_API_KEY
+        base_url = config.OPENAI_API_BASE
+        model = config.OPENAI_DEFAULT_MODEL
         
         print(f"🔧 Testing LLM Connection")
         print(f"Base URL: {base_url}")

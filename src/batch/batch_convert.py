@@ -6,10 +6,11 @@ import subprocess
 import time
 import sys
 from pathlib import Path
+from config import config
 
 def get_converted_files():
     """Get list of already converted files to avoid re-processing."""
-    converted_dir = Path("converted")
+    converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
     if not converted_dir.exists():
         return []
 
@@ -62,8 +63,8 @@ def main():
     print()
 
     # Directories
-    pdf_dir = Path("pdfs")
-    output_dir = Path("converted")
+    pdf_dir = Path(str(config.DEFAULT_PDF_FOLDER))
+    output_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
 
     # Ensure directories exist
     if not pdf_dir.exists():

@@ -18,6 +18,7 @@ import shutil
 import argparse
 from pathlib import Path
 from datetime import datetime
+from config import config
 
 # Handle imports whether running as module or script
 try:
@@ -81,7 +82,7 @@ class AutoBatchProcessor:
         session_folder.mkdir(exist_ok=True)
 
         # Create temporary pdfs folder if needed
-        temp_pdfs = Path("pdfs")
+        temp_pdfs = Path(str(config.DEFAULT_PDF_FOLDER))
         if not temp_pdfs.exists() or temp_pdfs != self.pdf_folder:
             temp_pdfs.mkdir(exist_ok=True)
             # Copy PDFs to workspace
@@ -127,7 +128,7 @@ class AutoBatchProcessor:
         self.print_step(4, "Submitting batch to OpenAI")
 
         # Use batch_api to submit
-        pdf_dir = Path("pdfs")
+        pdf_dir = Path(str(config.DEFAULT_PDF_FOLDER))
         pdf_files = [f.name for f in pdf_dir.glob("*.pdf")]
 
         requests, file_mapping = self.converter.create_batch_requests(pdf_files)
@@ -207,7 +208,7 @@ class AutoBatchProcessor:
             from utils.linting.markdown_linter import MarkdownLinter
 
             linter = MarkdownLinter()
-            converted_dir = Path("converted")
+            converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
 
             if not converted_dir.exists():
                 print("⚠️  No converted directory found, skipping linting")
@@ -298,7 +299,7 @@ class AutoBatchProcessor:
                     })
 
             # Apply metadata enhancement
-            enhance_converted_files("converted", batch_data, linting_stats)
+            enhance_converted_files(str(config.DEFAULT_CONVERTED_FOLDER), batch_data, linting_stats)
 
             print("✅ Metadata enhancement completed")
 
@@ -355,7 +356,7 @@ class AutoBatchProcessor:
         self.print_step(8, "Organizing final outputs")
 
         # Move converted files to session folder
-        converted_dir = Path("converted")
+        converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
         if converted_dir.exists():
             session_converted = session_folder / "markdown_files"
             session_converted.mkdir(exist_ok=True)
@@ -401,7 +402,7 @@ class AutoBatchProcessor:
             "temp_batch",
             "batch_info_*.json",
             "usage_stats_*.json",
-            "converted"
+            str(config.DEFAULT_CONVERTED_FOLDER)
         ]
 
         cleaned = 0
@@ -510,7 +511,7 @@ Safety:
   This tool only creates new .md files and cleans temporary processing files
 """)
 
-    parser.add_argument('pdf_folder', nargs='?', default='pdfs',
+    parser.add_argument('pdf_folder', nargs='?', default=str(config.DEFAULT_PDF_FOLDER),
                        help='Input folder containing PDF files (default: pdfs)')
     parser.add_argument('output_folder', nargs='?', default='converted_markdown',
                        help='Output folder for converted files (default: converted_markdown)')
