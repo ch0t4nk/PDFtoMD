@@ -4,8 +4,14 @@ OpenAI API Test - Check if your credits work
 """
 
 import os
+import sys
+from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
+
+# Add project root to path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
 from config import config
 
 load_dotenv()

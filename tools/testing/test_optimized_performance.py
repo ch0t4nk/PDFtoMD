@@ -7,9 +7,15 @@ Tests the speed improvements after configuration optimization
 import time
 import requests
 import json
+import sys
+from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+
+# Add project root to path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
 from config import config
 
 # Load environment variables

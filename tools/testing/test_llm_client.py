@@ -2,7 +2,12 @@
 
 import os
 import sys
+from pathlib import Path
 from dotenv import load_dotenv
+
+# Add project root to path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
 from config import config
 
 def test_llm_client():

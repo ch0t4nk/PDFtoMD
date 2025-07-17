@@ -2,6 +2,12 @@
 
 import os
 import glob
+import sys
+from pathlib import Path
+
+# Add project root to path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
 from config import config
 
 # Get the most recent output directory

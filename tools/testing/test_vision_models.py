@@ -1,9 +1,15 @@
 # Test Different Models for Vision Support
 
+import sys
+from pathlib import Path
 from dotenv import load_dotenv
 import os
-from core.LLMClient import LLMClient
 import requests
+
+# Add project root to path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
+from core.LLMClient import LLMClient
 from config import config
 
 load_dotenv()
