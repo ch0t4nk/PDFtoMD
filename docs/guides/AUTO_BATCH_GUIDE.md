@@ -7,24 +7,24 @@ The easiest way to convert multiple PDFs to Markdown using the OpenAI Batch API 
 ### Prerequisites
 
 1. **Configure API Key** (SSOT system):
- `bash
+ ```bash
  # Copy template and add your API key
  cp.env.template.env
  # Edit.env: OPENAI_API_KEY="sk-your-key"
 
  # Test configuration
  python config.py
- `
+ ```
 ### Windows Users
 
 Double-click `auto_batch_launcher.bat` or run:
-`cmd
+```cmd
 auto_batch_launcher.bat
-`
+```
 ### All Platforms
-`bash
+```bash
 python src/batch/auto_batch.py
-`
+```
 That's it! The system will automatically:
 - 🔍 Find all PDFs in the `pdfs` folder
 - 📊 Estimate costs
@@ -85,7 +85,7 @@ That's it! The system will automatically:
 - 2GB+ available disk space (for temporary files)
 
 ### Environment Setup
-`bash
+```bash
 # Set your OpenAI API key
 
 export OPENAI_API_KEY="your-api-key-here"
@@ -97,11 +97,11 @@ $env:OPENAI_API_KEY="your-api-key-here"
 # Windows Command Prompt:
 
 set OPENAI_API_KEY=your-api-key-here
-`
+```
 ### Verify Installation
-`bash
+```bash
 python src/batch/auto_batch.py --help
-`
+```
 Should display the usage information and confirm everything is working.
 
 ## Basic Usage
@@ -109,19 +109,19 @@ Should display the usage information and confirm everything is working.
 ### Default Processing
 
 Process all PDFs in the `pdfs` folder:
-`bash
+```bash
 python src/batch/auto_batch.py
-`
+```
 ### Custom Input Folder
-`bash
+```bash
 python src/batch/auto_batch.py documents
-`
+```
 ### Custom Input and Output
-`bash
+```bash
 python src/batch/auto_batch.py documents converted_docs
-`
+```
 ### Example Complete Workflow
-`bash
+```bash
 # Put your PDFs in the pdfs folder
 
 cp *.pdf pdfs/
@@ -133,15 +133,15 @@ python src/batch/auto_batch.py
 # Wait for completion (will show progress)
 
 # Results will be in: converted_markdown/session_YYYYMMDD_HHMMSS/
-`
+```
 ## Advanced Usage
 
 ### Batch File Processing (Windows)
 
 For convenience, use the Windows batch file:
-`cmd
+```cmd
 auto_batch.bat
-`
+```
 This automatically handles:
 - Directory navigation
 - Error handling
@@ -150,11 +150,11 @@ This automatically handles:
 ### Custom Configuration
 
 Create `auto_batch_config.py` from the sample:
-`bash
+```bash
 cp auto_batch_config_sample.py auto_batch_config.py
-`
+```
 Edit the configuration:
-`python
+```python
 # auto_batch_config.py
 
 DEFAULT_PDF_FOLDER = "my_documents"
@@ -162,9 +162,9 @@ DEFAULT_OUTPUT_FOLDER = "my_converted"
 TEMPERATURE = 0.05 # Consistency vs creativity
 MAX_TOKENS = 8192 # Output length
 COST_WARNING_THRESHOLD = 2.00 # Alert at $2.00
-`
+```
 ### Processing Specific File Types
-`bash
+```bash
 # Process only files matching pattern
 
 python src/batch/auto_batch.py --pattern "*.pdf"
@@ -172,9 +172,9 @@ python src/batch/auto_batch.py --pattern "*.pdf"
 # Skip certain files
 
 python src/batch/auto_batch.py --exclude "draft_*.pdf"
-`
+```
 ### Monitoring Long-Running Batches
-`bash
+```bash
 # Check status of running batch
 
 python monitor_batch.py batch_12345...
@@ -182,13 +182,13 @@ python monitor_batch.py batch_12345...
 # Track costs in real-time
 
 python track_batch_cost.py batch_12345...
-`
+```
 ## Configuration
 
 ### Configuration File Options
 
 Create `auto_batch_config.py` with these options:
-`python
+```python
 # Folder Settings
 
 DEFAULT_PDF_FOLDER = "pdfs" # Input folder
@@ -215,9 +215,9 @@ COST_ALERT_THRESHOLD = 5.00 # Alert at $5.00
 CREATE_SESSION_FOLDERS = True # Use timestamped folders
 INCLUDE_MASTER_DOCUMENT = True # Create combined document
 DETAILED_COST_REPORTS = True # Generate cost analysis
-`
+```
 ### Environment Variables
-`bash
+```bash
 # Required
 
 OPENAI_API_KEY="sk-..."
@@ -226,7 +226,7 @@ OPENAI_API_KEY="sk-..."
 
 OPENAI_API_BASE="https://api.openai.com/v1" # Custom endpoint
 OPENAI_DEFAULT_MODEL="gpt-4o-mini" # Default model
-`
+```
 ## Cost Management
 
 ### Understanding Costs
@@ -239,7 +239,7 @@ The Batch API provides **50% savings** over standard API:
 ### Cost Estimation
 
 Before processing, you'll see:
-`
+```
 📊 Processing Estimates:
  📄 Files:
  📦 Total Size: 3.0 MB
@@ -247,11 +247,11 @@ Before processing, you'll see:
  🔢 Estimated Tokens: ~280,000
  💰 Estimated Cost: ~$0.47
  ⏱️ Estimated Time: 5-15 minutes
-`
+```
 ### Cost Tracking
 
 After processing:
-`
+```
 📊 COST ANALYSIS SUMMARY
 ==================================================
 💰 Estimated Cost: $0.47
@@ -261,18 +261,18 @@ After processing:
 🔢 Tokens Used: 2,890,166
 ⚡ Cost per Page: $0.0050
 ==================================================
-`
+```
 ### Setting Cost Limits
 
 In your config:
-`python
+```python
 COST_WARNING_THRESHOLD = 1.00 # Warn before processing
 COST_ALERT_THRESHOLD = 5.00 # Require confirmation
-`
+```
 ## Output Structure
 
 ### Session-Based Organization
-`
+```
 converted_markdown/
 └── session_20250715_202045/
  ├── markdown_files/
@@ -282,7 +282,7 @@ converted_markdown/
  ├── cost_analysis.json
  ├── README.md (session summary)
  └── usage_stats_batch_xxxxx.json
-`
+```
 ### File Naming Convention
 
 - **Input**: `document.pdf`
@@ -290,7 +290,7 @@ converted_markdown/
 - **Session**: `session_YYYYMMDD_HHMMSS`
 
 ### Cost Analysis JSON
-`json
+```json
 {
  "batch_id": "batch_12345...",
  "total_cost": 0.4676,
@@ -307,13 +307,13 @@ converted_markdown/
  }
  ]
 }
-`
+```
 ## Troubleshooting
 
 ### Common Issues
 
 #### "No PDFs found"
-`bash
+```bash
 # Check if PDFs exist
 
 ls pdfs/*.pdf
@@ -322,9 +322,9 @@ ls pdfs/*.pdf
 
 mkdir pdfs
 cp your_documents/*.pdf pdfs/
-`
+```
 #### "OpenAI API key not set"
-`bash
+```bash
 # Set the environment variable
 
 export OPENAI_API_KEY="sk-your-key-here"
@@ -332,9 +332,9 @@ export OPENAI_API_KEY="sk-your-key-here"
 # Verify it's set
 
 echo $OPENAI_API_KEY
-`
+```
 #### "Batch processing failed"
-`bash
+```bash
 # Check batch status manually
 
 python -c "
@@ -343,7 +343,7 @@ converter = BatchPDFConverter()
 status = converter.get_batch_status('batch_12345...')
 print(status)
 "
-`
+```
 #### "Insufficient quota/credits"
 
 - Check your OpenAI billing dashboard
@@ -355,19 +355,19 @@ print(status)
 1. **Check Environment**:
  `bash
  python -c "import os; print(os.getenv('OPENAI_API_KEY', 'NOT SET'))"
- `
+```
 2. **Verify API Access**:
  `bash
  python test_openai.py
- `
+```
 3. **Check Batch Status**:
  `bash
  python monitor_batch.py your_batch_id
- `
+```
 4. **View Detailed Logs**:
  `bash
  python src/batch/auto_batch.py --verbose
- `
+```
 ### Performance Tips
 
 1. **Optimize Image Quality**:
@@ -385,7 +385,7 @@ print(status)
 ## API Reference
 
 ### AutoBatchProcessor Class
-`python
+```python
 from auto_batch import AutoBatchProcessor
 
 # Initialize
@@ -410,9 +410,9 @@ processor.retrieve_results()
 processor.analyze_costs()
 processor.organize_outputs()
 processor.cleanup()
-`
+```
 ### BatchPDFConverter Class
-`python
+```python
 from batch_api import BatchPDFConverter
 
 converter = BatchPDFConverter()
@@ -428,9 +428,9 @@ status = converter.monitor_batch(batch_id)
 # Get results
 
 converter.download_results(batch_id, "output_folder")
-`
+```
 ### Master Analysis
-`python
+```python
 from master import PDFBatchMaster
 
 master = PDFBatchMaster()
@@ -446,7 +446,7 @@ master.print_usage_summary()
 # Cleanup old files
 
 master.cleanup()
-`
+```
 ### Configuration Options
 
 | Setting | Default | Description |

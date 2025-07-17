@@ -50,9 +50,9 @@ Comprehensive technical glossary that serves as:
 ### For Developers
 
 1. **VS Code Extension**: Install Code Spell Checker extension
- `
+```
  Id: streetsidesoftware.code-spell-checker
- `
+```
 2. **Check Spelling**: Spelling errors will be underlined in red
  - Right-click on underlined words for suggestions
  - Use Ctrl+. for quick fixes
@@ -74,13 +74,13 @@ When adding new technical terms to the project:
 ### Command Line Usage
 
 Validate spell check configuration:
-`bash
+```bash
 python scripts/validate_spell_check.py
-`
+```
 Check specific files for spelling issues:
-`bash
+```bash
 npx cspell "**/*.md" "**/*.py"
-`
+```
 ## Ignored Paths
 
 The following directories and files are excluded from spell checking:
@@ -135,12 +135,12 @@ When expanding into new technical domains:
 ## Integration with CI/CD
 
 Consider adding spell check validation to your CI/CD pipeline:
-`yaml
+```yaml
 # Example GitHub Actions step
 
 - name: Validate Spell Check Configuration
  run: python scripts/validate_spell_check.py
-`
+```
 ## Benefits
 
 This comprehensive spell checking system provides:

@@ -21,11 +21,11 @@ markpdfdown/
 ├── examples/ # Example files and demos
 ├── outputs/ # Generated output files
 └── pdfs/ # Input PDF files
-`
+```
 ## Quick Access
 
 Use the `launcher.py` script for easy access to tools:
-`bash
+```bash
 # Main batch processing
 
 python launcher.py auto-batch --help
@@ -40,7 +40,7 @@ python launcher.py quick-lint
 python launcher.py cleanup
 python launcher.py convert-any input.pdf
 python launcher.py optimize-lm
-`
+```
 ## Key Scripts
 
 ### Main Processing

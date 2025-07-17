@@ -24,7 +24,7 @@
 ### Registry/Config File Settings:
 
 If you find config files, look for these keys:
-`json
+```json
 {
  "n_gpu_layers": -1,
  "n_batch": 512,
@@ -37,7 +37,7 @@ If you find config files, look for these keys:
  "use_mlock": false,
  "flash_attn": true
 }
-`
+```
 
 ## 🚀 Windows Performance Tweaks
 
@@ -45,7 +45,7 @@ If you find config files, look for these keys:
 
 `batch
 powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-`
+```
 
 ### NVIDIA Settings:
 
@@ -64,9 +64,9 @@ powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 
 ### Check GPU Usage:
 
-`
+```
 nvidia-smi -l
-`
+```
 
 ### Expected Performance:
 

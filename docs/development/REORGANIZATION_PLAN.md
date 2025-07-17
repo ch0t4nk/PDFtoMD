@@ -9,7 +9,7 @@
 - Example/demo files at root level
 
 ## Proposed New Structure
-`
+```
 markpdfdown/
 ├── 📁 src/ # Main source code
 │ ├── batch/ # Batch processing (existing)
@@ -76,7 +76,7 @@ markpdfdown/
  ├── Makefile
  ├──.gitignore
  └── auto_batch.bat (Windows launcher)
-`
+```
 ## Files to Move
 
 ### To src/scripts/

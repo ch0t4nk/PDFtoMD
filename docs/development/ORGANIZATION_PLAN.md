@@ -10,7 +10,7 @@
 
 ## Proposed Structure
 
-`
+```
 markpdfdown/
 ├── 📁 core/ # Core application code
 │ ├── main.py # Main single-file converter
@@ -48,7 +48,7 @@ markpdfdown/
 └── 📁 outputs/ # Generated outputs
  ├── converted_markdown/ # Batch outputs
  └── temp/ # Temporary files
-`
+```
 
 ## Implementation Steps
 

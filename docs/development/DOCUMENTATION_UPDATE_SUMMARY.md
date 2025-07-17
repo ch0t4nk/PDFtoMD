@@ -28,19 +28,19 @@ All project documentation has been comprehensively updated to reflect the new Si
 ### **Setup Instructions Updated**
 
 - *Before (Legacy):**
-`bash
+```bash
 export OPENAI_API_KEY="sk-your-key"
 python auto_batch.py
-`
+```
 - *After (SSOT):**
-`bash
+```bash
 cp.env.template.env
 
 # Edit.env with your API key
 
 python config.py # Test configuration
 python src/batch/auto_batch.py
-`
+```
 ### **Security Emphasis**
 
 - Added security warnings and best practices
@@ -62,7 +62,7 @@ python src/batch/auto_batch.py
 - Described feature flags system
 
 ## 🎯 **Documentation Structure**
-`
+```
 docs/
 ├── README.md # Main project documentation
 ├── QUICK_START.md # 30-second setup guide
@@ -72,7 +72,7 @@ docs/
 ├── PROJECT_STRUCTURE.md # Project organization
 ├── CHANGELOG.md # Version history
 └── IMPLEMENTATION_SUMMARY.md # Technical details
-`
+```
 ## 📊 **Documentation Quality**
 
 ### ✅ **Completed Updates**

@@ -14,7 +14,7 @@ The auto-batch system consists of several interconnected components that work to
 - Session management with timestamps
 - Progress monitoring and user feedback
 - Error handling and recovery
-`python
+```python
 class AutoBatchProcessor:
  def __init__(self, pdf_folder="pdfs", output_folder="converted_markdown")
  def run() # Main workflow orchestrator
@@ -26,7 +26,7 @@ class AutoBatchProcessor:
  def retrieve_results() # Step 6: Results download
  def analyze_costs() # Step 7: Cost analysis
  def organize_outputs() # Step 8: Final organization
-`
+```
 ### `batch_api.py` - OpenAI Batch API Interface
 
 - *Purpose**: Direct interface to OpenAI's Batch API
@@ -35,14 +35,14 @@ class AutoBatchProcessor:
 - Request batching and optimization
 - Comprehensive metadata tracking
 - Advanced error handling
-`python
+```python
 class BatchPDFConverter:
  def submit_batch(pdf_folder, output_folder="converted")
  def monitor_batch(batch_id, check_interval=30)
  def download_results(batch_id, output_folder)
  def get_batch_status(batch_id)
  def estimate_batch_cost(pdf_folder)
-`
+```
 ### `master.py` - Batch Management & Analytics
 
 - *Purpose**: High-level batch management and usage analysis
@@ -51,20 +51,20 @@ class BatchPDFConverter:
 - Batch history management
 - Cleanup utilities
 - Performance reporting
-`python
+```python
 class PDFBatchMaster:
  def analyze_batch_usage(batch_id)
  def print_usage_summary()
  def cleanup()
  def get_batch_history()
-`
+```
 ### Configuration System
 
 - *Files**: `auto_batch_config_sample.py` → `auto_batch_config.py`
 - *Purpose**: Customizable settings for all aspects of processing
 
 ## Data Flow
-`
+```
 1. PDF Discovery
  ├── Scan input folder for.pdf files
  ├── Calculate total size and estimate pages
@@ -109,22 +109,22 @@ class PDFBatchMaster:
  ├── Generate session README.md
  ├── Create cost_analysis.json
  └── Cleanup temporary files
-`
+```
 ## Enhanced Prompting System
 
 ### System Prompt
-`python
+```python
 SYSTEM_PROMPT = """You are an expert document conversion specialist...
 Your task is to convert PDF page images into clean, well-formatted Markdown...
 [9-point detailed requirements for consistent output]"""
-`
+```
 ### User Prompt Template
-`python
+```python
 USER_PROMPT = """Convert this PDF page to Markdown following these requirements:
 1. Use clean, semantic Markdown formatting
 2. Preserve all text content and structure
 [Additional specific requirements per page]"""
-`
+```
 ### Quality Parameters
 
 - **Temperature**: 0.05 (high consistency, low creativity)
@@ -146,7 +146,7 @@ USER_PROMPT = """Convert this PDF page to Markdown following these requirements:
 - Minimize API round trips
 
 ### Cost Tracking
-`python
+```python
 {
  "batch_id": "batch_xxx",
  "total_cost": 0.4676,
@@ -161,11 +161,11 @@ USER_PROMPT = """Convert this PDF page to Markdown following these requirements:
  }
  ]
 }
-`
+```
 ## Session Management
 
 ### Folder Structure
-`
+```
 converted_markdown/
 └── session_20250715_202045/
  ├── markdown_files/ # Converted documents
@@ -174,7 +174,7 @@ converted_markdown/
  ├── cost_analysis.json # Financial breakdown
  ├── README.md # Session summary
  └── usage_stats_batch_xxx.json # Detailed usage data
-`
+```
 ### Session Metadata
 
 - **Session ID**: `YYYYMMDD_HHMMSS` format
@@ -186,7 +186,7 @@ converted_markdown/
 ## Error Handling & Recovery
 
 ### Batch Status Monitoring
-`python
+```python
 def monitor_batch(batch_id):
  while True:
  status = get_batch_status(batch_id)
@@ -197,7 +197,7 @@ def monitor_batch(batch_id):
  elif status == "cancelled":
  handle_batch_cancellation()
  time.sleep(check_interval)
-`
+```
 ### Failure Recovery
 
 - **Network Issues**: Automatic retry with exponential backoff
@@ -228,13 +228,13 @@ def monitor_batch(batch_id):
 ## Integration Points
 
 ### Environment Variables
-`bash
+```bash
 OPENAI_API_KEY # Required: OpenAI API key
 OPENAI_API_BASE # Optional: Custom API endpoint
 OPENAI_DEFAULT_MODEL # Optional: Override default model
-`
+```
 ### Configuration Override
-`python
+```python
 # auto_batch_config.py
 
 DEFAULT_PDF_FOLDER = "custom_input"
@@ -242,9 +242,9 @@ DEFAULT_OUTPUT_FOLDER = "custom_output"
 TEMPERATURE = 0.1 # More creative output
 MAX_TOKENS = 4096 # Shorter responses
 COST_WARNING_THRESHOLD = 2.00 # Higher threshold
-`
+```
 ### External Tools Integration
-`bash
+```bash
 # Standalone monitoring
 
 python monitor_batch.py batch_12345
@@ -260,7 +260,7 @@ python master.py analyze batch_12345
 # Cleanup utilities
 
 python master.py cleanup
-`
+```
 ## Testing & Validation
 
 ### Unit Tests
