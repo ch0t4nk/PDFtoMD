@@ -26,7 +26,8 @@ graph TD
 ## 📁 Current Project Organization
 
 This project follows enterprise-grade organization principles with **Single Source of Truth (SSOT) Configuration** at its core:
-`
+
+```
 markpdfdown/
 ├── 🔧 config.py # ⭐ SSOT Configuration System
 ├── 🔒.env # Environment variables (DO NOT COMMIT)
@@ -36,7 +37,7 @@ markpdfdown/
 ├── 📊 auto_batch_launcher.bat # Windows batch launcher
 ├── 📄 LICENSE # Apache 2.0 License
 ├── 📝 README.md # Main documentation
-├── � pyproject.toml # Project dependencies & config
+├── 📦 pyproject.toml # Project dependencies & config
 └── 🔒 SECURITY_VERIFICATION_COMPLETE.md # Security audit report
 ```
 
@@ -188,7 +189,7 @@ graph TD
 ├── 📄 LICENSE # Apache 2.0 License
 ├── 📄 Dockerfile # Docker configuration
 └── 📄 Makefile # Build configuration
-`
+```
 
 ## 🚀 Quick Start (Updated Paths)
 
@@ -205,20 +206,20 @@ python src/batch/auto_batch.py
 # Custom folders:
 
 python src/batch/auto_batch.py "my_pdfs" "my_output"
-`
+```
 ### Single File Processing
 
-`bash
+```bash
 
 # Core application:
 
 python core/main.py < input.pdf > output.md
 python core/main_fast.py < input.pdf > output.md
-`
+```
 
 ### Utility Scripts
 
-`bash
+```bash
 
 # Conversion utilities:
 
@@ -233,13 +234,13 @@ python utils/testing/simple_llm_test.py
 # LM Studio optimization:
 
 python utils/optimization/optimize_lm_studio.py
-`
+```
 
 ## 📋 Configuration
 
 ### Environment Setup
 
-`bash
+```bash
 
 # Copy configuration template:
 
@@ -249,11 +250,11 @@ cp config/.env.sample.env
 
 # OPENAI_API_KEY=sk-your-key-here
 
-`
+```
 
 ### Auto Batch Configuration
 
-`bash
+```bash
 
 # Copy batch config template:
 
@@ -264,8 +265,7 @@ cp config/auto_batch_config_sample.py auto_batch_config.py
 # DEFAULT_PDF_FOLDER = "examples/pdfs"
 
 # DEFAULT_OUTPUT_FOLDER = "outputs/converted_markdown"
-
-`
+```
 
 ## 🎯 Benefits of New Organization
 
