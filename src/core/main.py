@@ -238,10 +238,17 @@ if __name__ == "__main__":
 
     # Output Markdown
     try:
+        # Try to print directly first
         print(markdown)
     except UnicodeEncodeError:
-        # Handle Unicode characters that can't be displayed in console
-        print(markdown.encode('utf-8', errors='replace').decode('utf-8', errors='replace'))
+        try:
+            # Handle Unicode characters that can't be displayed in console
+            print(markdown.encode('utf-8', errors='replace').decode('utf-8', errors='replace'))
+        except UnicodeEncodeError:
+            # Fallback: write to stdout with UTF-8 encoding
+            import sys
+            sys.stdout.buffer.write(markdown.encode('utf-8', errors='replace'))
+            sys.stdout.buffer.flush()
     logger.info("Image conversion to Markdown completed")
     # Remote output path
     shutil.rmtree(output_dir)
