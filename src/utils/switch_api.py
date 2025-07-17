@@ -85,12 +85,14 @@ def show_current():
             masked_key = "****"
         print(f"   API Key: {masked_key}")
 
-        # Determine current provider based on API base
-        if "api.openai.com" in config.OPENAI_API_BASE:
+        # Determine current provider based on API base URL
+        api_base = config.OPENAI_API_BASE.lower()
+        if api_base.startswith("https://api.openai.com"):
             print("🌐 Provider: OpenAI (Cloud)")
         elif (
-            "192.168.56.1" in config.OPENAI_API_BASE
-            or "localhost" in config.OPENAI_API_BASE
+            api_base.startswith("http://192.168.56.1")
+            or api_base.startswith("http://localhost")
+            or api_base.startswith("https://localhost")
         ):
             print("🖥️  Provider: LM Studio (Local)")
         else:
