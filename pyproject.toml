@@ -1,6 +1,6 @@
 [project]
 name = "PDFtoMD"
-version = "3.0.0"
+version = "4.1.0"
 description = "Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities."
 readme = "README.md"
 license = {text = "Apache-2.0"}
