@@ -322,6 +322,7 @@ python launcher.py auto-batch # Main batch processing
 python launcher.py convert-any input.pdf # Single file conversion
 python launcher.py test-llm # Test API connection
 python launcher.py optimize-lm # Optimize LM Studio settings
+python launcher.py cleanup-temp # Clean temporary files
 ```
 
 ## 🛠️ Development
