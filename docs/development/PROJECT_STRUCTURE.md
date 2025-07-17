@@ -148,6 +148,11 @@ graph TD
 | **⚡ Optimization** | Performance tuning | LM Studio optimization |
 | **🧪 Testing** | Validation tools | API testing, batch validation |
 
+## 📁 Complete Directory Structure
+
+```
+markpdfdown/
+├── 📁 tools/ # Development tools
 │ ├── conversion/ # Conversion tools
 │ ├── optimization/ # LM Studio optimization tools
 │ └── testing/ # Testing tools
@@ -155,6 +160,8 @@ graph TD
 ├── 📁 config/ # Configuration templates
 │ ├── auto_batch_config_sample.py # Batch config template
 │ └── templates/ # Additional templates
+│
+├── 📁 docs/ # Complete documentation
 │ ├── README.md # Main documentation
 │ ├── QUICK_START.md # 30-second setup guide
 │ ├── AUTO_BATCH_GUIDE.md # Complete batch guide
@@ -189,12 +196,13 @@ graph TD
 ├── 📄 LICENSE # Apache 2.0 License
 ├── 📄 Dockerfile # Docker configuration
 └── 📄 Makefile # Build configuration
+└── 📄 Makefile # Build configuration
 ```
 
 ## 🚀 Quick Start (Updated Paths)
 
 ### Auto Batch Processing (Recommended)
-`bash
+```bash
 # Windows users - double click:
 
 auto_batch_launcher.bat
