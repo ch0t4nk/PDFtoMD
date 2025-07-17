@@ -247,3 +247,6 @@ test_sample*.md
 # PDF Input Directory - Keep directory structure but ignore contents
 pdfs/*
 !pdfs/.gitkeep
+
+# Examples PDFs - Allow open-source/non-copyright examples
+!examples/pdfs/Art_of_Simplicity.pdf
