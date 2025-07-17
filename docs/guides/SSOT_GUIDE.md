@@ -33,20 +33,20 @@ MarkPDFDown uses a centralized configuration system that provides a **Single Sou
 ✅ **Cost Management** - Centralized thresholds and monitoring
 
 ## 📁 File Structure
-`
+```
 markpdfdown/
 ├── config.py # 🎯 SSOT Configuration System
 ├──.env # 🔒 Environment Variables (DO NOT COMMIT)
 ├──.env.template # 📋 Template for.env file
 ├──.env.backup # 💾 Your original.env (with API key)
 └── migrate_to_ssot.py # 🚀 Migration tool
-`
+```
 ## 🚀 Quick Setup
 
 ### Configure Your API Key
 
 - *SECURE SETUP (Recommended):**
-`bash
+```bash
 # Copy the template to create your.env file
 
 cp.env.template.env
@@ -54,19 +54,19 @@ cp.env.template.env
 # Edit.env file and add your OpenAI API key
 
 # OPENAI_API_KEY="sk-your-actual-api-key-here"
-`
+```
 - *Alternative Setup:**
-`bash
+```bash
 # Direct edit of.env file
 
 echo 'OPENAI_API_KEY="sk-your-actual-api-key-here"' >.env
-`
+```
 ### Test Configuration
-`bash
+```bash
 python config.py
-`
+```
 - *Expected Output:**
-`
+```
 🔧 MarkPDFDown Configuration Summary
 ==================================================
 📁 PDF Folder: C:\Users\...\markpdfdown\pdfs
@@ -81,20 +81,13 @@ python config.py
 🌐 API Base: https://api.openai.com/v1
 ==================================================
 ✅ Configuration test complete!
-`
+```
 ### You're Ready!
 
 All tools now automatically use the SSOT configuration. No more manual environment variable setup!
-🌡️ Temperature: 0.05
-🔢 Max Tokens:
-💰 Cost Warning: $1.0
-🚨 Cost Alert: $5.0
-🔑 API Key: ✅ Configured
-🌐 API Base: https://api.openai.com/v1
-==================================================
-`
+
 ### Test Your Application
-`bash
+```bash
 # Test with the launcher
 
 python launcher.py auto-batch --help
@@ -139,7 +132,7 @@ python src/scripts/auto_batch.py --help
 ## 🔄 Using the Configuration in Code
 
 ### Basic Usage
-`python
+```python
 from config import config
 
 # API Configuration
@@ -158,9 +151,9 @@ output_folder = config.DEFAULT_CONVERTED_FOLDER
 
 temperature = config.TEMPERATURE
 max_tokens = config.MAX_TOKENS
-`
+```
 ### Advanced Usage
-`python
+```python
 from config import config, get_openai_client_config, ensure_directories
 
 # Ensure directories exist
@@ -181,7 +174,7 @@ response = client.chat.completions.create(**model_config, messages=[...])
 
 if estimated_cost > config.COST_WARNING_THRESHOLD:
  print(f"⚠️ Cost warning: ${estimated_cost}")
-`
+```
 ## 🔒 Security Features
 
 ### ✅ What's Secure Now
@@ -203,7 +196,7 @@ if estimated_cost > config.COST_WARNING_THRESHOLD:
 ### Development vs Production
 
 Create different `.env` files:
-`bash
+```bash
 # Development
 
 cp.env.env.development
@@ -216,15 +209,15 @@ cp.env.env.production
 
 cp.env.development.env # Use development
 cp.env.production.env # Use production
-`
+```
 ### LM Studio (Local) Setup
 
 Update `.env` for local LM Studio:
-`bash
+```bash
 OPENAI_API_KEY="lm-studio"
 OPENAI_API_BASE="http://192.168.56.1:1234/v1"
 OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
-`
+```
 ## 📊 Migration Summary
 
 The SSOT migration updated **35 files** with **193 changes**:
@@ -248,7 +241,7 @@ The SSOT migration updated **35 files** with **193 changes**:
 ## 🔄 Rollback Instructions
 
 If you need to rollback the SSOT migration:
-`bash
+```bash
 # Restore from backups
 
 find. -name "*.backup" -exec bash -c 'mv "$1" "${1%.backup}"' _ {} \;
@@ -256,7 +249,7 @@ find. -name "*.backup" -exec bash -c 'mv "$1" "${1%.backup}"' _ {} \;
 # Or selectively restore specific files
 
 mv src/batch/batch_api.py.backup src/batch/batch_api.py
-`
+```
 ## 🆘 Troubleshooting
 
 ### "OPENAI_API_KEY not found"
