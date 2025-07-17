@@ -16,7 +16,9 @@ disable=trailing-whitespace,
         unspecified-encoding,
         logging-fstring-interpolation,
         reimported,
-        redefined-outer-name
+        redefined-outer-name,
+        broad-exception-caught,
+        subprocess-run-check
 
 [FORMAT]
 # Maximum number of characters on a single line
