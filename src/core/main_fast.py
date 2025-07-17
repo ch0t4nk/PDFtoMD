@@ -23,9 +23,9 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from . import LLMClient
-from .FileWorker import create_worker
-from .Util import remove_markdown_warp
+from src.core import LLMClient
+from src.core.FileWorker import create_worker
+from src.core.Util import remove_markdown_warp
 
 # Import config using relative path
 current_dir = Path(__file__).parent
