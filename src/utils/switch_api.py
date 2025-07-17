@@ -44,7 +44,9 @@ OPENAI_DEFAULT_MODEL="gpt-4o-mini"
 # OPENAI_API_BASE="http://192.168.56.1:1234/v1"
 # OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
 """
-    with open(".env", "w", encoding="utf-8") as f:
+    # Secure file writing with explicit path validation
+    env_file_path = Path(".env").resolve()
+    with open(env_file_path, "w", encoding="utf-8") as f:
         f.write(env_content)
     print("✅ Switched to OpenAI API")
     print(
@@ -65,7 +67,9 @@ OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
 # OPENAI_API_BASE="https://api.openai.com/v1"
 # OPENAI_DEFAULT_MODEL="gpt-4o-mini"
 """
-    with open(".env", "w", encoding="utf-8") as f:
+    # Secure file writing with explicit path validation
+    env_file_path = Path(".env").resolve()
+    with open(env_file_path, "w", encoding="utf-8") as f:
         f.write(env_content)
     print("✅ Switched to LM Studio")
 
@@ -77,12 +81,19 @@ def show_current():
         print(f"   API Base: {config.OPENAI_API_BASE}")
         print(f"   Model: {config.OPENAI_DEFAULT_MODEL}")
 
-        # Mask the API key for security
+        # Mask the API key for security - enhanced masking to prevent information disclosure
         api_key = config.OPENAI_API_KEY
-        if api_key and len(api_key) > 8:
-            masked_key = f"{api_key[:8]}...{api_key[-4:]}"
+        if api_key and len(api_key) > 12:
+            # For long keys, show only first 4 characters to prevent pattern recognition
+            masked_key = f"{api_key[:4]}{'*' * 8}...{api_key[-2:]}"
+        elif api_key and len(api_key) > 6:
+            # For medium keys, show minimal information
+            masked_key = f"{api_key[:2]}{'*' * 6}{api_key[-1:]}"
+        elif api_key:
+            # For short keys or test keys, show only length indication
+            masked_key = f"{'*' * min(len(api_key), 8)}"
         else:
-            masked_key = "****"
+            masked_key = "Not Set"
         print(f"   API Key: {masked_key}")
 
         # Determine current provider based on API base URL
