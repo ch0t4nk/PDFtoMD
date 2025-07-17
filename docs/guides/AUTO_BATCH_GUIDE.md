@@ -36,15 +36,15 @@ That's it! The system will automatically:
 
 ## Table of Contents
 
-- [Features](#features)
-- [Installation & Setup](#installation--setup)
-- [Basic Usage](#basic-usage)
-- [Advanced Usage](#advanced-usage)
-- [Configuration](#configuration)
-- [Cost Management](#cost-management)
-- [Output Structure](#output-structure)
-- [Troubleshooting](#troubleshooting)
-- [API Reference](#api-reference)
+- Features
+- Installation & Setup  
+- Basic Usage
+- Advanced Usage
+- Configuration
+- Cost Management
+- Output Structure
+- Troubleshooting
+- API Reference
 
 ## Features
 
@@ -470,7 +470,7 @@ master.cleanup()
 ### Getting Help
 
 - Check the [main README](../../README.md) for general setup
-- Review [troubleshooting](#troubleshooting) section above
+- Review troubleshooting section above
 - Open an issue on GitHub for bugs or feature requests
 
 ### Performance Optimization

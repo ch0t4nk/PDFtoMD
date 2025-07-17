@@ -83,7 +83,7 @@ Welcome to the comprehensive documentation for **PDFtoMD** - an enterprise-ready
 - **For Enterprise:**
   - 🛡️ [Security Compliance](security/SECURITY.md) - Enterprise security requirements
   - 👥 [Team Setup](guides/SSOT_GUIDE.md) - Multi-user configuration
-  - 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md#cost-management) - Budget controls
+  - 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md) - Budget controls
 
 ## 📋 Documentation Standards
 
@@ -110,7 +110,7 @@ Found an issue or want to improve our docs?
 
 1. 📝 [Create an issue](https://github.com/ch0t4nk/PDFtoMD/issues)
 2. 🔄 Submit a pull request
-3. 📚 Follow our [contribution guidelines](../README.md#-contributing)
+3. 📚 Follow our [contribution guidelines](../README.md)
 
 ---
 
