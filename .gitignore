@@ -204,6 +204,9 @@ venv/
 !/config.py
 !/migrate_to_ssot.py
 !/launcher.py
+!/cleanup.py
+!/test_comprehensive.py
+!/validate_setup.py
 
 # Markdown files that should only exist in docs/
 /*.md
@@ -231,6 +234,15 @@ test_report*.json
 # Test files that should not be committed
 test_*.mmd
 temp_*.mmd
+
+# Completion reports and temporary summaries (should be in docs/)
+*_COMPLETE.md
+*_SUMMARY.md
+MERMAID_TEST.md
+fix_markdown_codeblocks.py
+
+# Test samples in root (should be in tests/samples/)
+test_sample*.md
 
 # PDF Input Directory - Keep directory structure but ignore contents
 pdfs/*
