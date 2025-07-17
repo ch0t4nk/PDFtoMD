@@ -248,7 +248,7 @@ class PDFtoMDTestSuite:
                     if hasattr(fitz, "__version__"):
                         actual_version = fitz.__version__
                         if not actual_version.startswith(
-                            expected_version.split(".")[0]
+                            expected_version.split(".", maxsplit=1)[0]
                         ):
                             version_mismatches.append(
                                 f"{package}: expected {expected_version}, got {actual_version}"
@@ -260,7 +260,7 @@ class PDFtoMDTestSuite:
                     if hasattr(pypdf, "__version__"):
                         actual_version = pypdf.__version__
                         if not actual_version.startswith(
-                            expected_version.split(".")[0]
+                            expected_version.split(".", maxsplit=1)[0]
                         ):
                             version_mismatches.append(
                                 f"{package}: expected {expected_version}, got {actual_version}"
@@ -271,7 +271,7 @@ class PDFtoMDTestSuite:
                     if hasattr(openai, "__version__"):
                         actual_version = openai.__version__
                         if not actual_version.startswith(
-                            expected_version.split(".")[0]
+                            expected_version.split(".", maxsplit=1)[0]
                         ):
                             version_mismatches.append(
                                 f"{package}: expected {expected_version}, got {actual_version}"
@@ -283,7 +283,7 @@ class PDFtoMDTestSuite:
                     try:
                         actual_version = dotenv.__version__  # type: ignore
                         if not actual_version.startswith(
-                            expected_version.split(".")[0]
+                            expected_version.split(".", maxsplit=1)[0]
                         ):
                             version_mismatches.append(
                                 f"{package}: expected {expected_version}, got {actual_version}"

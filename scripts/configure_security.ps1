@@ -18,62 +18,62 @@ if (!(Get-Command gh -ErrorAction SilentlyContinue)) {
 }
 
 # Check if authenticated
-$authStatus = gh auth status 2>&1
+gh auth status 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Not authenticated with GitHub CLI. Run: gh auth login"
     exit 1
 }
 
-Write-Host "🔧 Configuring GitHub Advanced Security Settings for PDFtoMD" -ForegroundColor Cyan
-Write-Host "=" * 60
+Write-Output "🔧 Configuring GitHub Advanced Security Settings for PDFtoMD"
+Write-Output ("=" * 60)
 
 $repo = "ch0t4nk/PDFtoMD"
 
 # Enable Secret Scanning
-Write-Host "🔍 Enabling Secret Scanning..." -ForegroundColor Yellow
+Write-Output "🔍 Enabling Secret Scanning..."
 try {
     gh api --method PATCH "/repos/$repo" -f has_secret_scanning=true
-    Write-Host "✅ Secret scanning enabled" -ForegroundColor Green
+    Write-Output "✅ Secret scanning enabled"
 } catch {
     Write-Warning "Secret scanning may already be enabled or requires GitHub Advanced Security"
 }
 
 # Enable Push Protection
-Write-Host "🛡️ Enabling Push Protection..." -ForegroundColor Yellow
+Write-Output "🛡️ Enabling Push Protection..."
 try {
     gh api --method PATCH "/repos/$repo/secret-scanning/push-protection" -f enabled=true
-    Write-Host "✅ Push protection enabled" -ForegroundColor Green
+    Write-Output "✅ Push protection enabled"
 } catch {
     Write-Warning "Push protection configuration may require manual setup"
 }
 
 # Enable Dependency Review
-Write-Host "📦 Enabling Dependency Review..." -ForegroundColor Yellow
+Write-Output "📦 Enabling Dependency Review..."
 try {
     gh api --method PATCH "/repos/$repo" -f has_vulnerability_alerts=true
-    Write-Host "✅ Vulnerability alerts enabled" -ForegroundColor Green
+    Write-Output "✅ Vulnerability alerts enabled"
 } catch {
     Write-Warning "Dependency features may already be enabled"
 }
 
 # Enable Private Vulnerability Reporting
-Write-Host "🔒 Enabling Private Vulnerability Reporting..." -ForegroundColor Yellow
+Write-Output "🔒 Enabling Private Vulnerability Reporting..."
 try {
     gh api --method PATCH "/repos/$repo" -f has_private_vulnerability_reporting=true
-    Write-Host "✅ Private vulnerability reporting enabled" -ForegroundColor Green
+    Write-Output "✅ Private vulnerability reporting enabled"
 } catch {
     Write-Warning "Private vulnerability reporting may require manual setup"
 }
 
-Write-Host ""
-Write-Host "🎉 Security configuration complete!" -ForegroundColor Green
-Write-Host "📋 Verify settings at: https://github.com/$repo/settings/security_analysis" -ForegroundColor Cyan
+Write-Output ""
+Write-Output "🎉 Security configuration complete!"
+Write-Output "📋 Verify settings at: https://github.com/$repo/settings/security_analysis"
 
-Write-Host ""
-Write-Host "🔧 Current Security Features:" -ForegroundColor Yellow
-Write-Host "   ✅ CodeQL Security Analysis (already configured)" 
-Write-Host "   ✅ Secret Scanning + Push Protection" 
-Write-Host "   ✅ Dependency Review + Vulnerability Alerts"
-Write-Host "   ✅ Private Vulnerability Reporting"
-Write-Host ""
-Write-Host "🛡️ Your PDFtoMD repository now has enterprise-grade security!" -ForegroundColor Green
+Write-Output ""
+Write-Output "🔧 Current Security Features:"
+Write-Output "   ✅ CodeQL Security Analysis (already configured)"
+Write-Output "   ✅ Secret Scanning + Push Protection"
+Write-Output "   ✅ Dependency Review + Vulnerability Alerts"
+Write-Output "   ✅ Private Vulnerability Reporting"
+Write-Output ""
+Write-Output "🛡️ Your PDFtoMD repository now has enterprise-grade security!"
