@@ -19,8 +19,6 @@ import sys
 import time
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 # Handle imports depending on execution context
 try:
     from src.core import LLMClient
@@ -58,8 +56,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stderr)],
 )
 logger = logging.getLogger(__name__)
-
-load_dotenv()
 
 
 def completion(

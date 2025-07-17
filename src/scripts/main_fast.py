@@ -8,8 +8,6 @@ import sys
 import time
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 # Import core modules using importlib for proper path resolution
 script_dir = Path(__file__).parent
 src_dir = script_dir.parent
@@ -63,8 +61,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stderr)],
 )
 logger = logging.getLogger(__name__)
-
-load_dotenv()
 
 
 def completion_fast(

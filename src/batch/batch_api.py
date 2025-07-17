@@ -24,7 +24,6 @@ import sys
 import time
 from pathlib import Path
 
-from dotenv import load_dotenv
 from openai import OpenAI
 
 # Import config using relative path
@@ -42,9 +41,6 @@ if config_path.exists():
         raise ImportError("Failed to load config spec")
 else:
     raise ImportError("Config file not found")
-
-# Load environment variables
-load_dotenv()
 
 
 class BatchPDFConverter:

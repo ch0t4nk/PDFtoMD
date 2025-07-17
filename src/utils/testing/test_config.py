@@ -3,11 +3,9 @@
 import importlib.util
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-# Import config using relative path
+# Import config using relative path - SSOT handles all environment loading
 current_dir = Path(__file__).parent
-root_dir = current_dir.parent.parent
+root_dir = current_dir.parent.parent.parent  # Go up three levels from src/utils/testing/
 config_path = root_dir / "config.py"
 
 if config_path.exists():
@@ -24,7 +22,6 @@ else:
 
 def test_environment():
     """Test if environment variables are properly configured"""
-    load_dotenv()
 
     api_key = config.OPENAI_API_KEY
     base_url = config.OPENAI_API_BASE
