@@ -1,29 +1,30 @@
 # 📚 MarkPDFDown Documentation
-`mermaid
+
+```mermaid
 graph TB
- A[📚 Documentation Hub] --> B[🚀 Getting Started]
- A --> C[📖 User Guides]
- A --> D[🔒 Security]
- A --> E[🛠️ Development]
- A --> F[⚖️ Legal]
-
- B --> B1[Main README.md]
- B --> B2[Quick Start Guide]
-
- C --> C1[Auto Batch Processing]
- C --> C2[SSOT Configuration]
- C --> C3[LM Studio Optimization]
-
- D --> D1[Security Guidelines]
- D --> D2[API Key Management]
-
- E --> E1[Project Structure]
- E --> E2[Implementation Guide]
- E --> E3[Testing Framework]
-
- F --> F1[Contributors]
- F --> F2[Copyright & Licenses]
-`
+    A[📚 Documentation Hub] --> B[🚀 Getting Started]
+    A --> C[📖 User Guides]
+    A --> D[🔒 Security]
+    A --> E[🛠️ Development]
+    A --> F[⚖️ Legal]
+    
+    B --> B1[Main README.md]
+    B --> B2[Quick Start Guide]
+    
+    C --> C1[Auto Batch Processing]
+    C --> C2[SSOT Configuration]
+    C --> C3[LM Studio Optimization]
+    
+    D --> D1[Security Guidelines]
+    D --> D2[API Key Management]
+    
+    E --> E1[Project Structure]
+    E --> E2[Implementation Guide]
+    E --> E3[Testing Framework]
+    
+    F --> F1[Contributors]
+    F --> F2[Copyright & Licenses]
+```
 Welcome to the comprehensive documentation for **MarkPDFDown** - an enterprise-ready PDF to Markdown conversion tool with AI-powered processing and secure configuration management.
 
 ## 🗺️ Documentation Navigation
@@ -68,17 +69,17 @@ Welcome to the comprehensive documentation for **MarkPDFDown** - an enterprise-r
 
 ### 🏃‍♂️ Quick Access Links
 
-- *For New Users:**
+**For New Users:**
 - 🚀 [30-Second Setup](guides/QUICK_START.md) - Get started immediately
 - 🔧 [Configuration Guide](guides/SSOT_GUIDE.md) - Set up your API keys securely
 - 💡 [Auto Batch Processing](guides/AUTO_BATCH_GUIDE.md) - Process multiple PDFs with 50% savings
 
-- *For Developers:**
+**For Developers:**
 - 🗂️ [Project Structure](development/PROJECT_STRUCTURE.md) - Understand the codebase
 - 🔒 [Security Framework](security/SECURITY.md) - Implement secure practices
 - 🧪 [Testing Guide](../test_comprehensive.py) - Run comprehensive tests
 
-- *For Enterprise:**
+**For Enterprise:**
 - 🛡️ [Security Compliance](security/SECURITY.md) - Enterprise security requirements
 - 👥 [Team Setup](guides/SSOT_GUIDE.md#team-collaboration) - Multi-user configuration
 - 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md#cost-management) - Budget controls
@@ -108,6 +109,6 @@ Found an issue or want to improve our docs?
 2. 🔄 Submit a pull request
 3. 📚 Follow our [contribution guidelines](../README.md#contributing)
 
-- --
+---
 
-- *📍 You are here:** `/docs/` → Use the navigation above to find exactly what you need!
+**📍 You are here:** `/docs/` → Use the navigation above to find exactly what you need!

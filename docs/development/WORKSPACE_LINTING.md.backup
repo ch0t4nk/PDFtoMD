@@ -7,9 +7,7 @@ This directory contains tools to maintain code quality and consistency across th
 Comprehensive workspace linting tool that fixes common formatting and style issues.
 
 ### Usage
-
 `bash
-
 # Run workspace linting
 
 python workspace_lint.py
@@ -18,7 +16,6 @@ python workspace_lint.py
 
 python workspace_lint.py --help
 `
-
 ### What it does
 
 - **Markdown Files**: Uses `utils.linting.markdown_linter` to fix formatting issues
@@ -27,7 +24,6 @@ python workspace_lint.py --help
 - **Smart Ignoring**: Skips `outputs/`, `__pycache__/`, and temporary files
 
 ### Example Output
-
 `
 🔧 MarkPDFDown Workspace Linter
 ============================================================
@@ -54,15 +50,12 @@ python workspace_lint.py --help
 ❌ Errors Encountered:
 ✅ Workspace linting completed with fixes applied!
 `
-
 ## 🧹 cleanup_backups.py
 
 Simple utility to remove backup files created by the workspace linter.
 
 ### Usage
-
 `bash
-
 # Remove all.backup files
 
 python cleanup_backups.py
@@ -71,7 +64,6 @@ python cleanup_backups.py
 
 python cleanup_backups.py --help
 `
-
 ### What it does
 
 - Finds all `.backup` files in the workspace
@@ -79,14 +71,12 @@ python cleanup_backups.py --help
 - Shows what was cleaned up
 
 ### Example Output
-
 `
 🧹 Found 57 backup files to remove:
  🗑️ batch\auto_batch.py.backup
  🗑️ utils\metadata_embedder.py.backup...
 ✅ Cleaned up 57 backup files!
 `
-
 ## 🚫 Ignored Directories
 
 The workspace linter automatically ignores:

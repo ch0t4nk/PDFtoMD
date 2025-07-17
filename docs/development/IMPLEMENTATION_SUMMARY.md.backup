@@ -31,7 +31,6 @@
 - **Automated maintenance** - Self-managing temporary files
 
 ## 📊 **Proven Results**
-
 `
 Real Test Data (4 PDF files, 189 pages):
 ├── Before Linting: 453KB total file size
@@ -39,7 +38,6 @@ Real Test Data (4 PDF files, 189 pages):
 ├── Savings: 177KB (39% reduction)
 └── API Cost: $0.00 (local processing)
 `
-
 ## 🎯 **Key Benefits**
 
 - **📁 Easy Access** - All converted files in `outputs/converted/`

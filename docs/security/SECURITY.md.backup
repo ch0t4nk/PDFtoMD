@@ -23,103 +23,94 @@ MarkPDFDown v3.0+ implements comprehensive security measures to protect your API
 
 ## 🚀 Security Best Practices
 
-### **Initial Setup**
-`bash
+### 1. **Initial Setup**
+```bash
 # ✅ Always use the template
+cp .env.template .env
 
-cp.env.template.env
-
-# ✅ Edit.env with your real API key
-
+# ✅ Edit .env with your real API key
 # OPENAI_API_KEY="sk-your-real-key-here"
 
 # ❌ Never edit source files directly
-`
-### **Key Rotation**
-`bash
+```
+
+### 2. **Key Rotation**
+```bash
 # When rotating API keys:
+# 1. Revoke old key from OpenAI dashboard
+# 2. Generate new key
+# 3. Update .env file only
+# 4. Test with: python config.py
+```
 
-# Revoke old key from OpenAI dashboard
+### 3. **Version Control**
+```bash
+# ✅ .env is automatically ignored
+git status  # .env should not appear
 
-# Generate new key
+# ❌ Never force-add .env
+# git add -f .env  # DON'T DO THIS
+```
 
-# Update.env file only
-
-# Test with: python config.py
-`
-### **Version Control**
-`bash
-# ✅.env is automatically ignored
-
-git status #.env should not appear
-
-# ❌ Never force-add.env
-
-# git add -f.env # DON'T DO THIS
-`
 ## 🔍 Security Validation
 
 ### Test Your Setup
-`bash
+```bash
 # Check configuration loads correctly
-
 python config.py
 
 # Verify no API keys in source code
-
 grep -r "sk-proj" src/ tools/ config/
-
 # Should return no results
 
-# Verify.env is gitignored
+# Verify .env is gitignored
+git check-ignore .env
+# Should output: .env
+```
 
-git check-ignore.env
-
-# Should output:.env
-`
 ### Validate Environment
-`bash
-# Ensure.env exists and has proper permissions
-
-ls -la.env
-
-# Should show: -rw--- (600 permissions recommended)
+```bash
+# Ensure .env exists and has proper permissions
+ls -la .env
+# Should show: -rw------- (600 permissions recommended)
 
 # Check for API key pattern
-
-grep "OPENAI_API_KEY".env
-
+grep "OPENAI_API_KEY" .env
 # Should show: OPENAI_API_KEY="sk-..."
-`
+```
+
 ## 🚨 Security Incident Response
 
 ### If API Key is Exposed
 
 1. **Immediate Actions:**
- `bash
- # 1. Revoke the exposed key immediately
- # Go to https://platform.openai.com/api-keys
+   ```bash
+   # 1. Revoke the exposed key immediately
+   # Go to https://platform.openai.com/api-keys
+   
+   # 2. Generate new API key
+   
+   # 3. Update .env file
+   echo 'OPENAI_API_KEY="sk-new-key-here"' > .env
+   
+   # 4. Test new configuration
+   python config.py
+   ```
 
- # 2. Generate new API key
-
- # 3. Update.env file
- echo 'OPENAI_API_KEY="sk-new-key-here"' >.env
-
- # 4. Test new configuration
- python config.py
- `
 2. **Git History Cleanup:**
- `bash
- # If key was committed to git:
- # Use BFG Repo-Cleaner or git filter-branch
- # Contact team for history rewrite procedures
- `
+   ```bash
+   # If key was committed to git:
+   # Use BFG Repo-Cleaner or git filter-branch
+   # Contact team for history rewrite procedures
+   ```
+
 3. **Verification:**
- `bash
- # Verify no traces remain
- git log --all -p -S "sk-proj" --since="1 month ago"
- # Should return no results
- `
+   ```bash
+   # Verify no traces remain
+   git log --all -p -S "sk-proj" --since="1 month ago"
+   # Should return no results
+   ```
+
 ## 📋 Security Checklist
 
 - [ ] `.env` file exists and contains your API key
@@ -134,36 +125,30 @@ grep "OPENAI_API_KEY".env
 
 ### For Team Environments
 
-1. **Never share.env files directly**
-2. **Use.env.template for onboarding**
+1. **Never share .env files directly**
+2. **Use .env.template for onboarding**
 3. **Each developer has their own API key**
 4. **Regularly rotate API keys**
 5. **Monitor API usage for anomalies**
 
 ### Example Team Workflow
-`bash
+```bash
 # New team member setup:
-
-# Clone repository
-
+# 1. Clone repository
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 
-# Copy template
+# 2. Copy template
+cp .env.template .env
 
-cp.env.template.env
-
-# Get personal API key from team lead
-
-# Configure.env with personal key
-
-# Test setup
-
+# 3. Get personal API key from team lead
+# 4. Configure .env with personal key
+# 5. Test setup
 python config.py
 
-# Never commit.env
-
+# 6. Never commit .env
 # (Already gitignored)
-`
+```
+
 ## 📞 Support
 
 If you discover a security issue:
@@ -179,6 +164,6 @@ If you discover a security issue:
 - [Git Security Guidelines](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure)
 - [Environment Variable Security](https://12factor.net/config)
 
-- --
+---
 
-- *Remember: Security is everyone's responsibility. When in doubt, ask for help rather than risk exposure.**
+**Remember: Security is everyone's responsibility. When in doubt, ask for help rather than risk exposure.**

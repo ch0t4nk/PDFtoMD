@@ -14,7 +14,6 @@ The MarkPDFDown project uses a multi-layered approach to spell checking and term
 ## Configuration Files
 
 ### `cspell.json`
-
 Primary configuration file for Code Spell Checker extension containing:
 - 500+ technical terms commonly used in the project
 - Language-specific settings for Python, Markdown, JSON, YAML
@@ -22,7 +21,6 @@ Primary configuration file for Code Spell Checker extension containing:
 - Custom validation rules and compound word handling
 
 ### `.cspell-dictionaries.txt`
-
 Project-specific dictionary file containing:
 - MarkPDFDown-specific terminology
 - Development tool names
@@ -30,7 +28,6 @@ Project-specific dictionary file containing:
 - Common programming acronyms
 
 ### `.vscode/settings.json`
-
 VS Code workspace settings that:
 - Enable spell checking for relevant file types
 - Configure diagnostic levels and suggestion counts
@@ -38,7 +35,6 @@ VS Code workspace settings that:
 - Define file associations
 
 ### `docs/GLOSSARY.md`
-
 Comprehensive technical glossary that serves as:
 - Reference documentation for all technical terms
 - Spell check validation source
@@ -50,17 +46,18 @@ Comprehensive technical glossary that serves as:
 ### For Developers
 
 1. **VS Code Extension**: Install Code Spell Checker extension
- `
- Id: streetsidesoftware.code-spell-checker
- `
+   ```
+   Id: streetsidesoftware.code-spell-checker
+   ```
+
 2. **Check Spelling**: Spelling errors will be underlined in red
- - Right-click on underlined words for suggestions
- - Use Ctrl+. for quick fixes
+   - Right-click on underlined words for suggestions
+   - Use Ctrl+. for quick fixes
 
 3. **Add New Terms**: When encountering legitimate technical terms:
- - Add to workspace dictionary via VS Code command palette
- - Or manually add to `cspell.json` words array
- - Update `docs/GLOSSARY.md` with definitions
+   - Add to workspace dictionary via VS Code command palette
+   - Or manually add to `cspell.json` words array
+   - Update `docs/GLOSSARY.md` with definitions
 
 ### For New Technical Terms
 
@@ -74,13 +71,15 @@ When adding new technical terms to the project:
 ### Command Line Usage
 
 Validate spell check configuration:
-`bash
+```bash
 python scripts/validate_spell_check.py
-`
+```
+
 Check specific files for spelling issues:
-`bash
+```bash
 npx cspell "**/*.md" "**/*.py"
-`
+```
+
 ## Ignored Paths
 
 The following directories and files are excluded from spell checking:
@@ -103,17 +102,17 @@ The system is designed to achieve zero spelling-related problems by:
 
 ### Common Issues and Solutions
 
-- *Issue**: New technical term flagged as misspelled
-- *Solution**: Add to `cspell.json` words array and update glossary
+**Issue**: New technical term flagged as misspelled
+**Solution**: Add to `cspell.json` words array and update glossary
 
-- *Issue**: Too many false positives
-- *Solution**: Review and update `ignorePaths` in configuration
+**Issue**: Too many false positives
+**Solution**: Review and update `ignorePaths` in configuration
 
-- *Issue**: Spell checker not working
-- *Solution**: Ensure Code Spell Checker extension is installed and enabled
+**Issue**: Spell checker not working
+**Solution**: Ensure Code Spell Checker extension is installed and enabled
 
-- *Issue**: Configuration validation fails
-- *Solution**: Run `python scripts/validate_spell_check.py` and follow recommendations
+**Issue**: Configuration validation fails
+**Solution**: Run `python scripts/validate_spell_check.py` and follow recommendations
 
 ## Maintenance
 
@@ -135,12 +134,13 @@ When expanding into new technical domains:
 ## Integration with CI/CD
 
 Consider adding spell check validation to your CI/CD pipeline:
-`yaml
-# Example GitHub Actions step
 
+```yaml
+# Example GitHub Actions step
 - name: Validate Spell Check Configuration
- run: python scripts/validate_spell_check.py
-`
+  run: python scripts/validate_spell_check.py
+```
+
 ## Benefits
 
 This comprehensive spell checking system provides:
@@ -151,6 +151,6 @@ This comprehensive spell checking system provides:
 - **Onboarding**: Clear reference for new team members
 - **Automation**: Automated validation of spell check coverage
 
-- --
+---
 
-- For questions or issues with the spell checking system, refer to the technical glossary or create an issue in the project repository.*
+*For questions or issues with the spell checking system, refer to the technical glossary or create an issue in the project repository.*

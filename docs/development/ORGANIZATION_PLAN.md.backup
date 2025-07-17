@@ -9,7 +9,6 @@
 - Documentation mixed with code
 
 ## Proposed Structure
-
 `
 markpdfdown/
 ├── 📁 core/ # Core application code
@@ -49,7 +48,6 @@ markpdfdown/
  ├── converted_markdown/ # Batch outputs
  └── temp/ # Temporary files
 `
-
 ## Implementation Steps
 
 1. Create new directory structure

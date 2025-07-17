@@ -38,22 +38,18 @@ If you find config files, look for these keys:
  "flash_attn": true
 }
 `
-
 ## 🚀 Windows Performance Tweaks
 
 ### Power Settings:
-
 `batch
 powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 `
-
 ### NVIDIA Settings:
 
 - Open NVIDIA Control Panel
 - Manage 3D Settings → Global Settings
 - Power management mode: "Prefer maximum performance"
 - CUDA - GPUs used by PhysX: Your RTX
-
 ### Memory Settings:
 
 - Virtual Memory: Set to system managed
@@ -63,11 +59,9 @@ powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 ## 📊 Monitoring Performance
 
 ### Check GPU Usage:
-
 `
 nvidia-smi -l
 `
-
 ### Expected Performance:
 
 - GPU Utilization: 85-95% during processing

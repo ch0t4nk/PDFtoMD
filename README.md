@@ -1,285 +1,519 @@
 # MarkPDFDown
 
-**English**
-
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
+[![Security Verified](https://img.shields.io/badge/Security-Verified-green.svg)](docs/security/SECURITY.md)
+[![SSOT Config](https://img.shields.io/badge/Config-SSOT-blue.svg)](docs/guides/SSOT_GUIDE.md)
 
 Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.
+`mermaid
+graph TB
+ A[📄 PDF Documents] --> B[🔧 MarkPDFDown]
+ B --> C[📝 Clean Markdown]
 
-![markpdfdown](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/markpdfdown.png)
+ subgraph "Enterprise Features"
+ D[🔒 SSOT Configuration]
+ E[💰 Cost Optimization]
+ F[🛡️ Security Framework]
+ G[👥 Team Collaboration]
+ end
 
+ B --> D
+ B --> E
+ B --> F
+ B --> G
+`![markpdfdown](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/markpdfdown.png)
+
+## 🏗️ Architecture Overview
+`mermaid
+graph LR
+ subgraph "Input Sources"
+ A[📁 PDF Files]
+ B[🖼️ Image Files]
+ end
+
+ subgraph "Processing Engine"
+ C[🔧 SSOT Config]
+ D[🤖 AI Processing]
+ E[📊 Batch Manager]
+ F[💰 Cost Tracker]
+ end
+
+ subgraph "Output & Management"
+ G[📝 Markdown Files]
+ H[📋 Metadata]
+ I[📈 Analytics]
+ J[🧹 Cleanup]
+ end
+
+ A --> D
+ B --> D
+ C --> D
+ C --> E
+ D --> E
+ E --> F
+ E --> G
+ E --> H
+ F --> I
+ E --> J
+`
 ## Overview
 
 MarkPDFDown is designed to simplify the process of converting PDF documents into clean, editable Markdown text for enterprise environments. By utilizing advanced multimodal AI models with enterprise-grade security and configuration management, it can accurately extract text, preserve formatting, and handle complex document structures including tables, formulas, and diagrams.
 
 ## Enterprise Features
 
-- **🔧 Single Source of Truth (SSOT) Configuration** - Centralized configuration management for enterprise deployments
-- **🔒 Enterprise Security Framework** - Secure API key management, git history protection, and compliance features
-- **👥 Team Collaboration Ready** - Multi-user support with secure onboarding procedures
-- **📊 Cost Management & Analytics** - Detailed cost tracking and budget controls for enterprise use
-- **⚙️ Production-Ready Architecture** - Robust error handling, logging, and monitoring capabilities
+| Feature | Description | Benefits |
+|---|---|---|
+| 🔧 **SSOT Configuration** | Centralized configuration management | Secure, consistent settings across deployments |
+| 🔒 **Security Framework** | Enterprise-grade security controls | API key protection, audit trails, compliance |
+| 👥 **Team Collaboration** | Multi-user support with secure onboarding | Scalable team workflows, role management |
+| 📊 **Cost Management** | Advanced analytics and budget controls | Predictable costs, usage optimization |
+| ⚙️ **Production Architecture** | Robust error handling and monitoring | High availability, enterprise reliability |
+| 🧪 **Comprehensive Testing** | 100% test coverage with CI/CD | Quality assurance, automated validation |
+`mermaid
+pie title Enterprise Feature Distribution
+ "Security & Config":
+ "Processing & AI":
+ "Cost Management":
+ "Team Collaboration":
+`
+## ✨ Features
+`mermaid
+graph TD
+ A[📄 Document Input] --> B{Processing Mode}
+ B -->|Single File| C[🔧 Direct Conversion]
+ B -->|Multiple Files| D[🤖 Auto Batch Processing]
 
-## Features
+ C --> E[📝 Markdown Output]
+ D --> F[💰 50% Cost Savings]
+ D --> G[📊 Progress Monitoring]
+ D --> H[🗂️ Organized Results]
 
-- **PDF to Markdown Conversion**: Transform any PDF document into well-formatted Markdown
-- **Image to Markdown Conversion**: Transform image into well-formatted Markdown
+ F --> E
+ G --> E
+ H --> E
+
+ subgraph "Core Features"
+ I[📄 PDF to Markdown]
+ J[🖼️ Image to Markdown]
+ K[🔧 Local Linting]
+ L[🤖 Multimodal AI]
+ end
+
+ subgraph "Enterprise Features"
+ M[💰 Cost Optimization]
+ N[📊 Analytics Dashboard]
+ O[🛡️ Security Controls]
+ P[⚙️ Batch Management]
+ end
+`
+### Core Capabilities
+
+- **📄 PDF to Markdown Conversion**: Transform any PDF document into well-formatted Markdown
+- **🖼️ Image to Markdown Conversion**: Convert images (PNG, JPG, BMP) into structured Markdown
 - **🤖 Auto Batch Processing**: Fully automated batch conversion with OpenAI Batch API (50% cost savings)
 - **🔧 Local Linting System**: Super-fast local markdown formatting and cleanup (no API costs)
-- **Multimodal Understanding**: Leverages AI to comprehend document structure and content
-- **Format Preservation**: Maintains headings, lists, tables, and other formatting elements
+- **🤖 Multimodal Understanding**: Leverages AI to comprehend document structure and content
+- **📐 Format Preservation**: Maintains headings, lists, tables, and other formatting elements
+
+### Advanced Features
+
 - **💰 Cost Optimization**: Advanced cost tracking and optimization with detailed analytics
 - **📊 Progress Monitoring**: Real-time batch processing status and intelligent monitoring
-- **� Clean Output Structure**: Organized converted/, metadata/, temp/ folder structure
+- **🗂️ Clean Output Structure**: Organized `converted/`, `metadata/`, `temp/` folder structure
 - **🧹 Automatic Cleanup**: Smart temp file management and old file removal
-- **Customizable Model**: Configure the model to suit your needs
+- **⚙️ Customizable Processing**: Configure models, prompts, and processing parameters
+- **🛡️ Enterprise Security**: SSOT configuration with secure API key management
 
-## Demo
-![Demo Image](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/demo_02.png)
+## 🚀 Quick Start
+`mermaid
+sequenceDiagram
+ participant U as User
+ participant C as Config System
+ participant A as Auto Batch
+ participant O as OpenAI API
+ participant R as Results
 
-## Installation
+ U->>C: 1. Setup API Key (.env)
+ C->>U: ✅ Configuration Ready
+ U->>A: 2. Run auto_batch.py
+ A->>O: 3. Submit Batch (50% savings)
+ O->>A: 4. Process Documents
+ A->>R: 5. Organize Results
+ R->>U: 📄 Clean Markdown Files
+`
+### ⚡ 30-Second Setup
 
-### Using uv (Recommended)
+| Step | Command | Description |
+|---|---|---|
+| **1** | `cp.env.template.env` | Create configuration file |
+| **2** | Edit `.env` file | Add your OpenAI API key |
+| **3** | `python config.py` | Verify configuration |
+| **4** | `python src/batch/auto_batch.py` | Start processing! |
 
-```bash
-# Install uv if you haven't already
+- *🎉 That's it!** Your PDFs will be converted with 50% cost savings and organized automatically.
+
+## 📦 Installation
+`mermaid
+graph LR
+ A[Choose Method] --> B[🚀 uv Recommended]
+ A --> C[🐍 pip Standard]
+ A --> D[🐋 Docker Container]
+ A --> E[🐍 conda Environment]
+
+ B --> F[Fast & Modern]
+ C --> G[Traditional]
+ D --> H[Containerized]
+ E --> I[Data Science]
+`
+### 🚀 Using uv (Recommended - Fastest)
+`bash
+# Install uv package manager
+
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Clone the repository
+# Clone and setup
+
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
+uv sync # Creates venv + installs dependencies automatically
+`
+### 🐍 Using pip (Traditional)
+`bash
+# Clone repository
+
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
-# Install dependencies and create virtual environment
-uv sync
-```
+# Create virtual environment
 
-### Using pip
-
-```bash
-# Clone the repository
-git clone https://github.com/ch0t4nk/PDFtoMD.git
-cd PDFtoMD
-
-# Create virtual environment (recommended)
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate # Windows: venv\Scripts\activate
 
-# Install production dependencies
+# Install dependencies
+
 pip install -r requirements.txt
+`
+### 🐋 Using Docker
+`bash
+# Build image
 
-# OR install development dependencies (includes testing tools)
-pip install -r requirements-dev.txt
-```
+docker build -t markpdfdown.
 
-### Using conda
+# Run with SSOT configuration
 
-```bash
+docker run -i -v $(pwd)/.env:/app/.env markpdfdown < input.pdf > output.md
+`
+### 🐍 Using conda
+`bash
+# Create environment
+
 conda create -n markpdfdown python=3.9
 conda activate markpdfdown
 
-# Clone the repository
+# Clone and install
+
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
-
-# Install dependencies
 pip install -r requirements.txt
-```
-## Usage
+`
+## 🔧 Configuration
 
-### 🔧 Initial Setup (REQUIRED)
+### SSOT System Setup (Required)
+`mermaid
+graph TD
+ A[�.env.template] --> B[📝 Create.env]
+ B --> C[🔑 Add API Key]
+ C --> D[✅ Test Configuration]
+ D --> E[🚀 Ready to Use]
 
-**Before first use, configure your API key using our secure SSOT system:**
+ subgraph "Security Features"
+ F[🔒 No keys in code]
+ G[📋 Template sharing]
+ H[🎯 Centralized config]
+ I[🔄 Environment switching]
+ end
+`
+- *Before first use, configure your API key using our secure SSOT system:**
+`bash
+# Copy the template to create your.env file
 
-```bash
-# 1. Copy the template to create your .env file
-cp .env.template .env
+cp.env.template.env
 
-# 2. Edit .env and add your OpenAI API key
+# Edit.env and add your OpenAI API key
+
 # OPENAI_API_KEY="sk-your-actual-api-key-here"
 
-# 3. Test configuration
-python config.py
-```
+# Test configuration
 
-✅ **Security Features:**
+python config.py
+`
+- *✅ Security Features:**
 - 🔒 API keys never stored in source code
-- 📋 Template system for easy setup  
+- 📋 Template system for easy setup
 - 🎯 Single Source of Truth for all settings
 - 🔄 Easy environment switching (dev/prod/local)
 - 🛡️ Git history cleaned of any exposed keys
 
-See the [SSOT Configuration Guide](docs/guides/SSOT_GUIDE.md) and [Security Guide](docs/security/SECURITY.md) for complete setup documentation.
+📚 **Complete Setup Documentation:**
+- [SSOT Configuration Guide](docs/guides/SSOT_GUIDE.md)
+- [Security Guide](docs/security/SECURITY.md)
+- [Quick Start Guide](docs/guides/QUICK_START.md)
 
-### 🤖 Auto Batch Processing (Recommended)
+## 🤖 Usage
 
+### Auto Batch Processing (Recommended - 50% Savings)
+`mermaid
+flowchart TD
+ A[📁 Place PDFs in folder] --> B[🚀 Run auto_batch.py]
+ B --> C[📊 Cost Estimation]
+ C --> D{Approve Cost?}
+ D -->|Yes| E[☁️ Submit to OpenAI Batch API]
+ D -->|No| F[❌ Cancel]
+ E --> G[⏰ Monitor Progress]
+ G --> H[📥 Download Results]
+ H --> I[📋 Generate Analytics]
+ I --> J[🗂️ Organize Output]
+ J --> K[✅ Complete!]
+`
 For processing multiple PDFs with **50% cost savings** using OpenAI Batch API:
-```bash
-# Quick start - process all PDFs in examples/pdfs/ folder
+`bash
+# Quick start - process all PDFs in pdfs/ folder
 
 python src/batch/auto_batch.py
 
-# Custom folders
+# Custom input/output folders
 
 python src/batch/auto_batch.py documents outputs
 
 # Windows users can double-click
 
 auto_batch_launcher.bat
-```
-- **Batch Processing Features:**
+`
+- *📊 Batch Processing Features:**
 - ✅ Fully automated workflow (set it and forget it)
 - 💰 50% cost savings with OpenAI Batch API
 - 📊 Real-time progress monitoring and cost tracking
-- 🗂️ Clean output structure: converted/, metadata/, temp/
+- 🗂️ Clean output structure: `converted/`, `metadata/`, `temp/`
 - 🔧 Automatic markdown linting and formatting
 - 🧹 Smart cleanup of temporary files and old sessions
 
-- **Utility Commands:**
-```bash
+- *🛠️ Utility Commands:**
+`bash
 python src/batch/auto_batch.py --list-recent # Show recent conversions
 python src/batch/auto_batch.py --summary # Daily cost summary
 python src/batch/auto_batch.py --cleanup # Manual cleanup
-```
-- **Local Linting (Zero API Cost):**
-```bash
+`
+- *🔧 Local Linting (Zero API Cost):**
+`bash
 # Lint all converted files
 
-python quick_lint.py outputs/converted
+python launcher.py quick-lint outputs/converted
 
 # Lint single file
 
-python quick_lint.py myfile.md
-```
-See the [Auto Batch Guide](docs/guides/AUTO_BATCH_GUIDE.md) for complete documentation.
+python launcher.py quick-lint myfile.md
+`
+📚 **Complete Documentation:** [Auto Batch Guide](docs/guides/AUTO_BATCH_GUIDE.md)
 
 ### Single File Processing
 
-**Using the SSOT Configuration System:**
-```bash
-# Configuration is automatically loaded from .env file
+- *Using the SSOT Configuration System:**
+`bash
+# Configuration is automatically loaded from.env file
+
 # No need to manually set environment variables!
 
 # PDF to markdown
-python src/scripts/main.py < tests/input.pdf > output.md
 
-# Image to markdown  
-python src/scripts/main.py < input_image.png > output.md
-```
+python src/core/main.py < input.pdf > output.md
 
-**Legacy Method (not recommended):**
-```bash
-# Manual environment variable setup (use SSOT instead)
-export OPENAI_API_KEY="your-api-key"
-export OPENAI_API_BASE="your-api-base" 
-export OPENAI_DEFAULT_MODEL="your-model"
+# Image to markdown
 
-python src/scripts/main.py < tests/input.pdf > output.md
-```
-## Advanced Usage
+python src/core/main.py < input_image.png > output.md
 
-```bash
-python src/scripts/main.py page_start page_end < tests/input.pdf > output.md
-```
+# Process specific pages
 
-## Docker Usage
+python src/core/main.py 1 5 < input.pdf > output.md
+`
+### Advanced Usage with Launcher
+`bash
+# Universal launcher for all tools
 
-```bash
-# Build local Docker image first
-docker build -t markpdfdown .
+python launcher.py auto-batch # Main batch processing
+python launcher.py convert-any input.pdf # Single file conversion
+python launcher.py test-llm # Test API connection
+python launcher.py optimize-lm # Optimize LM Studio settings
+`
+## 🛠️ Development
+`mermaid
+graph TD
+ A[🔄 Clone Repository] --> B[🐍 Setup Environment]
+ B --> C[📦 Install Dependencies]
+ C --> D[🔧 Configure API Key]
+ D --> E[🧪 Run Tests]
+ E --> F[📝 Code Quality]
+ F --> G[🚀 Ready to Develop]
 
-# Using SSOT configuration (mount .env file)
-docker run -i -v $(pwd)/.env:/app/.env markpdfdown < input.pdf > output.md
+ subgraph "Quality Tools"
+ H[🧹 ruff format]
+ I[🔍 ruff check]
+ J[🎯 pre-commit]
+ K[🧪 test_comprehensive.py]
+ end
+`
+### Development Setup
+`bash
+# Clone and setup
 
-# Legacy method (manual environment variables)
-docker run -i -e OPENAI_API_KEY=your-api-key -e OPENAI_API_BASE=your-api-base -e OPENAI_DEFAULT_MODEL=your-model markpdfdown < input.pdf > output.md
-```
-## Development Setup
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
 
-### Code Quality Tools
+# Install with development dependencies
 
-This project uses `ruff` for linting and formatting, and `pre-commit` for automated code quality checks.
-
-### Install development dependencies
-
-```bash
-# If using uv
 uv sync --group dev
 
-# If using pip
-pip install -e ".[dev]"
-```
+# OR: pip install -r requirements-dev.txt
 
-### Set up pre-commit hooks
+# Setup configuration
 
-```bash
+cp.env.template.env
+
+# Edit.env with your API key
+
 # Install pre-commit hooks
+
 pre-commit install
 
-# Run pre-commit on all files (optional)
-pre-commit run --all-files
-```
+# Run comprehensive tests
 
-### Code formatting and linting
+python test_comprehensive.py
+`
+### Code Quality & Testing
 
-```bash
-# Format code with ruff
-ruff format
+| Tool | Purpose | Command |
+|---|---|---|
+| **🧪 Tests** | Comprehensive validation | `python test_comprehensive.py` |
+| **🧹 Formatter** | Code formatting | `ruff format` |
+| **🔍 Linter** | Code quality checks | `ruff check --fix` |
+| **🎯 Pre-commit** | Automated quality gates | `pre-commit run --all-files` |
+| **📊 Coverage** | Test coverage analysis | Included in test suite |
 
-# Run linting checks
-ruff check
+### Testing Framework
+`bash
+# Full test suite (11 categories)
 
-# Fix auto-fixable issues
-ruff check --fix
-```
-## Requirements
+python test_comprehensive.py
 
-- Python 3.9+
-- [uv](https://astral.sh/uv/) (recommended for package management) or conda/pip
-- Dependencies specified in `pyproject.toml`
-- Access to the specified multimodal AI model
+# Quick tests only
 
-## Contributing
+python test_comprehensive.py quick
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+# Specific test categories
 
-1. Fork the repository
-2. Create your feature branch ( `git checkout -b feature/amazing-feature` )
-3. Set up the development environment:
+python test_comprehensive.py structure # Project structure
+python test_comprehensive.py config # Configuration testing
+python test_comprehensive.py deps # Dependencies
+`
+- *🧪 Test Coverage:**
+- ✅ Project Structure Validation
+- ✅ Configuration System Testing
+- ✅ Dependencies & Imports
+- ✅ Script Syntax Validation
+- ✅ Security Compliance
+- ✅ Performance Benchmarking
+
+## 📋 Requirements
+
+| Requirement | Version | Purpose |
+|---|---|---|
+| **Python** | 3.9+ | Core runtime |
+| **OpenAI API** | Latest | AI processing |
+| **Package Manager** | uv/pip/conda | Dependency management |
+| **OS Support** | Windows/Linux/macOS | Cross-platform |
+
+- *📦 Key Dependencies:**
+- `openai` - AI processing
+- `PyPDF2` - PDF handling
+- `Pillow` - Image processing
+- `python-dotenv` - Environment management
+- `ruff` - Code quality
+- `pre-commit` - Quality automation
+
+See `pyproject.toml` for complete dependency specifications.
+
+## 🤝 Contributing
+`mermaid
+gitgraph
+ commit id: "fork"
+ branch feature/amazing-feature
+ checkout feature/amazing-feature
+ commit id: "develop"
+ commit id: "test"
+ checkout main
+ merge feature/amazing-feature
+ commit id: "merge"
+`
+We welcome contributions! Follow these steps:
+
+### 🔄 Contribution Workflow
+
+1. **🍴 Fork the repository**
+2. **🌿 Create feature branch**: `git checkout -b feature/amazing-feature`
+3. **🛠️ Setup development environment:**
  `bash
  uv sync --group dev
  pre-commit install
+ cp.env.template.env # Add your API key
  `
-4. Make your changes and ensure code quality:
+4. **✨ Make your changes and ensure quality:**
  `bash
- ruff format
- ruff check --fix
- pre-commit run --all-files
+ ruff format # Format code
+ ruff check --fix # Fix linting issues
+ python test_comprehensive.py # Run tests
+ pre-commit run --all-files # Final quality check
  `
-5. Commit your changes ( `git commit -m 'feat: Add some amazing feature'` )
-6. Push to the branch ( `git push origin feature/amazing-feature` )
-7. Open a Pull Request
+5. **📝 Commit changes**: `git commit -m 'feat: Add amazing feature'`
+6. **🚀 Push to branch**: `git push origin feature/amazing-feature`
+7. **🔄 Open Pull Request**
 
-Please ensure your code follows the project's coding standards by running the linting and formatting tools before submitting.
+### 📋 Contribution Guidelines
 
-## License
+| Area | Guidelines |
+|---|---|
+| **🔧 Code Style** | Follow ruff formatting and linting |
+| **🧪 Testing** | Ensure all tests pass |
+| **📚 Documentation** | Update relevant docs |
+| **🔒 Security** | Follow SSOT configuration patterns |
+| **🏷️ Commits** | Use conventional commit format |
 
-This project is licensed under the Apache License 2.0. See the LICENSE file for details.
+## 📄 License
 
+Licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
+`mermaid
+graph LR
+ A[Apache 2.0] --> B[✅ Commercial Use]
+ A --> C[✅ Modification]
+ A --> D[✅ Distribution]
+ A --> E[✅ Patent Use]
+ A --> F[📋 Include License]
+ A --> G[📋 State Changes]
+`
 ## Attribution
 
 This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdown) by the original MarkPDFDown team.
 
-**Original Project:** [MarkPDFDown Repository](https://github.com/MarkPDFdown/markpdfdown)  
-**Original License:** Apache License 2.0
+- *Original Project:** [MarkPDFDown Repository](https://github.com/MarkPDFdown/markpdfdown)
+- *Original License:** Apache License 2.0
 
-**Enterprise Enhancements by Joseph Wright ([@ch0t4nk](https://github.com/ch0t4nk)):**
+- *Enterprise Enhancements by Joseph Wright ([@ch0t4nk](https://github.com/ch0t4nk)):**
 - 🔧 Single Source of Truth (SSOT) Configuration System v3.0
 - 🔒 Enterprise Security Framework with API key protection and git history cleanup
 - 📚 Comprehensive documentation suite for enterprise adoption
 - 🛡️ Security best practices and incident response procedures
-- 🎯 Centralized configuration management with .env template system
+- 🎯 Centralized configuration management with.env template system
 - 👥 Team collaboration features and secure onboarding procedures
 
 ## Acknowledgments
