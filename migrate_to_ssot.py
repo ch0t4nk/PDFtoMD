@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MarkPDFDown SSOT Migration Script
+PDFtoMD SSOT Migration Script
 =================================
 
 This script helps migrate existing code to use the new centralized configuration system.
@@ -13,11 +13,11 @@ Options:
     --dry-run    Show what would be changed without making changes
     --backup     Create backup files before making changes
 
-Enterprise Enhancement for MarkPDFDown
+Enterprise Enhancement for PDFtoMD
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 
-This file is part of the enterprise enhancement suite for MarkPDFDown,
+This file is part of the enterprise enhancement suite for PDFtoMD,
 providing automated migration utilities to update existing code to use
 the centralized Single Source of Truth configuration system.
 

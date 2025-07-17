@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Cleanup Script for MarkPDFDown Workspace
+Cleanup Script for PDFtoMD Workspace
 Removes backup files created by workspace linting
 
-Enterprise Enhancement for MarkPDFDown
+Enterprise Enhancement for PDFtoMD
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 
-This file is part of the enterprise enhancement suite for MarkPDFDown,
+This file is part of the enterprise enhancement suite for PDFtoMD,
 providing automated cleanup utilities to remove backup files created
 during workspace linting operations.
 

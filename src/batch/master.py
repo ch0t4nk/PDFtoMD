@@ -3,11 +3,11 @@
 PDF Batch Master - Complete batch processing management
 Handles submission, monitoring, retrieval, and consolidation
 
-Enterprise Enhancement for MarkPDFDown
+Enterprise Enhancement for PDFtoMD
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 
-This file is part of the enterprise enhancement suite for MarkPDFDown,
+This file is part of the enterprise enhancement suite for PDFtoMD,
 providing comprehensive batch processing management with automated submission,
 monitoring, retrieval, and consolidation capabilities for large-scale PDF conversions.
 

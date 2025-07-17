@@ -3,11 +3,11 @@
 Auto Batch PDF Converter - Fully Automated PDF to Markdown Conversion
 Usage: python auto_batch.py [pdf_folder] [output_folder] [options]
 
-Enterprise Enhancement for MarkPDFDown
+Enterprise Enhancement for PDFtoMD
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 
-This file is part of the enterprise enhancement suite for MarkPDFDown,
+This file is part of the enterprise enhancement suite for PDFtoMD,
 providing fully automated batch PDF to Markdown conversion with comprehensive
 monitoring, cost tracking, and intelligent processing capabilities.
 
