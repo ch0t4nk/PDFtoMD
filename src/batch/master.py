@@ -272,7 +272,9 @@ class PDFBatchMaster:
 
     def find_active_batches(self):
         """Find all active batch files"""
-        batch_files = list(Path(".").glob("batch_info_*.json"))
+        # Look in the correct temp_batch directory
+        temp_batch_dir = Path(str(config.DEFAULT_TEMP_FOLDER)) / "temp_batch"
+        batch_files = list(temp_batch_dir.glob("batch_info_*.json")) if temp_batch_dir.exists() else []
         active_batches = []
 
         for batch_file in batch_files:

@@ -161,7 +161,7 @@ class AutoBatchProcessor:
         while True:
             check_count += 1
 
-            # Get batch status
+            # Get batch status using the corrected find_active_batches method
             batches = self.master.find_active_batches()
             current_batch = None
 

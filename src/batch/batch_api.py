@@ -352,7 +352,7 @@ Focus on creating clean, professional documentation that preserves all informati
             os.makedirs(str(config.DEFAULT_CONVERTED_FOLDER), exist_ok=True)
 
             for pdf_name, pages in pdf_contents.items():
-                output_file = f"converted/{pdf_name}_batch.md"
+                output_file = Path(str(config.DEFAULT_CONVERTED_FOLDER)) / f"{pdf_name}_batch.md"
                 usage_data = pdf_usage_stats.get(pdf_name, {})
 
                 with open(output_file, 'w', encoding='utf-8') as f:
