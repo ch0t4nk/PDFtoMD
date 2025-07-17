@@ -21,7 +21,7 @@ graph TD
 ```
 ## 🎯 Overview
 
-MarkPDFDown uses a centralized configuration system that provides a **Single Source of Truth** for all settings, API keys, and directory paths. This eliminates hardcoded values scattered throughout the codebase and provides secure, centralized configuration management.
+PDFtoMD uses a centralized configuration system that provides a **Single Source of Truth** for all settings, API keys, and directory paths. This eliminates hardcoded values scattered throughout the codebase and provides secure, centralized configuration management.
 
 ## 🔑 Key Benefits
 
@@ -34,7 +34,7 @@ MarkPDFDown uses a centralized configuration system that provides a **Single Sou
 
 ## 📁 File Structure
 ```
-markpdfdown/
+pdftomd/
 ├── config.py # 🎯 SSOT Configuration System
 ├──.env # 🔒 Environment Variables (DO NOT COMMIT)
 ├──.env.template # 📋 Template for.env file
@@ -67,11 +67,11 @@ python config.py
 ```
 - *Expected Output:**
 ```
-🔧 MarkPDFDown Configuration Summary
+🔧 PDFtoMD Configuration Summary
 ==================================================
-📁 PDF Folder: C:\Users\...\markpdfdown\pdfs
-📁 Output Folder: C:\Users\...\markpdfdown\outputs
-📁 Temp Folder: C:\Users\...\markpdfdown\temp
+📁 PDF Folder: C:\Users\...\pdftomd\pdfs
+📁 Output Folder: C:\Users\...\pdftomd\outputs
+📁 Temp Folder: C:\Users\...\pdftomd\temp
 🤖 Model: gpt-4o-mini
 🌡️ Temperature: 0.05
 🔢 Max Tokens:
@@ -280,4 +280,4 @@ mv src/batch/batch_api.py.backup src/batch/batch_api.py
 
 - --
 
-🎉 **Congratulations!** Your MarkPDFDown application now uses a secure, centralized configuration system with your API keys safely managed outside of source code.
+🎉 **Congratulations!** Your PDFtoMD application now uses a secure, centralized configuration system with your API keys safely managed outside of source code.

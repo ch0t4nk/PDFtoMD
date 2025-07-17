@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick Test Runner for MarkPDFDown
+Quick Test Runner for PDFtoMD
 =================================
 
 A simple script to run basic validation tests before comprehensive testing.
@@ -13,7 +13,7 @@ from pathlib import Path
 
 def run_quick_validation():
     """Run quick validation checks"""
-    print("[TEST] MarkPDFDown Quick Validation")
+    print("[TEST] PDFtoMD Quick Validation")
     print("=" * 40)
 
     errors = []

@@ -15,7 +15,7 @@ This project builds upon the excellent work of the original MarkPDFDown team and
 **Role:** Enterprise Architecture Lead & Security Enhancement Specialist
 
 **Enterprise-Ready Enhancements:**
-- 🔧 **Single Source of Truth (SSOT) Configuration System v3.0**
+- 🔧 **Single Source of Truth (SSOT) Configuration System v4.1**
   - Complete centralized configuration management for enterprise deployments
   - Secure API key handling and .env template system
   - Migration tool for existing installations (193 code changes across 35 files)

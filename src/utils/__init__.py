@@ -1,1 +1,1 @@
-# Utils package for MarkPDFDown
+# Utils package for PDFtoMD

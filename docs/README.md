@@ -1,4 +1,5 @@
-# 📚 MarkPDFDown Documentation
+# 📚 PDFtoMD Documentation
+
 ```mermaid
 graph TB
  A[Documentation Hub] --> B[Getting Started]
@@ -24,7 +25,8 @@ graph TB
  F --> F1[Contributors]
  F --> F2[Copyright & Licenses]
 ```
-Welcome to the comprehensive documentation for **MarkPDFDown** - an enterprise-ready PDF to Markdown conversion tool with AI-powered processing and secure configuration management.
+
+Welcome to the comprehensive documentation for **PDFtoMD** - an enterprise-ready PDF to Markdown conversion tool with AI-powered processing and secure configuration management.
 
 ## 🗺️ Documentation Navigation
 
@@ -68,20 +70,20 @@ Welcome to the comprehensive documentation for **MarkPDFDown** - an enterprise-r
 
 ### 🏃‍♂️ Quick Access Links
 
-- *For New Users:**
-- 🚀 [30-Second Setup](guides/QUICK_START.md) - Get started immediately
-- 🔧 [Configuration Guide](guides/SSOT_GUIDE.md) - Set up your API keys securely
-- 💡 [Auto Batch Processing](guides/AUTO_BATCH_GUIDE.md) - Process multiple PDFs with 50% savings
+- **For New Users:**
+  - 🚀 [30-Second Setup](guides/QUICK_START.md) - Get started immediately
+  - 🔧 [Configuration Guide](guides/SSOT_GUIDE.md) - Set up your API keys securely
+  - 💡 [Auto Batch Processing](guides/AUTO_BATCH_GUIDE.md) - Process multiple PDFs with 50% savings
 
-- *For Developers:**
-- 🗂️ [Project Structure](development/PROJECT_STRUCTURE.md) - Understand the codebase
-- 🔒 [Security Framework](security/SECURITY.md) - Implement secure practices
-- 🧪 [Testing Guide](../test_comprehensive.py) - Run comprehensive tests
+- **For Developers:**
+  - 🗂️ [Project Structure](development/PROJECT_STRUCTURE.md) - Understand the codebase
+  - 🔒 [Security Framework](security/SECURITY.md) - Implement secure practices
+  - 🧪 [Testing Guide](../test_comprehensive.py) - Run comprehensive tests
 
-- *For Enterprise:**
-- 🛡️ [Security Compliance](security/SECURITY.md) - Enterprise security requirements
-- 👥 [Team Setup](guides/SSOT_GUIDE.md#team-collaboration) - Multi-user configuration
-- 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md#cost-management) - Budget controls
+- **For Enterprise:**
+  - 🛡️ [Security Compliance](security/SECURITY.md) - Enterprise security requirements
+  - 👥 [Team Setup](guides/SSOT_GUIDE.md) - Multi-user configuration
+  - 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md#cost-management) - Budget controls
 
 ## 📋 Documentation Standards
 
@@ -96,9 +98,11 @@ This documentation follows enterprise standards:
 
 ## 🔄 Changelog & Updates
 
-- **Latest Version**: 4.0.0 (July 16, 2025)
+- **Latest Version**: 4.1.0 (July 17, 2025)
 - **Major Updates**: [See Changelog](CHANGELOG.md)
-- **Security Status**: [Verified Complete](../SECURITY_VERIFICATION_COMPLETE.md)
+- **Release Notes**: [v4.1.0 Details](../RELEASE_NOTES_v4.1.0.md)
+
+- **Security Status**: [Security Guide](security/SECURITY.md)
 
 ## 🤝 Contributing to Documentation
 
@@ -106,8 +110,8 @@ Found an issue or want to improve our docs?
 
 1. 📝 [Create an issue](https://github.com/ch0t4nk/PDFtoMD/issues)
 2. 🔄 Submit a pull request
-3. 📚 Follow our [contribution guidelines](../README.md#contributing)
+3. 📚 Follow our [contribution guidelines](../README.md#-contributing)
 
-- --
+---
 
-- *📍 You are here:** `/docs/` → Use the navigation above to find exactly what you need!
+**📍 You are here:** `/docs/` → Use the navigation above to find exactly what you need!

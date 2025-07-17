@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick Lint Command for MarkPDFDown
+Quick Lint Command for PDFtoMD
 Fast access to local markdown linting
 """
 

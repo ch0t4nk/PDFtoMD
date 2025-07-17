@@ -1,10 +1,10 @@
 # Spell Checking and Glossary System
 
-This document explains the comprehensive spell checking and glossary system implemented in MarkPDFDown to maintain terminology consistency and achieve zero spelling-related problems.
+This document explains the comprehensive spell checking and glossary system implemented in PDFtoMD to maintain terminology consistency and achieve zero spelling-related problems.
 
 ## Overview
 
-The MarkPDFDown project uses a multi-layered approach to spell checking and terminology management:
+The PDFtoMD project uses a multi-layered approach to spell checking and terminology management:
 
 1. **CSpell Configuration** - Advanced spell checking with custom dictionaries
 2. **Technical Glossary** - Comprehensive documentation of project terminology
@@ -24,7 +24,7 @@ Primary configuration file for Code Spell Checker extension containing:
 ### `.cspell-dictionaries.txt`
 
 Project-specific dictionary file containing:
-- MarkPDFDown-specific terminology
+- PDFtoMD-specific terminology
 - Development tool names
 - Framework and library names
 - Common programming acronyms

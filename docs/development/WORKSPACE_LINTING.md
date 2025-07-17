@@ -1,6 +1,6 @@
 # Workspace Linting Tools
 
-This directory contains tools to maintain code quality and consistency across the MarkPDFDown workspace.
+This directory contains tools to maintain code quality and consistency across the PDFtoMD workspace.
 
 ## 🔧 workspace_lint.py
 
@@ -29,9 +29,9 @@ python workspace_lint.py --help
 ### Example Output
 
 ```
-🔧 MarkPDFDown Workspace Linter
+🔧 PDFtoMD Workspace Linter
 ============================================================
-📁 Scanning workspace: C:\Users\joeyw\markpdfdown
+📁 Scanning workspace: C:\Users\joeyw\pdftomd
 🚫 Ignoring:.git, __pycache__, outputs, converted_markdown, temp_batch
 ============================================================
 📊 Found 90 files to process:

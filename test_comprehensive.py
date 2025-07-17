@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
 """
-MarkPDFDown Comprehensive Test Suite
+PDFtoMD Comprehensive Test Suite
 ===================================
 
-Enterprise Enhancement for MarkPDFDown
+Enterprise Enhancement for PDFtoMD
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
-Licensed under the Apa        expected_packages = {
-            'openai': '1.97.0',
-            'pymupdf': '1.26.3',
-            'pypdf': '5.8.0',
-            'python-dotenv': '1.1.1'
-        }cense, Version 2.0
+Licensed under the Apache License, Version 2.0
 
-This file provides comprehensive testing for all MarkPDFDown components
+This file provides comprehensive testing for all PDFtoMD components
 including core functionality, enterprise features, configuration validation,
 and integration testing.
 
@@ -32,8 +27,8 @@ from pathlib import Path
 from typing import Any
 
 
-class MarkPDFDownTestSuite:
-    """Comprehensive test suite for MarkPDFDown project"""
+class PDFtoMDTestSuite:
+    """Comprehensive test suite for PDFtoMD project"""
 
     def __init__(self):
         self.root_dir = Path(__file__).parent.absolute()
@@ -441,7 +436,7 @@ class MarkPDFDownTestSuite:
                     content = full_path.read_text(encoding="utf-8")
 
                     # Check for enterprise enhancement header
-                    if "Enterprise Enhancement for MarkPDFDown" not in content:
+                    if "Enterprise Enhancement for PDFtoMD" not in content:
                         missing_attribution.append(file_path)
                     elif "Joseph Wright" not in content:
                         missing_attribution.append(f"{file_path} (missing author)")
@@ -616,7 +611,7 @@ OPENAI_DEFAULT_MODEL=gpt-4o-mini
 
     def run_comprehensive_test(self) -> bool:
         """Run all tests in the comprehensive test suite"""
-        self.print_status("Starting MarkPDFDown Comprehensive Test Suite", "SUCCESS")
+        self.print_status("Starting PDFtoMD Comprehensive Test Suite", "SUCCESS")
         self.print_status("=" * 60, "INFO")
 
         # Define test suite
@@ -676,7 +671,7 @@ OPENAI_DEFAULT_MODEL=gpt-4o-mini
 
 def main():
     """Main entry point for test suite"""
-    test_suite = MarkPDFDownTestSuite()
+    test_suite = PDFtoMDTestSuite()
 
     if len(sys.argv) > 1:
         command = sys.argv[1].lower()

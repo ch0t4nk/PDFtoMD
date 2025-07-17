@@ -1,7 +1,7 @@
-# 🗂️ MarkPDFDown - Project Structure
+# 🗂️ PDFtoMD - Project Structure
 ```mermaid
 graph TD
- A[markpdfdown/] --> B[config.py]
+ A[pdftomd/] --> B[config.py]
  A --> C[src/]
  A --> D[docs/]
  A --> E[tests/]
@@ -28,7 +28,7 @@ graph TD
 This project follows enterprise-grade organization principles with **Single Source of Truth (SSOT) Configuration** at its core:
 
 ```
-markpdfdown/
+pdftomd/
 ├── 🔧 config.py # ⭐ SSOT Configuration System
 ├── 🔒.env # Environment variables (DO NOT COMMIT)
 ├── 📋.env.template # Template for.env file
@@ -151,7 +151,7 @@ graph TD
 ## 📁 Complete Directory Structure
 
 ```
-markpdfdown/
+pdftomd/
 ├── 📁 tools/ # Development tools
 │ ├── conversion/ # Conversion tools
 │ ├── optimization/ # LM Studio optimization tools
@@ -183,7 +183,7 @@ markpdfdown/
 │ ├── demos/ # Demo images
 │ │ ├── demo_01.png
 │ │ ├── demo_02.png
-│ │ └── markpdfdown.png
+│ │ └── pdftomd.png
 │ └── outputs/ # Example outputs (future)
 │
 ├── 📁 outputs/ # Generated outputs
@@ -344,6 +344,6 @@ cp config/auto_batch_config_sample.py auto_batch_config.py
 
 - --
 
-- *The new structure makes MarkPDFDown more professional, maintainable, and user-friendly!** 🎉
+- **The new structure makes PDFtoMD more professional, maintainable, and user-friendly!** 🎉
 
 For detailed usage instructions, see the [Quick Start Guide](../guides/QUICK_START.md) and [Complete Documentation](../README.md).

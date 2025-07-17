@@ -1,4 +1,4 @@
-name: MarkPDFDown Comprehensive Test Suite
+name: PDFtoMD Comprehensive Test Suite
 
 on:
   push:

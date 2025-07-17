@@ -1,10 +1,10 @@
-# MarkPDFDown - Reorganized File Structure
+# PDFtoMD - Reorganized File Structure
 
 ## Directory Structure
 
 After reorganization, the project now has a clean, logical structure:
 `text
-markpdfdown/
+pdftomd/
 ├── src/ # Core source code
 │ ├── batch/ # Batch processing modules
 │ ├── core/ # Core functionality (workers, clients)

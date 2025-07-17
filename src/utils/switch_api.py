@@ -3,7 +3,7 @@
 API Provider Switcher
 SSOT-compliant API provider switching utility
 
-Enhanced for MarkPDFDown enterprise security
+Enhanced for PDFtoMD enterprise security
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 

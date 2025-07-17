@@ -1,4 +1,4 @@
-# MarkPDFDown
+# PDFtoMD
 
 [English](../README.md) | **中文**
 
@@ -6,11 +6,11 @@
 [![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
 
-基于多模态大语言模型的PDF转Markdown工具，高质量实现文档结构化转换![markpdfdown](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/markpdfdown.png)
+基于多模态大语言模型的PDF转Markdown工具，高质量实现文档结构化转换![pdftomd](https://raw.githubusercontent.com/ch0t4nk/PDFtoMD/master/examples/demos/pdftomd.png)
 
 ## 项目概述
 
-MarkPDFDown 是一款智能PDF转换Markdown工具，通过先进的多模态AI模型，能够将PDF文档准确转换为结构清晰的Markdown格式，保留原始文档的排版、表格、公式等复杂元素。
+PDFtoMD 是一款智能PDF转换Markdown工具，通过先进的多模态AI模型，能够将PDF文档准确转换为结构清晰的Markdown格式，保留原始文档的排版、表格、公式等复杂元素。
 
 ## 功能特性
 
@@ -41,8 +41,8 @@ uv sync
 ```
 ## 使用 conda
 ```bash
-conda create -n markpdfdown python=3.9
-conda activate markpdfdown
+conda create -n pdftomd python=3.9
+conda activate pdftomd
 
 # 克隆仓库
 
@@ -90,7 +90,7 @@ python main.py 起始页码 结束页码 < input.pdf > output.md
 ## 在Docker中使用
 
 ```bash
-docker run -i -e OPENAI_API_KEY=你的API密钥 -e OPENAI_API_BASE=你的API端点 -e OPENAI_DEFAULT_MODEL=你的模型 jorbenzhu/markpdfdown < input.pdf > output.md
+docker run -i -e OPENAI_API_KEY=你的API密钥 -e OPENAI_API_BASE=你的API端点 -e OPENAI_DEFAULT_MODEL=你的模型 jorbenzhu/pdftomd < input.pdf > output.md
 ```
 
 ## 开发环境设置

@@ -1,8 +1,8 @@
-# 🔒 Security Guide - MarkPDFDown
+# 🔒 Security Guide - PDFtoMD
 
 ## 🛡️ Security Overview
 
-MarkPDFDown v3.0+ implements comprehensive security measures to protect your API keys and sensitive information through the Single Source of Truth (SSOT) configuration system.
+PDFtoMD v3.0+ implements comprehensive security measures to protect your API keys and sensitive information through the Single Source of Truth (SSOT) configuration system.
 
 ## 🔑 API Key Security
 

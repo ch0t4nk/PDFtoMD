@@ -1,4 +1,4 @@
-# MarkPDFDown
+# PDFtoMD
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
@@ -10,7 +10,7 @@ Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Featu
 
 ```mermaid
 graph TB
-    A[PDF Documents] --> B[MarkPDFDown]
+    A[PDF Documents] --> B[PDFtoMD]
     B --> C[Clean Markdown]
     B --> D[Enterprise Features]
 ```
@@ -27,7 +27,7 @@ graph LR
 
 ## Overview
 
-MarkPDFDown is designed to simplify the process of converting PDF documents into clean, editable Markdown text for enterprise environments. By utilizing advanced multimodal AI models with enterprise-grade security and configuration management, it can accurately extract text, preserve formatting, and handle complex document structures including tables, formulas, and diagrams.
+PDFtoMD is designed to simplify the process of converting PDF documents into clean, editable Markdown text for enterprise environments. By utilizing advanced multimodal AI models with enterprise-grade security and configuration management, it can accurately extract text, preserve formatting, and handle complex document structures including tables, formulas, and diagrams.
 
 ## Enterprise Features
 
@@ -51,6 +51,7 @@ pie title Enterprise Feature Distribution
 ## 🚀 Quick Installation
 
 ### Git Installation (Recommended)
+
 ```bash
 # Clone repository
 git clone https://github.com/ch0t4nk/PDFtoMD.git
@@ -71,6 +72,7 @@ python test_comprehensive.py
 ```
 
 ### Download Release
+
 1. Download from [GitHub Releases](https://github.com/ch0t4nk/PDFtoMD/releases/latest)
 2. Extract and follow virtual environment setup above
 
@@ -151,6 +153,7 @@ graph LR
 ```
 
 ### 🚀 Using uv (Recommended - Fastest)
+
 ```bash
 # Install uv package manager
 
@@ -188,11 +191,11 @@ pip install -r requirements.txt
 
 # Build image
 
-docker build -t markpdfdown.
+docker build -t pdftomd .
 
 # Run with SSOT configuration
 
-docker run -i -v $(pwd)/.env:/app/.env markpdfdown < input.pdf > output.md
+docker run -i -v $(pwd)/.env:/app/.env pdftomd < input.pdf > output.md
 ```
 
 ### 🐍 Using conda
@@ -201,8 +204,8 @@ docker run -i -v $(pwd)/.env:/app/.env markpdfdown < input.pdf > output.md
 
 # Create environment
 
-conda create -n markpdfdown python=3.9
-conda activate markpdfdown
+conda create -n pdftomd python=3.9
+conda activate pdftomd
 
 # Clone and install
 
@@ -231,7 +234,9 @@ graph TD
 
  E --> SecurityFeatures
 ```
+
 **Before first use, configure your API key using our secure SSOT system:**
+
 ```bash
 # Copy the template to create your .env file
 
@@ -247,6 +252,7 @@ python config.py
 ```
 
 **✅ Security Features:**
+
 - 🔒 API keys never stored in source code
 - 📋 Template system for easy setup
 - 🎯 Single Source of Truth for all settings
@@ -254,6 +260,7 @@ python config.py
 - 🛡️ Git history cleaned of any exposed keys
 
 📚 **Complete Setup Documentation:**
+
 - [SSOT Configuration Guide](docs/guides/SSOT_GUIDE.md)
 - [Security Guide](docs/security/SECURITY.md)
 - [Quick Start Guide](docs/guides/QUICK_START.md)
@@ -277,6 +284,7 @@ flowchart TD
 ```
 
 For processing multiple PDFs with **50% cost savings** using OpenAI Batch API:
+
 ```bash
 # Quick start - process all PDFs in pdfs/ folder
 
@@ -292,6 +300,7 @@ auto_batch_launcher.bat
 ```
 
 **📊 Batch Processing Features:**
+
 - ✅ Fully automated workflow (set it and forget it)
 - 💰 50% cost savings with OpenAI Batch API
 - 📊 Real-time progress monitoring and cost tracking
@@ -300,12 +309,15 @@ auto_batch_launcher.bat
 - 🧹 Smart cleanup of temporary files and old sessions
 
 **🛠️ Utility Commands:**
+
 ```bash
 python src/batch/auto_batch.py --list-recent # Show recent conversions
 python src/batch/auto_batch.py --summary # Daily cost summary
 python src/batch/auto_batch.py --cleanup # Manual cleanup
 ```
+
 **🔧 Local Linting (Zero API Cost):**
+
 ```bash
 
 # Lint all converted files
@@ -316,11 +328,13 @@ python launcher.py quick-lint outputs/converted
 
 python launcher.py quick-lint myfile.md
 ```
+
 📚 **Complete Documentation:** [Auto Batch Guide](docs/guides/AUTO_BATCH_GUIDE.md)
 
 ### Single File Processing
 
 **Using the SSOT Configuration System:**
+
 ```bash
 
 # Configuration is automatically loaded from.env file
@@ -373,6 +387,7 @@ graph TD
 
  F --> QualityTools
 ```
+
 ### Development Setup
 
 ```bash
@@ -433,6 +448,7 @@ python test_comprehensive.py deps # Dependencies
 ```
 
 **🧪 Test Coverage:**
+
 - ✅ Project Structure Validation
 - ✅ Configuration System Testing
 - ✅ Dependencies & Imports
@@ -450,6 +466,7 @@ python test_comprehensive.py deps # Dependencies
 | **OS Support** | Windows/Linux/macOS | Cross-platform |
 
 **📦 Key Dependencies:**
+
 - `openai` - AI processing
 - `pypdf` - PDF handling
 - `Pillow` - Image processing
@@ -480,13 +497,15 @@ We welcome contributions! Follow these steps:
 1. **🍴 Fork the repository**
 2. **🌿 Create feature branch**: `git checkout -b feature/amazing-feature`
 3. **🛠️ Setup development environment:**
+
  ```bash
  uv sync --group dev
  pre-commit install
  cp .env.template .env # Add your API key
  ```
 
-4. **✨ Make your changes and ensure quality:**
+1. **✨ Make your changes and ensure quality:**
+
  ```bash
  ruff format # Format code
  ruff check --fix # Fix linting issues
@@ -494,11 +513,11 @@ We welcome contributions! Follow these steps:
  pre-commit run --all-files # Final quality check
  ```
 
-5. **📝 Commit changes**: `git commit -m 'feat: Add amazing feature'`
+2. **📝 Commit changes**: `git commit -m 'feat: Add amazing feature'`
 
-6. **🚀 Push to branch**: `git push origin feature/amazing-feature`
+3. **🚀 Push to branch**: `git push origin feature/amazing-feature`
 
-7. **🔄 Open Pull Request**
+4. **🔄 Open Pull Request**
 
 ### 📋 Contribution Guidelines
 
@@ -532,7 +551,8 @@ This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdow
 **Original License:** Apache License 2.0
 
 **Enterprise Enhancements by Joseph Wright ([@ch0t4nk](https://github.com/ch0t4nk)):**
-- 🔧 Single Source of Truth (SSOT) Configuration System v3.0
+
+- 🔧 Single Source of Truth (SSOT) Configuration System v4.1
 - 🔒 Enterprise Security Framework with API key protection and git history cleanup
 - 📚 Comprehensive documentation suite for enterprise adoption
 - 🛡️ Security best practices and incident response procedures

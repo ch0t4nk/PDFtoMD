@@ -1,10 +1,10 @@
-# MarkPDFDown Technical Glossary
+# PDFtoMD Technical Glossary
 
-This document serves as a comprehensive glossary of technical terms used throughout the MarkPDFDown project. This ensures consistent terminology and helps with spell checking.
+This document serves as a comprehensive glossary of technical terms used throughout the PDFtoMD project. This ensures consistent terminology and helps with spell checking.
 
 ## Core Project Terms
 
-- *MarkPDFDown** - The name of this enterprise-ready PDF to Markdown conversion tool powered by multimodal AI.
+- **PDFtoMD** - The name of this enterprise-ready PDF to Markdown conversion tool powered by multimodal AI.
 
 - *SSOT (Single Source of Truth)** - A centralized configuration management approach ensuring all settings are managed from one authoritative source.
 
@@ -264,4 +264,4 @@ Symbolic link pointing to another file or directory.
 
 - --
 
-- This glossary is maintained as part of the MarkPDFDown project documentation and is used for spell checking consistency across all project files.*
+- This glossary is maintained as part of the PDFtoMD project documentation and is used for spell checking consistency across all project files.

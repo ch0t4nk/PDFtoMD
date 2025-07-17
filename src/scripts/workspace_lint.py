@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Workspace Lint & Fix Script for MarkPDFDown
+Workspace Lint & Fix Script for PDFtoMD
 Automatically fixes common markdown and Python linting issues across the workspace
 while ignoring output directories and temporary files.
 
-Enterprise Enhancement for MarkPDFDown
+Enterprise Enhancement for PDFtoMD
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 
-This file is part of the enterprise enhancement suite for MarkPDFDown,
+This file is part of the enterprise enhancement suite for PDFtoMD,
 providing automated workspace linting and fixing capabilities with intelligent
 issue detection and resolution across markdown and Python files.
 
@@ -268,7 +268,7 @@ class WorkspaceLinter:
 
     def scan_and_fix(self) -> None:
         """Scan workspace and fix issues"""
-        print("🔧 MarkPDFDown Workspace Linter")
+        print("🔧 PDFtoMD Workspace Linter")
         print("=" * 60)
         print(f"📁 Scanning workspace: {self.root_dir}")
         print(f"🚫 Ignoring: {', '.join(sorted(self.ignore_patterns['directories']))}")
@@ -382,7 +382,7 @@ class WorkspaceLinter:
 def main():
     """Main entry point"""
     if len(sys.argv) > 1 and sys.argv[1] in ["-h", "--help"]:
-        print("🔧 MarkPDFDown Workspace Linter")
+        print("🔧 PDFtoMD Workspace Linter")
         print("\nUsage:")
         print("  python workspace_lint.py")
         print("\nThis will:")

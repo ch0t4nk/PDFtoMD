@@ -10,7 +10,7 @@
 
 ## Proposed New Structure
 ```
-markpdfdown/
+pdftomd/
 ├── 📁 src/ # Main source code
 │ ├── batch/ # Batch processing (existing)
 │ ├── core/ # Core functionality (existing)

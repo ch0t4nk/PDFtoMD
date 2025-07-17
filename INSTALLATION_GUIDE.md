@@ -1,4 +1,4 @@
-# MarkPDFDown Installation Guide
+# PDFtoMD Installation Guide
 
 ## 🚀 Quick Start Installation
 
