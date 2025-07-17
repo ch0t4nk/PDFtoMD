@@ -1,5 +1,18 @@
 name: build image
 
+# Disabled - requires Docker Hub setup
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       tag:
+#         description: 'Release tag (e.g. 1.0.0)'
+#         required: true
+#         default: '0.0.1'
+#   push:
+#     tags:
+#       - '*'
+
+# Manually trigger only when Docker Hub is configured
 on:
   workflow_dispatch:
     inputs:
@@ -7,9 +20,6 @@ on:
         description: 'Release tag (e.g. 1.0.0)'
         required: true
         default: '0.0.1'
-  push:
-    tags:
-      - '*'
 
 jobs:
   build-and-push-image-to-dockerhub:
