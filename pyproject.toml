@@ -66,6 +66,7 @@ select = [
 ignore = [
     "E501",  # line too long (handled by formatter)
     "UP007", # Use `X | Y` for type annotations
+    "UP045", # Use `X | None` for type annotations (conflicts with Python 3.9 compatibility)
     "UP036", # Version comparisons (needed for backwards compatibility)
     "E402",  # Module level import not at top (needed for dynamic path additions)
     "F841",  # Local variable assigned but never used (acceptable in some contexts)
