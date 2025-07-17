@@ -1,0 +1,52 @@
+name: "CodeQL Security Analysis"
+
+on:
+  push:
+    branches: [ "master", "main", "develop" ]
+  pull_request:
+    branches: [ "master", "main", "develop" ]
+  schedule:
+    - cron: '30 2 * * 1'  # Weekly on Mondays at 2:30 AM UTC
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python' ]
+        # CodeQL supports [ 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        config-file: ./.github/codeql/codeql-config.yml
+        queries: +security-extended,security-and-quality
+        # Using custom configuration for enhanced security scanning
+
+    # For Python, we don't need to build since it's an interpreted language
+    # CodeQL will automatically detect and analyze Python files
+    
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
+        upload: true

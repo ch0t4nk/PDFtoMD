@@ -1,0 +1,74 @@
+# CodeQL Query Suite for PDFtoMD Security Analysis
+# Enhanced security scanning configuration
+
+- description: "PDFtoMD Enterprise Security Queries"
+- queries: .
+- apply:
+    suite-id: "pdftomd-security"
+    
+# Core security queries
+- include:
+    query: "python/sql-injection"
+    severity: "error"
+    
+- include:
+    query: "python/code-injection"
+    severity: "error"
+    
+- include:
+    query: "python/path-injection"  
+    severity: "error"
+    
+- include:
+    query: "python/unsafe-deserialization"
+    severity: "error"
+
+# API and authentication security
+- include:
+    query: "python/hardcoded-credentials"
+    severity: "error"
+    
+- include:
+    query: "python/clear-text-logging-sensitive-data"
+    severity: "warning"
+
+# File and system security  
+- include:
+    query: "python/path-injection"
+    severity: "error"
+    
+- include:
+    query: "python/unsafe-shell-command-construction" 
+    severity: "error"
+
+# Cryptography and randomness
+- include:
+    query: "python/weak-crypto"
+    severity: "warning"
+    
+- include:
+    query: "python/insecure-randomness"
+    severity: "warning"
+
+# Web security (for API endpoints)
+- include:
+    query: "python/reflected-xss"
+    severity: "error"
+    
+- include:
+    query: "python/url-redirection"
+    severity: "warning"
+
+# Memory and resource security
+- include:
+    query: "python/regex-injection"
+    severity: "warning"
+    
+- include:
+    query: "python/incomplete-hostname-regexp"
+    severity: "warning"
+
+# Configuration and environment
+- include:
+    query: "python/incomplete-url-substring-sanitization"
+    severity: "error"
