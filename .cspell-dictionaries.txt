@@ -48,8 +48,6 @@ csrf
 CSRF
 
 # Technical Terms - Infrastructure
-dockerfile
-Dockerfile
 kubernetes
 Kubernetes
 containerization

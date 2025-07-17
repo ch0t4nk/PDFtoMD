@@ -87,11 +87,9 @@ python main.py < input_image.png > output.md
 python main.py 起始页码 结束页码 < input.pdf > output.md
 ```
 
-## 在Docker中使用
+## 使用方法
 
-```bash
-docker run -i -e OPENAI_API_KEY=你的API密钥 -e OPENAI_API_BASE=你的API端点 -e OPENAI_DEFAULT_MODEL=你的模型 jorbenzhu/pdftomd < input.pdf > output.md
-```
+参考主要的 [README.md](../README.md) 文档获取完整的安装和使用说明。
 
 ## 开发环境设置
 

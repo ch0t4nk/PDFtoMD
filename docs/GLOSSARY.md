@@ -110,9 +110,9 @@ Compact means of representing claims securely between parties.
 
 ## Infrastructure and Deployment
 
-### **Docker/Dockerfile**
+### **GitHub Actions**
 
-Containerization platform and configuration file for creating containers.
+Continuous Integration/Continuous Deployment (CI/CD) platform for automated testing and deployment.
 
 ### **Kubernetes**
 

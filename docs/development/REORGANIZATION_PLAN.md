@@ -72,7 +72,7 @@ pdftomd/
  ├── README.md
  ├── LICENSE
  ├── pyproject.toml
- ├── Dockerfile
+ ├── pyproject.toml
  ├── Makefile
  ├──.gitignore
  └── auto_batch.bat (Windows launcher)

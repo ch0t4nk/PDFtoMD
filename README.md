@@ -143,13 +143,11 @@ sequenceDiagram
 graph LR
  A[Choose Method] --> B[uv Recommended]
  A --> C[pip Standard]
- A --> D[Docker Container]
- A --> E[conda Environment]
+ A --> D[conda Environment]
 
- B --> F[Fast & Modern]
- C --> G[Traditional]
- D --> H[Containerized]
- E --> I[Data Science]
+ B --> E[Fast & Modern]
+ C --> F[Traditional]
+ D --> G[Data Science]
 ```
 
 ### 🚀 Using uv (Recommended - Fastest)
@@ -169,33 +167,31 @@ uv sync # Creates venv + installs dependencies automatically
 ### 🐍 Using pip (Traditional)
 
 ```bash
-
 # Clone repository
-
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Create virtual environment
-
 python -m venv venv
 source venv/bin/activate # Windows: venv\Scripts\activate
 
 # Install dependencies
-
 pip install -r requirements.txt
 ```
 
-### 🐋 Using Docker
+### � Using conda (Data Science Environments)
 
 ```bash
+# Clone repository
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
 
-# Build image
+# Create conda environment
+conda create -n pdftomd python=3.11
+conda activate pdftomd
 
-docker build -t pdftomd .
-
-# Run with SSOT configuration
-
-docker run -i -v $(pwd)/.env:/app/.env pdftomd < input.pdf > output.md
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 ### 🐍 Using conda

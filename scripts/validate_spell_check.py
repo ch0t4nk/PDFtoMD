@@ -42,7 +42,6 @@ def check_cspell_coverage():
         "postprocessing",
         "tokenization",
         "embeddings",
-        "dockerfile",
         "kubernetes",
         "oauth",
         "https",

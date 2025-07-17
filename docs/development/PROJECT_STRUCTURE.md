@@ -194,7 +194,7 @@ pdftomd/
 ├── 📄 pyproject.toml # Project configuration
 ├── 📄 uv.lock # Dependency lock file
 ├── 📄 LICENSE # Apache 2.0 License
-├── 📄 Dockerfile # Docker configuration
+├── 📄 pyproject.toml # Python project configuration
 └── 📄 Makefile # Build configuration
 └── 📄 Makefile # Build configuration
 ```
