@@ -228,6 +228,10 @@ page_*.jpg
 batch_info_batch_*.json
 test_report*.json
 
+# Test files that should not be committed
+test_*.mmd
+temp_*.mmd
+
 # PDF Input Directory - Keep directory structure but ignore contents
 pdfs/*
 !pdfs/.gitkeep
