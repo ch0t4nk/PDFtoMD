@@ -21,9 +21,19 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from src.core import LLMClient
-from src.core.FileWorker import create_worker
-from src.core.Util import remove_markdown_warp
+# Handle imports depending on execution context
+try:
+    from src.core import LLMClient
+    from src.core.FileWorker import create_worker
+    from src.core.Util import remove_markdown_warp
+except ImportError:
+    # If running from within src/core, use relative imports
+    import sys
+    from pathlib import Path
+    sys.path.append(str(Path(__file__).parent.parent.parent))
+    from src.core import LLMClient
+    from src.core.FileWorker import create_worker
+    from src.core.Util import remove_markdown_warp
 
 # Import config using relative path
 current_dir = Path(__file__).parent
