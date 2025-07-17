@@ -227,3 +227,7 @@ temp/
 page_*.jpg
 batch_info_batch_*.json
 test_report*.json
+
+# PDF Input Directory - Keep directory structure but ignore contents
+pdfs/*
+!pdfs/.gitkeep

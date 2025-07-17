@@ -1,0 +1,5 @@
+# This file ensures the pdfs directory is tracked by git
+# while the actual PDF files are ignored.
+# 
+# This directory is used for input PDF files that will be
+# processed by the MarkPDFDown conversion tools.
