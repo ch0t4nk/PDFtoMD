@@ -648,7 +648,7 @@ OPENAI_DEFAULT_MODEL=gpt-4o-mini
         )
         self.print_status("=" * 60, "INFO")
 
-        print("\n📊 TEST SUMMARY:")
+        print("\n[TEST SUMMARY]:")
         print(f"   Tests Run: {report['summary']['tests_run']}")
         print(f"   Tests Passed: {report['summary']['tests_passed']}")
         print(f"   Tests Failed: {report['summary']['tests_failed']}")

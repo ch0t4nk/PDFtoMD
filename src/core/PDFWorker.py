@@ -13,6 +13,7 @@ Licensed under the Apache License, Version 2.0
 
 import logging
 import os
+from typing import Optional
 
 import pypdf
 
@@ -65,7 +66,7 @@ class PDFWorker(FileWorker):
         return self.total_pages
 
     def extract_pages(
-        self, start_page: int, end_page: int, output_name: str | None = None
+        self, start_page: int, end_page: int, output_name: Optional[str] = None
     ) -> str:
         """
         Extract PDF content from a specified page range

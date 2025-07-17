@@ -12,7 +12,7 @@ Licensed under the Apache License, Version 2.0
 """
 
 import logging
-from typing import Any
+from typing import Any, Optional
 
 import openai
 
@@ -39,8 +39,8 @@ class LLMClient:
     def completion(
         self,
         user_message: str,
-        system_prompt: str | None = None,
-        image_paths: list[str] | None = None,
+        system_prompt: Optional[str] = None,
+        image_paths: Optional[list[str]] = None,
         temperature: float = 0.7,
         max_tokens: int = 8192,
     ) -> str:
