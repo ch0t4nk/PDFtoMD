@@ -5,9 +5,10 @@ Usage: python launcher.py [tool] [args...]
 
 Available tools:
   auto-batch    - Main batch processing script
-  workspace-lint - Lint and fix workspace files  
+  workspace-lint - Lint and fix workspace files
   quick-lint    - Quick linting utility
   cleanup       - Cleanup backup files
+  cleanup-temp  - Cleanup temporary files and directories
   convert-any   - Convert any file type
   convert-fast  - Fast conversion utility
   optimize-lm   - Optimize LM Studio settings
@@ -27,6 +28,7 @@ TOOLS = {
     'workspace-lint': 'src/scripts/workspace_lint.py', 
     'quick-lint': 'src/scripts/quick_lint.py',
     'cleanup': 'src/scripts/cleanup_backups.py',
+    'cleanup-temp': 'cleanup.py',
     'convert-any': 'tools/conversion/convert_any.py',
     'convert-fast': 'tools/conversion/convert_fast.py',
     'optimize-lm': 'tools/optimization/optimize_lm_studio.py',

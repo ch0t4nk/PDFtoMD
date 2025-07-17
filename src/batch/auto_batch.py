@@ -419,20 +419,33 @@ class AutoBatchProcessor:
         # Remove temp files but keep pdfs if they were copied
         cleanup_patterns = [
             "temp_batch",
-            "batch_info_*.json",
+            "batch_info_*.json", 
             "usage_stats_*.json",
             str(config.DEFAULT_CONVERTED_FOLDER)
         ]
 
+        # Also clean up temp directory contents
+        temp_cleanup_patterns = [
+            "temp/workspace/*",
+            "temp/output/*", 
+            "temp/temp_batch",
+            "page_*.jpg",
+            "*.jpg"  # Individual page images in root
+        ]
+
         cleaned = 0
+        
+        # Clean up main patterns
         for pattern in cleanup_patterns:
             if "*" in pattern:
                 for item in Path(".").glob(pattern):
                     try:
                         if item.is_dir():
                             shutil.rmtree(item)
+                            print(f"   🗑️  Removed temp batch directory")
                         else:
                             item.unlink()
+                            print(f"   🗑️  Removed {item.name}")
                         cleaned += 1
                     except (OSError, PermissionError):
                         pass
@@ -442,11 +455,26 @@ class AutoBatchProcessor:
                     try:
                         if item.is_dir():
                             shutil.rmtree(item)
+                            print(f"   🗑️  Cleaned converted directory")
                         else:
                             item.unlink()
                         cleaned += 1
                     except (OSError, PermissionError):
                         pass
+
+        # Clean up temp directory patterns  
+        for pattern in temp_cleanup_patterns:
+            for item in Path(".").glob(pattern):
+                try:
+                    if item.is_dir():
+                        shutil.rmtree(item)
+                        print(f"   🗑️  Removed temp directory: {item}")
+                    else:
+                        item.unlink()
+                        print(f"   🗑️  Removed temp file: {item.name}")
+                    cleaned += 1
+                except (OSError, PermissionError):
+                    pass
 
         print(f"✅ Cleaned up {cleaned} temporary items")
 
