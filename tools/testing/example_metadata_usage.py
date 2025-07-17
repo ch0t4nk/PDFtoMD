@@ -18,6 +18,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from utils.metadata_embedder import enhance_converted_files
 
+
 def demo_metadata_system():
     """Demonstrate the complete metadata system with realistic data"""
 
@@ -67,59 +68,55 @@ The STM32 Nucleo-64 board family provides an affordable and flexible platform.
 
 ## Development Environment
 Compatible with multiple IDEs and toolchains.
-"""
+""",
     }
 
     # Create the demo files
     for filename, content in demo_files.items():
         file_path = converted_dir / filename
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
         print(f"✓ Created demo file: {filename}")
 
     # Realistic batch data from a conversion session
     batch_data = {
-        'session_id': '20250716_143545',
-        'batch_id': 'batch_6877d5cf9db48190aff4f8e23e5e61c9',
-        'total_cost': 1.1130,
-        'total_files': 3,
-        'total_pages': 186,
-        'session_start': '2025-07-16 14:35:45',
-        'session_end': '2025-07-16 14:42:18',
-        'files': [
+        "session_id": "20250716_143545",
+        "batch_id": "batch_6877d5cf9db48190aff4f8e23e5e61c9",
+        "total_cost": 1.1130,
+        "total_files": 3,
+        "total_pages": 186,
+        "session_start": "2025-07-16 14:35:45",
+        "session_end": "2025-07-16 14:42:18",
+        "files": [
             {
-                'name': 'dm00105823-nucleo-f401re-user-manual.pdf',
-                'pages': 91,
-                'cost': 0.5359,
-                'cost_per_page': 0.0059,
-                'tokens': 3424316,
-                'final_size': '128KB'
+                "name": "dm00105823-nucleo-f401re-user-manual.pdf",
+                "pages": 91,
+                "cost": 0.5359,
+                "cost_per_page": 0.0059,
+                "tokens": 3424316,
+                "final_size": "128KB",
             },
             {
-                'name': 'stsw-spin002.pdf',
-                'pages': 4,
-                'cost': 0.0227,
-                'cost_per_page': 0.0057,
-                'tokens': 149154,
-                'final_size': '4KB'
+                "name": "stsw-spin002.pdf",
+                "pages": 4,
+                "cost": 0.0227,
+                "cost_per_page": 0.0057,
+                "tokens": 149154,
+                "final_size": "4KB",
             },
             {
-                'name': 'um1724-stm32-nucleo64-boards.pdf',
-                'pages': 91,
-                'cost': 0.5544,
-                'cost_per_page': 0.0061,
-                'tokens': 3543901,
-                'final_size': '127KB'
-            }
-        ]
+                "name": "um1724-stm32-nucleo64-boards.pdf",
+                "pages": 91,
+                "cost": 0.5544,
+                "cost_per_page": 0.0061,
+                "tokens": 3543901,
+                "final_size": "127KB",
+            },
+        ],
     }
 
     # Linting statistics from post-processing
-    linting_stats = {
-        'fixes': 47,
-        'size_reduction': 203847,
-        'processing_time': 12.3
-    }
+    linting_stats = {"fixes": 47, "size_reduction": 203847, "processing_time": 12.3}
 
     print("\n🚀 Enhancing converted files with metadata...")
 
@@ -129,9 +126,11 @@ Compatible with multiple IDEs and toolchains.
     print("✅ Metadata enhancement completed!")
     print("\n📊 Results:")
     print(f"   - Enhanced {len(demo_files)} markdown files with embedded metadata")
-    print(f"   - Created session summary in outputs/metadata/")
+    print("   - Created session summary in outputs/metadata/")
     print(f"   - Total batch cost: ${batch_data['total_cost']:.4f}")
-    print(f"   - Average cost per page: ${batch_data['total_cost']/batch_data['total_pages']:.4f}")
+    print(
+        f"   - Average cost per page: ${batch_data['total_cost'] / batch_data['total_pages']:.4f}"
+    )
 
     # Show what was created
     print("\n📁 Files enhanced:")
@@ -149,6 +148,7 @@ Compatible with multiple IDEs and toolchains.
     print("   Option B ✓ - Each file has embedded metadata headers")
     print("   Option C ✓ - Standalone session summary for comparison")
     print("   🔒 Safety ✓ - Original PDFs never touched")
+
 
 if __name__ == "__main__":
     demo_metadata_system()

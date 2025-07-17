@@ -7,8 +7,8 @@
 
 # Processing settings
 TEMPERATURE = 0.05  # Lower = more consistent
-MAX_TOKENS = 8192   # Higher = more complete output
-DPI = 200          # Image quality (200 is good balance)
+MAX_TOKENS = 8192  # Higher = more complete output
+DPI = 200  # Image quality (200 is good balance)
 
 # Monitoring settings
 CHECK_INTERVAL = 30  # Seconds between status checks
@@ -20,9 +20,9 @@ KEEP_TEMP_IMAGES = False  # Keep extracted page images
 
 # Cost alert thresholds
 COST_WARNING_THRESHOLD = 1.00  # Warn if estimated cost > $1.00
-COST_ALERT_THRESHOLD = 5.00    # Alert if estimated cost > $5.00
+COST_ALERT_THRESHOLD = 5.00  # Alert if estimated cost > $5.00
 
 # Output organization
 CREATE_SESSION_FOLDERS = True  # Create timestamped session folders
 INCLUDE_MASTER_DOCUMENT = True  # Create combined master document
-DETAILED_COST_REPORTS = True   # Include detailed per-page cost analysis
+DETAILED_COST_REPORTS = True  # Include detailed per-page cost analysis

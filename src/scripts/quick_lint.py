@@ -4,8 +4,8 @@ Quick Lint Command for MarkPDFDown
 Fast access to local markdown linting
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Add parent directories to path
@@ -19,6 +19,7 @@ try:
 except ImportError:
     print("⚠️  Markdown linter not available")
     sys.exit(1)
+
 
 def main():
     """Quick lint command"""
@@ -46,13 +47,13 @@ def main():
     if os.path.isfile(target):
         # Lint single file
         result = linter.lint_file(target)
-        if 'error' in result:
+        if "error" in result:
             print(f"❌ {result['error']}")
             return
 
-        if result['fixes']:
+        if result["fixes"]:
             print(f"✅ Applied {len(result['fixes'])} fixes:")
-            for fix in result['fixes']:
+            for fix in result["fixes"]:
                 print(f"   • {fix}")
         else:
             print("ℹ️ No fixes needed - file looks good!")
@@ -60,17 +61,18 @@ def main():
     elif os.path.isdir(target):
         # Lint directory
         result = linter.lint_directory(target)
-        if 'error' in result:
+        if "error" in result:
             print(f"❌ {result['error']}")
             return
 
         print(f"✅ Processed {result['files_processed']} files")
         print(f"✅ Applied {result['total_fixes']} total fixes")
-        if result['total_size_reduction'] > 0:
+        if result["total_size_reduction"] > 0:
             print(f"📉 Reduced size by {result['total_size_reduction']:,} bytes")
 
     else:
         print(f"❌ Path not found: {target}")
+
 
 if __name__ == "__main__":
     main()

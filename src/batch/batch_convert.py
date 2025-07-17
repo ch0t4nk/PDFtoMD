@@ -1,12 +1,12 @@
 # Batch PDF to Markdown Converter - OPTIMIZED VERSION
 # Uses convert_fast.py with OpenAI GPT-4o-mini for high-quality conversion
 
+import importlib.util
 import os
 import subprocess
-import time
 import sys
+import time
 from pathlib import Path
-import importlib.util
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -24,6 +24,7 @@ if config_path.exists():
 else:
     raise ImportError("Config file not found")
 
+
 def get_converted_files():
     """Get list of already converted files to avoid re-processing."""
     converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
@@ -40,6 +41,7 @@ def get_converted_files():
 
     return converted_pdfs
 
+
 def convert_pdf_to_markdown(pdf_file):
     """Convert a single PDF to Markdown using convert_fast.py"""
 
@@ -50,9 +52,12 @@ def convert_pdf_to_markdown(pdf_file):
         start_time = time.time()
 
         # Use the optimized convert_fast.py script
-        result = subprocess.run([
-            sys.executable, "convert_fast.py", pdf_file
-        ], capture_output=True, text=True, cwd=os.getcwd())
+        result = subprocess.run(
+            [sys.executable, "convert_fast.py", pdf_file],
+            capture_output=True,
+            text=True,
+            cwd=os.getcwd(),
+        )
 
         end_time = time.time()
         duration = end_time - start_time
@@ -69,6 +74,7 @@ def convert_pdf_to_markdown(pdf_file):
     except Exception as e:
         print(f"❌ Exception occurred: {e}")
         return False
+
 
 def main():
     """Main batch processing function."""
@@ -107,7 +113,7 @@ def main():
     print(f"⏳ Pending conversion: {len(pending_files)} files")
 
     if converted_files:
-        print(f"\n📋 Already converted:")
+        print("\n📋 Already converted:")
         for pdf in converted_files:
             print(f"   ✓ {pdf}")
 
@@ -115,7 +121,7 @@ def main():
         print("\n🎉 All PDF files have already been converted!")
         return
 
-    print(f"\n� Files to convert:")
+    print("\n� Files to convert:")
     for i, pdf in enumerate(pending_files, 1):
         print(f"   {i}. {pdf}")
 
@@ -135,7 +141,9 @@ def main():
 
         # Add a delay between conversions for OpenAI rate limiting
         if i < len(pending_files):
-            print("⏳ Waiting 10 seconds before next conversion (OpenAI rate limiting)...")
+            print(
+                "⏳ Waiting 10 seconds before next conversion (OpenAI rate limiting)..."
+            )
             time.sleep(10)
 
     total_end_time = time.time()
@@ -148,7 +156,9 @@ def main():
     print(f"❌ Failed: {failed} files")
     print(f"⏱️  Total time: {total_duration:.1f} seconds")
     if successful > 0:
-        print(f"� Average time per file: {total_duration/len(pending_files):.1f} seconds")
+        print(
+            f"� Average time per file: {total_duration / len(pending_files):.1f} seconds"
+        )
     print()
 
     if successful > 0:
@@ -157,6 +167,7 @@ def main():
 
     if failed > 0:
         print("⚠️  Some conversions failed. Check the error messages above.")
+
 
 if __name__ == "__main__":
     main()

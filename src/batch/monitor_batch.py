@@ -3,9 +3,10 @@
 Batch Monitor - Automatically check and retrieve batch results when ready
 """
 
-import time
 import subprocess
 import sys
+import time
+
 
 def monitor_batch(batch_id, check_interval=30):
     """Monitor batch and retrieve when completed"""
@@ -18,9 +19,11 @@ def monitor_batch(batch_id, check_interval=30):
             print(f"\n⏰ {time.strftime('%H:%M:%S')} - Checking batch status...")
 
             # Check status
-            result = subprocess.run([
-                sys.executable, "batch_api.py", "status", batch_id
-            ], capture_output=True, text=True)
+            result = subprocess.run(
+                [sys.executable, "batch_api.py", "status", batch_id],
+                capture_output=True,
+                text=True,
+            )
 
             if result.returncode == 0:
                 output = result.stdout
@@ -31,9 +34,11 @@ def monitor_batch(batch_id, check_interval=30):
                     print("\n🎉 Batch completed! Retrieving results...")
 
                     # Retrieve results
-                    retrieve_result = subprocess.run([
-                        sys.executable, "batch_api.py", "retrieve", batch_id
-                    ], capture_output=True, text=True)
+                    retrieve_result = subprocess.run(
+                        [sys.executable, "batch_api.py", "retrieve", batch_id],
+                        capture_output=True,
+                        text=True,
+                    )
 
                     if retrieve_result.returncode == 0:
                         print("✅ Results retrieved successfully!")
@@ -57,6 +62,7 @@ def monitor_batch(batch_id, check_interval=30):
 
     except KeyboardInterrupt:
         print("\n🛑 Monitoring stopped by user")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

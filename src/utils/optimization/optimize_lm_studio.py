@@ -1,11 +1,12 @@
 # LM Studio Configuration Script
 # This script optimizes LM Studio settings for faster processing
 
-import requests
-import json
 import time
 
+import requests
+
 LM_STUDIO_BASE = "http://192.168.56.1:1234"
+
 
 def test_current_speed():
     """Test current processing speed"""
@@ -15,12 +16,14 @@ def test_current_speed():
         "model": "Qwen2-VL-7B-Instruct",
         "messages": [{"role": "user", "content": "Count from 1 to 5."}],
         "max_tokens": 20,
-        "temperature": 0.1
+        "temperature": 0.1,
     }
 
     try:
         start_time = time.time()
-        response = requests.post(f"{LM_STUDIO_BASE}/v1/chat/completions", json=test_payload, timeout=30)
+        response = requests.post(
+            f"{LM_STUDIO_BASE}/v1/chat/completions", json=test_payload, timeout=30
+        )
         end_time = time.time()
 
         if response.status_code == 200:
@@ -34,6 +37,7 @@ def test_current_speed():
         print(f"❌ Error: {e}")
         return None
 
+
 def test_optimized_settings():
     """Test with optimized API parameters"""
     print("\n🚀 Testing optimized settings...")
@@ -46,34 +50,38 @@ def test_optimized_settings():
     ]
 
     best_config = None
-    best_time = float('inf')
+    best_time = float("inf")
 
     for config in configs:
         print(f"\n🧪 Testing {config['name']}:")
 
         test_payload = {
             "model": "Qwen2-VL-7B-Instruct",
-            "messages": [{"role": "user", "content": "Describe a simple electronic circuit."}],
+            "messages": [
+                {"role": "user", "content": "Describe a simple electronic circuit."}
+            ],
             "max_tokens": config["max_tokens"],
             "temperature": config["temperature"],
             "top_p": 0.9,
             "frequency_penalty": 0.0,
-            "presence_penalty": 0.0
+            "presence_penalty": 0.0,
         }
 
         try:
             start_time = time.time()
-            response = requests.post(f"{LM_STUDIO_BASE}/v1/chat/completions", json=test_payload, timeout=60)
+            response = requests.post(
+                f"{LM_STUDIO_BASE}/v1/chat/completions", json=test_payload, timeout=60
+            )
             end_time = time.time()
 
             if response.status_code == 200:
                 duration = end_time - start_time
                 result = response.json()
-                content = result['choices'][0]['message']['content']
+                content = result["choices"][0]["message"]["content"]
 
                 print(f"   ⏱️ Time: {duration:.2f}s")
                 print(f"   📝 Length: {len(content)} chars")
-                print(f"   🚀 Speed: {len(content)/duration:.1f} chars/sec")
+                print(f"   🚀 Speed: {len(content) / duration:.1f} chars/sec")
 
                 if duration < best_time:
                     best_time = duration
@@ -94,6 +102,7 @@ def test_optimized_settings():
 
     return None
 
+
 def create_optimized_env_file(best_config=None):
     """Create optimized environment file"""
     print("\n📝 Creating optimized settings...")
@@ -111,8 +120,8 @@ OPENAI_API_BASE="http://192.168.56.1:1234/v1"
 OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
 
 # Optimized Parameters
-OPENAI_MAX_TOKENS="{best_config['max_tokens']}"
-OPENAI_TEMPERATURE="{best_config['temperature']}"
+OPENAI_MAX_TOKENS="{best_config["max_tokens"]}"
+OPENAI_TEMPERATURE="{best_config["temperature"]}"
 OPENAI_TOP_P="0.9"
 OPENAI_RETRY_DELAY="0.3"
 
@@ -122,7 +131,7 @@ OPENAI_BATCH_SIZE="1"
 '''
 
     try:
-        with open('.env.optimized', 'w') as f:
+        with open(".env.optimized", "w") as f:
             f.write(optimized_settings)
         print("✅ Created .env.optimized file")
         print("   You can rename this to .env to use optimized settings")
@@ -130,6 +139,7 @@ OPENAI_BATCH_SIZE="1"
     except Exception as e:
         print(f"❌ Error creating file: {e}")
         return False
+
 
 def show_manual_optimizations():
     """Display manual optimization steps"""
@@ -165,6 +175,7 @@ def show_manual_optimizations():
     print("   • Test with a simple prompt first")
     print("   • Monitor GPU usage with nvidia-smi")
 
+
 def main():
     print("🚀 LM Studio Optimizer")
     print("=" * 30)
@@ -187,11 +198,12 @@ def main():
     if current_speed:
         print(f"📊 Baseline speed: {current_speed:.2f}s")
         if best_config:
-            print(f"🎯 Target improvement: 2-3x faster")
+            print("🎯 Target improvement: 2-3x faster")
         print("\n💡 Next steps:")
         print("   1. Apply manual LM Studio settings above")
         print("   2. Use .env.optimized for application settings")
         print("   3. Test with convert_fast.py")
+
 
 if __name__ == "__main__":
     main()

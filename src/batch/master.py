@@ -16,16 +16,17 @@ Created: July 16, 2025
 Version: 1.0
 """
 
-import os
+import importlib.util
 import json
-import time
+import os
+import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
-from openai import OpenAI
+
 from dotenv import load_dotenv
-import shutil
-import importlib.util
+from openai import OpenAI
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -46,23 +47,23 @@ else:
 # Load environment variables
 load_dotenv()
 
+
 class PDFBatchMaster:
     def __init__(self):
         self.client = OpenAI(
-            api_key=config.OPENAI_API_KEY,
-            base_url=config.OPENAI_API_BASE
+            api_key=config.OPENAI_API_KEY, base_url=config.OPENAI_API_BASE
         )
         self.model = config.OPENAI_DEFAULT_MODEL
 
     def print_status(self, message, level="INFO"):
         """Print formatted status messages"""
-        timestamp = time.strftime('%H:%M:%S')
+        timestamp = time.strftime("%H:%M:%S")
         symbols = {
             "INFO": "ℹ️",
             "SUCCESS": "✅",
             "WARNING": "⚠️",
             "ERROR": "❌",
-            "PROGRESS": "🔄"
+            "PROGRESS": "🔄",
         }
         symbol = symbols.get(level, "📋")
         print(f"{symbol} [{timestamp}] {message}")
@@ -72,13 +73,18 @@ class PDFBatchMaster:
         self.print_status("Starting new batch submission", "PROGRESS")
 
         try:
-            result = subprocess.run([
-                sys.executable, "batch_api.py", "submit"
-            ], capture_output=True, text=True, encoding='utf-8', errors='replace', check=False)
+            result = subprocess.run(
+                [sys.executable, "batch_api.py", "submit"],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                check=False,
+            )
 
             if result.returncode == 0:
                 # Extract batch ID from output
-                lines = result.stdout.split('\n')
+                lines = result.stdout.split("\n")
                 batch_id = None
                 for line in lines:
                     if "Batch ID:" in line:
@@ -86,10 +92,14 @@ class PDFBatchMaster:
                         break
 
                 if batch_id:
-                    self.print_status(f"Batch submitted successfully: {batch_id}", "SUCCESS")
+                    self.print_status(
+                        f"Batch submitted successfully: {batch_id}", "SUCCESS"
+                    )
                     return batch_id
                 else:
-                    self.print_status("Could not extract batch ID from output", "WARNING")
+                    self.print_status(
+                        "Could not extract batch ID from output", "WARNING"
+                    )
                     print(result.stdout)
                     return None
             else:
@@ -108,22 +118,27 @@ class PDFBatchMaster:
 
             # Extract usage statistics if available
             usage_info = {}
-            if hasattr(batch, 'request_counts') and batch.request_counts:
-                if hasattr(batch.request_counts, 'completed') and batch.request_counts.completed > 0:
+            if hasattr(batch, "request_counts") and batch.request_counts:
+                if (
+                    hasattr(batch.request_counts, "completed")
+                    and batch.request_counts.completed > 0
+                ):
                     # Try to get usage data from metadata or other fields
-                    if hasattr(batch, 'metadata') and batch.metadata:
+                    if hasattr(batch, "metadata") and batch.metadata:
                         usage_info = batch.metadata
 
             return {
-                'id': batch_id,
-                'status': batch.status,
-                'completed': batch.request_counts.completed if batch.request_counts else 0,
-                'failed': batch.request_counts.failed if batch.request_counts else 0,
-                'total': batch.request_counts.total if batch.request_counts else 0,
-                'created_at': batch.created_at,
-                'completed_at': batch.completed_at,
-                'failed_at': batch.failed_at,
-                'usage': usage_info
+                "id": batch_id,
+                "status": batch.status,
+                "completed": batch.request_counts.completed
+                if batch.request_counts
+                else 0,
+                "failed": batch.request_counts.failed if batch.request_counts else 0,
+                "total": batch.request_counts.total if batch.request_counts else 0,
+                "created_at": batch.created_at,
+                "completed_at": batch.completed_at,
+                "failed_at": batch.failed_at,
+                "usage": usage_info,
             }
         except Exception as e:  # pylint: disable=broad-except
             self.print_status(f"Error checking batch {batch_id}: {e}", "ERROR")
@@ -138,45 +153,53 @@ class PDFBatchMaster:
             batch = self.client.batches.retrieve(batch_id)
 
             if batch.status != "completed":
-                self.print_status("Batch not completed, usage analysis unavailable", "WARNING")
+                self.print_status(
+                    "Batch not completed, usage analysis unavailable", "WARNING"
+                )
                 return None
 
             # Try to get the output file
             if not batch.output_file_id:
-                self.print_status("No output file available for usage analysis", "WARNING")
+                self.print_status(
+                    "No output file available for usage analysis", "WARNING"
+                )
                 return None
 
             # Download and analyze the output file
             output_response = self.client.files.content(batch.output_file_id)
-            output_content = output_response.content.decode('utf-8')
+            output_content = output_response.content.decode("utf-8")
 
             total_tokens = 0
             total_cost = 0.0
             request_count = 0
             token_breakdown = {
-                'prompt_tokens': 0,
-                'completion_tokens': 0,
-                'total_tokens': 0
+                "prompt_tokens": 0,
+                "completion_tokens": 0,
+                "total_tokens": 0,
             }
 
             # Parse each line (JSONL format)
-            for line in output_content.strip().split('\n'):
+            for line in output_content.strip().split("\n"):
                 if line.strip():
                     try:
                         result = json.loads(line)
 
                         # Extract usage from response
-                        if 'response' in result and 'body' in result['response']:
-                            response_body = result['response']['body']
-                            if 'usage' in response_body:
-                                usage = response_body['usage']
-                                prompt_tokens = usage.get('prompt_tokens', 0)
-                                completion_tokens = usage.get('completion_tokens', 0)
-                                total_request_tokens = usage.get('total_tokens', prompt_tokens + completion_tokens)
+                        if "response" in result and "body" in result["response"]:
+                            response_body = result["response"]["body"]
+                            if "usage" in response_body:
+                                usage = response_body["usage"]
+                                prompt_tokens = usage.get("prompt_tokens", 0)
+                                completion_tokens = usage.get("completion_tokens", 0)
+                                total_request_tokens = usage.get(
+                                    "total_tokens", prompt_tokens + completion_tokens
+                                )
 
-                                token_breakdown['prompt_tokens'] += prompt_tokens
-                                token_breakdown['completion_tokens'] += completion_tokens
-                                token_breakdown['total_tokens'] += total_request_tokens
+                                token_breakdown["prompt_tokens"] += prompt_tokens
+                                token_breakdown["completion_tokens"] += (
+                                    completion_tokens
+                                )
+                                token_breakdown["total_tokens"] += total_request_tokens
                                 total_tokens += total_request_tokens
                                 request_count += 1
 
@@ -190,26 +213,30 @@ class PDFBatchMaster:
                         continue
 
             # Calculate per-page averages
-            avg_tokens_per_page = total_tokens / request_count if request_count > 0 else 0
+            avg_tokens_per_page = (
+                total_tokens / request_count if request_count > 0 else 0
+            )
             avg_cost_per_page = total_cost / request_count if request_count > 0 else 0
 
             usage_stats = {
-                'batch_id': batch_id,
-                'total_requests': request_count,
-                'total_tokens': total_tokens,
-                'total_cost': total_cost,
-                'avg_tokens_per_page': avg_tokens_per_page,
-                'avg_cost_per_page': avg_cost_per_page,
-                'token_breakdown': token_breakdown,
-                'cost_breakdown': {
-                    'input_cost': (token_breakdown['prompt_tokens'] / 1_000_000) * 0.150,
-                    'output_cost': (token_breakdown['completion_tokens'] / 1_000_000) * 0.600
-                }
+                "batch_id": batch_id,
+                "total_requests": request_count,
+                "total_tokens": total_tokens,
+                "total_cost": total_cost,
+                "avg_tokens_per_page": avg_tokens_per_page,
+                "avg_cost_per_page": avg_cost_per_page,
+                "token_breakdown": token_breakdown,
+                "cost_breakdown": {
+                    "input_cost": (token_breakdown["prompt_tokens"] / 1_000_000)
+                    * 0.150,
+                    "output_cost": (token_breakdown["completion_tokens"] / 1_000_000)
+                    * 0.600,
+                },
             }
 
             # Save usage stats to file
             usage_file = f"usage_stats_{batch_id}.json"
-            with open(usage_file, 'w', encoding='utf-8') as f:
+            with open(usage_file, "w", encoding="utf-8") as f:
                 json.dump(usage_stats, f, indent=2)
 
             self.print_status(f"Usage analysis saved to {usage_file}", "SUCCESS")
@@ -224,9 +251,9 @@ class PDFBatchMaster:
         if not usage_stats:
             return
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("📊 BATCH USAGE ANALYSIS")
-        print("="*60)
+        print("=" * 60)
         print(f"Batch ID: {usage_stats['batch_id']}")
         print(f"Total Requests: {usage_stats['total_requests']:,}")
         print(f"Total Tokens: {usage_stats['total_tokens']:,}")
@@ -236,22 +263,29 @@ class PDFBatchMaster:
         print(f"  Cost per page: ${usage_stats['avg_cost_per_page']:.4f}")
         print("\n🔢 Token Breakdown:")
         print(f"  Prompt tokens: {usage_stats['token_breakdown']['prompt_tokens']:,}")
-        print(f"  Completion tokens: {usage_stats['token_breakdown']['completion_tokens']:,}")
+        print(
+            f"  Completion tokens: {usage_stats['token_breakdown']['completion_tokens']:,}"
+        )
         print(f"  Total tokens: {usage_stats['token_breakdown']['total_tokens']:,}")
         print("\n💰 Cost Breakdown:")
         print(f"  Input cost: ${usage_stats['cost_breakdown']['input_cost']:.4f}")
         print(f"  Output cost: ${usage_stats['cost_breakdown']['output_cost']:.4f}")
         print(f"  Total cost: ${usage_stats['total_cost']:.4f}")
-        print("="*60)
+        print("=" * 60)
 
     def retrieve_batch_results(self, batch_id):
         """Retrieve batch results and analyze usage"""
         self.print_status(f"Retrieving results for batch {batch_id}", "PROGRESS")
 
         try:
-            result = subprocess.run([
-                sys.executable, "batch_api.py", "retrieve", batch_id
-            ], capture_output=True, text=True, encoding='utf-8', errors='replace', check=False)
+            result = subprocess.run(
+                [sys.executable, "batch_api.py", "retrieve", batch_id],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                check=False,
+            )
 
             if result.returncode == 0:
                 self.print_status("Results retrieved successfully", "SUCCESS")
@@ -263,7 +297,9 @@ class PDFBatchMaster:
 
                 return True
             else:
-                self.print_status(f"Failed to retrieve results: {result.stderr}", "ERROR")
+                self.print_status(
+                    f"Failed to retrieve results: {result.stderr}", "ERROR"
+                )
                 return False
 
         except Exception as e:  # pylint: disable=broad-except
@@ -274,12 +310,18 @@ class PDFBatchMaster:
         """Find all active batch files"""
         # Look in the correct temp_batch directory
         temp_batch_dir = Path(str(config.DEFAULT_TEMP_FOLDER)) / "temp_batch"
-        batch_files = list(temp_batch_dir.glob("batch_info_*.json")) if temp_batch_dir.exists() else []
+        batch_files = (
+            list(temp_batch_dir.glob("batch_info_*.json"))
+            if temp_batch_dir.exists()
+            else []
+        )
         active_batches = []
 
         for batch_file in batch_files:
             try:
-                batch_id = batch_file.name.replace("batch_info_", "").replace(".json", "")
+                batch_id = batch_file.name.replace("batch_info_", "").replace(
+                    ".json", ""
+                )
                 status_info = self.check_batch_status(batch_id)
                 if status_info:
                     active_batches.append(status_info)
@@ -299,7 +341,9 @@ class PDFBatchMaster:
                 break
 
             iterations += 1
-            self.print_status(f"Check #{iterations} - Monitoring active batches...", "PROGRESS")
+            self.print_status(
+                f"Check #{iterations} - Monitoring active batches...", "PROGRESS"
+            )
 
             active_batches = self.find_active_batches()
 
@@ -310,12 +354,14 @@ class PDFBatchMaster:
             completed_batches = []
 
             for batch_info in active_batches:
-                batch_id = batch_info['id']
-                status = batch_info['status']
-                completed = batch_info['completed']
-                total = batch_info['total']
+                batch_id = batch_info["id"]
+                status = batch_info["status"]
+                completed = batch_info["completed"]
+                total = batch_info["total"]
 
-                self.print_status(f"Batch {batch_id}: {status} ({completed}/{total})", "INFO")
+                self.print_status(
+                    f"Batch {batch_id}: {status} ({completed}/{total})", "INFO"
+                )
 
                 if status == "completed":
                     completed_batches.append(batch_id)
@@ -324,7 +370,9 @@ class PDFBatchMaster:
                 elif status in ["in_progress", "validating", "finalizing"]:
                     continue
                 else:
-                    self.print_status(f"Unknown status for batch {batch_id}: {status}", "WARNING")
+                    self.print_status(
+                        f"Unknown status for batch {batch_id}: {status}", "WARNING"
+                    )
 
             # Retrieve results for completed batches
             for batch_id in completed_batches:
@@ -332,14 +380,18 @@ class PDFBatchMaster:
                 self.retrieve_batch_results(batch_id)
 
             # Check if all batches are done
-            remaining_batches = [b for b in active_batches if b['status'] not in ['completed', 'failed']]
+            remaining_batches = [
+                b for b in active_batches if b["status"] not in ["completed", "failed"]
+            ]
 
             if not remaining_batches:
                 self.print_status("All batches completed!", "SUCCESS")
                 break
 
             if not max_iterations:  # Only sleep if running continuously
-                self.print_status(f"Waiting {check_interval} seconds before next check...", "INFO")
+                self.print_status(
+                    f"Waiting {check_interval} seconds before next check...", "INFO"
+                )
                 time.sleep(check_interval)
 
     def create_master_document(self):
@@ -382,7 +434,7 @@ class PDFBatchMaster:
             master_content.append(f"# {title} {{#{pdf_name.lower()}}}\n\n")
 
             try:
-                with open(batch_file, 'r', encoding='utf-8') as f:
+                with open(batch_file, encoding="utf-8") as f:
                     content = f.read()
                     # Remove the individual metadata section
                     content = content.split("## Processing Metadata")[0]
@@ -395,21 +447,28 @@ class PDFBatchMaster:
 
         # Add master metadata
         master_content.append("## Master Document Metadata\n\n")
-        master_content.append(f"- **Generated:** {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-        master_content.append(f"- **Source Method:** OpenAI Batch API\n")
+        master_content.append(
+            f"- **Generated:** {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
+        )
+        master_content.append("- **Source Method:** OpenAI Batch API\n")
         master_content.append(f"- **Model:** {self.model}\n")
         master_content.append(f"- **Documents Included:** {len(pdf_groups)}\n")
-        master_content.append(f"- **Individual Files:** {', '.join(sorted(pdf_groups.keys()))}\n")
+        master_content.append(
+            f"- **Individual Files:** {', '.join(sorted(pdf_groups.keys()))}\n"
+        )
 
         # Write master file
         master_file = "CAN_RS485_Master_Documentation.md"
         try:
-            with open(master_file, 'w', encoding='utf-8') as f:
+            with open(master_file, "w", encoding="utf-8") as f:
                 f.writelines(master_content)
 
             # Get file size
             file_size = os.path.getsize(master_file)
-            self.print_status(f"Master document created: {master_file} ({file_size:,} bytes)", "SUCCESS")
+            self.print_status(
+                f"Master document created: {master_file} ({file_size:,} bytes)",
+                "SUCCESS",
+            )
             return True
 
         except Exception as e:  # pylint: disable=broad-except
@@ -420,11 +479,7 @@ class PDFBatchMaster:
         """Clean up temporary files and directories"""
         self.print_status("Cleaning up temporary files", "PROGRESS")
 
-        cleanup_patterns = [
-            "batch_requests_*.jsonl",
-            "temp_batch",
-            "batch_info_*.json"
-        ]
+        cleanup_patterns = ["batch_requests_*.jsonl", "temp_batch", "batch_info_*.json"]
 
         cleaned = 0
         for pattern in cleanup_patterns:
@@ -463,10 +518,15 @@ class PDFBatchMaster:
         if existing_batches:
             self.print_status(f"Found {len(existing_batches)} existing batches", "INFO")
             for batch in existing_batches:
-                self.print_status(f"  - {batch['id']}: {batch['status']} ({batch['completed']}/{batch['total']})", "INFO")
+                self.print_status(
+                    f"  - {batch['id']}: {batch['status']} ({batch['completed']}/{batch['total']})",
+                    "INFO",
+                )
 
         # Step 2: Submit new batch if no active ones
-        if not existing_batches or all(b['status'] in ['completed', 'failed'] for b in existing_batches):
+        if not existing_batches or all(
+            b["status"] in ["completed", "failed"] for b in existing_batches
+        ):
             batch_id = self.submit_new_batch()
             if not batch_id:
                 self.print_status("Failed to submit new batch", "ERROR")
@@ -480,11 +540,12 @@ class PDFBatchMaster:
 
         # Step 5: Optional cleanup
         response = input("\nClean up temporary files? (y/N): ").strip().lower()
-        if response == 'y':
+        if response == "y":
             self.cleanup_temp_files()
 
         self.print_status("Complete workflow finished!", "SUCCESS")
         return True
+
 
 def main():
     master = PDFBatchMaster()
@@ -510,7 +571,7 @@ def main():
         batch_id = master.submit_new_batch()
         if batch_id:
             print(f"\nBatch submitted: {batch_id}")
-            print(f"Monitor with: python master.py monitor")
+            print("Monitor with: python master.py monitor")
 
     elif command == "monitor":
         interval = int(sys.argv[2]) if len(sys.argv) > 2 else 30
@@ -524,7 +585,9 @@ def main():
         if batches:
             print(f"\nFound {len(batches)} batches:")
             for batch in batches:
-                print(f"  {batch['id']}: {batch['status']} ({batch['completed']}/{batch['total']})")
+                print(
+                    f"  {batch['id']}: {batch['status']} ({batch['completed']}/{batch['total']})"
+                )
         else:
             print("No active batches found")
 
@@ -537,30 +600,30 @@ def main():
         else:
             # Analyze all completed batches
             batches = master.find_active_batches()
-            completed_batches = [b for b in batches if b['status'] == 'completed']
+            completed_batches = [b for b in batches if b["status"] == "completed"]
             if completed_batches:
                 total_cost = 0
                 total_tokens = 0
                 total_pages = 0
 
                 for batch in completed_batches:
-                    usage_stats = master.analyze_batch_usage(batch['id'])
+                    usage_stats = master.analyze_batch_usage(batch["id"])
                     if usage_stats:
                         master.print_usage_summary(usage_stats)
-                        total_cost += usage_stats['total_cost']
-                        total_tokens += usage_stats['total_tokens']
-                        total_pages += usage_stats['total_requests']
+                        total_cost += usage_stats["total_cost"]
+                        total_tokens += usage_stats["total_tokens"]
+                        total_pages += usage_stats["total_requests"]
 
                 if total_pages > 0:
-                    print(f"\n{'='*60}")
+                    print(f"\n{'=' * 60}")
                     print("📊 TOTAL USAGE SUMMARY")
-                    print(f"{'='*60}")
+                    print(f"{'=' * 60}")
                     print(f"Total batches analyzed: {len(completed_batches)}")
                     print(f"Total pages processed: {total_pages:,}")
                     print(f"Total tokens used: {total_tokens:,}")
                     print(f"Total cost: ${total_cost:.4f}")
-                    print(f"Average cost per page: ${total_cost/total_pages:.4f}")
-                    print(f"{'='*60}")
+                    print(f"Average cost per page: ${total_cost / total_pages:.4f}")
+                    print(f"{'=' * 60}")
             else:
                 print("No completed batches found for usage analysis")
 
@@ -569,6 +632,7 @@ def main():
 
     else:
         print(f"Unknown command: {command}")
+
 
 if __name__ == "__main__":
     main()

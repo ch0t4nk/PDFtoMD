@@ -2,12 +2,12 @@
 Universal File Converter (PDF/Image to Markdown).
 """
 
+import importlib.util
 import os
-import sys
 import subprocess
+import sys
 import time
 from pathlib import Path
-import importlib.util
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -25,12 +25,13 @@ if config_path.exists():
 else:
     raise ImportError("Config file not found")
 
+
 def convert_file_direct(file_path, output_file):
     """Convert file (PDF or image) directly using Python subprocess with stdin"""
 
     try:
         # Read the file as binary
-        with open(file_path, 'rb') as input_file:
+        with open(file_path, "rb") as input_file:
             file_data = input_file.read()
 
         print(f"📊 Input file size: {len(file_data):,} bytes")
@@ -38,11 +39,11 @@ def convert_file_direct(file_path, output_file):
         # Run main.py with the file data as stdin
         start_time = time.time()
         process = subprocess.Popen(
-            [sys.executable, 'src/core/main.py'],
+            [sys.executable, "src/core/main.py"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            cwd=os.getcwd()
+            cwd=os.getcwd(),
         )
 
         stdout, stderr = process.communicate(input=file_data)
@@ -55,19 +56,22 @@ def convert_file_direct(file_path, output_file):
         if process.returncode == 0:
             # Write the markdown output to file
             if stdout:
-                with open(output_file, 'w', encoding='utf-8') as f:
-                    f.write(stdout.decode('utf-8', errors='ignore'))
+                with open(output_file, "w", encoding="utf-8") as f:
+                    f.write(stdout.decode("utf-8", errors="ignore"))
 
                 file_size = os.path.getsize(output_file)
                 return True, end_time - start_time, file_size, ""
             else:
                 return False, end_time - start_time, 0, "No output generated"
         else:
-            error_msg = stderr.decode('utf-8', errors='ignore') if stderr else "Unknown error"
+            error_msg = (
+                stderr.decode("utf-8", errors="ignore") if stderr else "Unknown error"
+            )
             return False, end_time - start_time, 0, error_msg
 
     except (OSError, subprocess.SubprocessError, UnicodeDecodeError) as e:
         return False, 0, 0, str(e)
+
 
 def convert_any_file(filename):
     """Convert any file (PDF or image) to Markdown"""
@@ -77,7 +81,11 @@ def convert_any_file(filename):
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
         print("Available files:")
-        files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))]
+        files = [
+            f
+            for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+            if f.lower().endswith((".pdf", ".png", ".jpg", ".jpeg", ".bmp"))
+        ]
         for f in sorted(files):
             print(f"   - {f}")
         return False
@@ -104,7 +112,7 @@ def convert_any_file(filename):
         # Show first few lines of output
         if file_size > 0:
             try:
-                with open(output_file, 'r', encoding='utf-8') as f:
+                with open(output_file, encoding="utf-8") as f:
                     content = f.read()[:500]  # First 500 characters
                     print(f"\n📄 Preview:\n{content}...")
             except (OSError, subprocess.SubprocessError, UnicodeDecodeError) as e:
@@ -117,6 +125,7 @@ def convert_any_file(filename):
             print(f"   Error: {error}")
         return False
 
+
 def main():
     """Main function for command-line usage."""
     if len(sys.argv) != 2:
@@ -124,8 +133,9 @@ def main():
         print("\nAvailable files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
             files = [
-                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
-                if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))
+                f
+                for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith((".pdf", ".png", ".jpg", ".jpeg", ".bmp"))
             ]
             for f in sorted(files):
                 print(f"   - {f}")

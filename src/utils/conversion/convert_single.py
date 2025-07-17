@@ -4,12 +4,12 @@ Single PDF to Markdown Converter.
 Usage: python convert_single.py <pdf_filename>
 """
 
+import importlib.util
 import os
-import sys
 import subprocess
+import sys
 import time
 from pathlib import Path
-import importlib.util
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -27,6 +27,7 @@ if config_path.exists():
 else:
     raise ImportError("Config file not found")
 
+
 def convert_single_pdf(pdf_filename):
     """Convert a single PDF file to Markdown"""
 
@@ -35,7 +36,11 @@ def convert_single_pdf(pdf_filename):
     if not os.path.exists(pdf_path):
         print(f"❌ File not found: {pdf_path}")
         print("Available PDF files:")
-        pdf_files = [f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER)) if f.lower().endswith('.pdf')]
+        pdf_files = [
+            f
+            for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+            if f.lower().endswith(".pdf")
+        ]
         for f in sorted(pdf_files):
             print(f"   - {f}")
         return False
@@ -54,17 +59,22 @@ def convert_single_pdf(pdf_filename):
     try:
         # Use PowerShell to pipe the PDF content to main.py
         cmd = [
-            "powershell", "-Command",
+            "powershell",
+            "-Command",
             f'Get-Content "{pdf_path}" -Encoding Byte -Raw | '
-            f'C:/Python313/python.exe src/core/main.py > "{output_file}"'
+            f'C:/Python313/python.exe src/core/main.py > "{output_file}"',
         ]
 
         start_time = time.time()
-        result = subprocess.run(cmd, capture_output=True, text=True, cwd=os.getcwd(), check=False)
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, cwd=os.getcwd(), check=False
+        )
         end_time = time.time()
 
         if result.returncode == 0:
-            file_size = os.path.getsize(output_file) if os.path.exists(output_file) else 0
+            file_size = (
+                os.path.getsize(output_file) if os.path.exists(output_file) else 0
+            )
             print("✅ Conversion successful!")
             print(f"   ⏱️  Time: {end_time - start_time:.1f} seconds")
             print(f"   📊 Output size: {file_size:,} bytes")
@@ -80,6 +90,7 @@ def convert_single_pdf(pdf_filename):
         print(f"❌ Exception during conversion: {e}")
         return False
 
+
 def main():
     """Main function for command-line usage."""
     if len(sys.argv) != 2:
@@ -87,8 +98,9 @@ def main():
         print("\nAvailable PDF files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
             pdf_files = [
-                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
-                if f.lower().endswith('.pdf')
+                f
+                for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith(".pdf")
             ]
             for f in sorted(pdf_files):
                 print(f"   - {f}")

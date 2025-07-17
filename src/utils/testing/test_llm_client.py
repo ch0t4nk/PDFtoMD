@@ -1,10 +1,10 @@
 # LLM Client Diagnostic Test
 
-import os
-import sys
-from dotenv import load_dotenv
 import importlib.util
+import sys
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -22,6 +22,7 @@ if config_path.exists():
 else:
     raise ImportError("Config file not found")
 
+
 def test_llm_client():
     """Test LLM client initialization and basic connectivity"""
     load_dotenv()
@@ -32,6 +33,7 @@ def test_llm_client():
     try:
         # Import core modules
         from core.LLMClient import LLMClient
+
         print("✅ Successfully imported LLMClient")
 
         # Get configuration
@@ -57,7 +59,7 @@ def test_llm_client():
             response = client.completion(
                 user_message="Hello! Please respond with just 'Test successful!'",
                 temperature=0.1,
-                max_tokens=50
+                max_tokens=50,
             )
             print(f"✅ LLM Response: {response}")
             return True
@@ -71,6 +73,7 @@ def test_llm_client():
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
         return False
+
 
 if __name__ == "__main__":
     success = test_llm_client()

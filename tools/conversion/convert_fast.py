@@ -3,8 +3,8 @@ Optimized Fast PDF Converter with parallel processing.
 """
 
 import os
-import sys
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -21,7 +21,7 @@ def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
     process = None
     try:
         # Read the PDF file as binary
-        with open(pdf_path, 'rb') as pdf_file:
+        with open(pdf_path, "rb") as pdf_file:
             pdf_data = pdf_file.read()
 
         print(f"📊 Input file size: {len(pdf_data):,} bytes")
@@ -31,17 +31,17 @@ def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
 
         # Set optimized environment variables for faster processing
         env = os.environ.copy()
-        env['OPENAI_MAX_TOKENS'] = '4096'  # Reduce max tokens for speed
-        env['OPENAI_TEMPERATURE'] = '0.1'  # Lower temperature for speed
-        env['MARKPDF_OUTPUT_FILE'] = output_file  # Pass output file name
+        env["OPENAI_MAX_TOKENS"] = "4096"  # Reduce max tokens for speed
+        env["OPENAI_TEMPERATURE"] = "0.1"  # Lower temperature for speed
+        env["MARKPDF_OUTPUT_FILE"] = output_file  # Pass output file name
 
         process = subprocess.Popen(
-            [sys.executable, 'src/core/main_fast.py'],
+            [sys.executable, "src/core/main_fast.py"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=os.getcwd(),
-            env=env
+            env=env,
         )
 
         stdout, stderr = process.communicate(input=pdf_data)
@@ -54,15 +54,15 @@ def convert_pdf_optimized(pdf_path, output_file, max_workers=3):
         if process.returncode == 0:
             # Write the markdown output to file
             if stdout:
-                with open(output_file, 'w', encoding='utf-8') as f:
-                    f.write(stdout.decode('utf-8'))
+                with open(output_file, "w", encoding="utf-8") as f:
+                    f.write(stdout.decode("utf-8"))
 
                 file_size = os.path.getsize(output_file)
                 return True, end_time - start_time, file_size, ""
             else:
                 return False, end_time - start_time, 0, "No output received"
         else:
-            error_msg = stderr.decode('utf-8') if stderr else "Unknown error"
+            error_msg = stderr.decode("utf-8") if stderr else "Unknown error"
             return False, end_time - start_time, 0, error_msg
 
     except (OSError, subprocess.SubprocessError, UnicodeDecodeError) as e:
@@ -119,8 +119,9 @@ def main():
         print("\nAvailable PDF files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
             files = [
-                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
-                if f.lower().endswith('.pdf')
+                f
+                for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith(".pdf")
             ]
             for f in sorted(files):
                 print(f"   - {f}")

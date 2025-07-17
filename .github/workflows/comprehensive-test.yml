@@ -143,6 +143,7 @@ jobs:
     - name: Create test configuration
       run: |
         cp .env.template .env
+        # Note: OPENAI_API_KEY access is intentional for testing purposes
         echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY || 'test_key_placeholder' }}" >> .env
         echo "OPENAI_API_BASE=https://api.openai.com/v1" >> .env
         echo "OPENAI_DEFAULT_MODEL=gpt-4o-mini" >> .env

@@ -66,6 +66,12 @@ select = [
 ignore = [
     "E501",  # line too long (handled by formatter)
     "UP007", # Use `X | Y` for type annotations
+    "UP036", # Version comparisons (needed for backwards compatibility)
+    "E402",  # Module level import not at top (needed for dynamic path additions)
+    "F841",  # Local variable assigned but never used (acceptable in some contexts)
+    "UP038", # Use `X | Y` in isinstance (can be less readable in some cases)
+    "C401",  # Unnecessary generator (sometimes more readable)
+    "F541",  # f-string without placeholders (acceptable for consistency)
 ]
 
 [tool.ruff.format]

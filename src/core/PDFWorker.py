@@ -113,7 +113,9 @@ class PDFWorker(FileWorker):
             logger.error(f"Unexpected error during page extraction: {str(e)}")
             return ""
 
-    def convert_to_images(self, output_dir: str = ".", dpi: int = 300, fmt: str = "jpg", **kwargs) -> list[str]:
+    def convert_to_images(
+        self, output_dir: str = ".", dpi: int = 300, fmt: str = "jpg", **kwargs
+    ) -> list[str]:
         """
         Convert each PDF page to a high-quality image
 
@@ -139,9 +141,7 @@ class PDFWorker(FileWorker):
                 zoom = dpi / 72.0
                 mat = fitz.Matrix(zoom, zoom)
                 pix = page.get_pixmap(matrix=mat)  # type: ignore
-                output_path = os.path.join(
-                    output_dir, f"page_{page_num + 1:04d}.{fmt}"
-                )
+                output_path = os.path.join(output_dir, f"page_{page_num + 1:04d}.{fmt}")
                 pix.save(output_path)
                 img_paths.append(output_path)
 

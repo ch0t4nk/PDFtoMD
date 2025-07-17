@@ -2,9 +2,11 @@
 """
 Batch Cost Tracker - Monitor batch progress and calculate exact costs
 """
+
 import time
-import json
+
 from .master import PDFBatchMaster
+
 
 def track_batch_cost():
     master = PDFBatchMaster()
@@ -13,7 +15,7 @@ def track_batch_cost():
     print("🔍 BATCH COST TRACKING")
     print("=" * 50)
     print(f"Batch ID: {batch_id}")
-    print(f"Baseline Cost (previous batch): $0.4528")
+    print("Baseline Cost (previous batch): $0.4528")
     print(f"Start Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 50)
 
@@ -24,7 +26,7 @@ def track_batch_cost():
             current_batch = None
 
             for batch in batches:
-                if batch['id'] == batch_id:
+                if batch["id"] == batch_id:
                     current_batch = batch
                     break
 
@@ -32,11 +34,13 @@ def track_batch_cost():
                 print("❌ Batch not found!")
                 break
 
-            status = current_batch['status']
-            completed = current_batch['completed']
-            total = current_batch['total']
+            status = current_batch["status"]
+            completed = current_batch["completed"]
+            total = current_batch["total"]
 
-            print(f"\n⏰ {time.strftime('%H:%M:%S')} - Status: {status} ({completed}/{total})")
+            print(
+                f"\n⏰ {time.strftime('%H:%M:%S')} - Status: {status} ({completed}/{total})"
+            )
 
             if status == "completed":
                 print("\n🎉 BATCH COMPLETED! Analyzing costs...")
@@ -47,19 +51,23 @@ def track_batch_cost():
                     master.print_usage_summary(usage_stats)
 
                     # Calculate cost difference
-                    new_cost = usage_stats['total_cost']
+                    new_cost = usage_stats["total_cost"]
                     old_cost = 0.4528
                     difference = new_cost - old_cost
 
-                    print(f"\n💰 COST COMPARISON")
+                    print("\n💰 COST COMPARISON")
                     print(f"Previous batch: ${old_cost:.4f}")
                     print(f"New batch: ${new_cost:.4f}")
-                    print(f"Difference: ${difference:+.4f} ({difference/old_cost*100:+.1f}%)")
+                    print(
+                        f"Difference: ${difference:+.4f} ({difference / old_cost * 100:+.1f}%)"
+                    )
 
                     if new_cost > old_cost:
-                        print(f"📈 Higher cost due to increased max_tokens (8192 vs 4096)")
+                        print(
+                            "📈 Higher cost due to increased max_tokens (8192 vs 4096)"
+                        )
                     else:
-                        print(f"📉 Lower cost - impressive optimization!")
+                        print("📉 Lower cost - impressive optimization!")
 
                 break
             elif status == "failed":
@@ -75,6 +83,7 @@ def track_batch_cost():
         except (RuntimeError, OSError, ValueError) as e:
             print(f"❌ Error: {e}")
             time.sleep(30)
+
 
 if __name__ == "__main__":
     track_batch_cost()

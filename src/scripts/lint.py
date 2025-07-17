@@ -4,9 +4,10 @@ MarkPDFDown Workspace Linter Launcher
 Convenient access to workspace linting from root directory
 """
 
-import sys
 import subprocess
+import sys
 from pathlib import Path
+
 
 def main():
     """Main entry point for the lint launcher script."""
@@ -22,12 +23,16 @@ def main():
     try:
         # Set working directory to project root (two levels up from src/scripts/)
         project_root = Path(__file__).parent.parent.parent
-        result = subprocess.run([sys.executable, str(script_path)] + sys.argv[1:],
-                               cwd=project_root, check=False)
+        result = subprocess.run(
+            [sys.executable, str(script_path)] + sys.argv[1:],
+            cwd=project_root,
+            check=False,
+        )
         sys.exit(result.returncode)
     except (subprocess.SubprocessError, OSError) as e:
         print(f"❌ Error running workspace linter: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

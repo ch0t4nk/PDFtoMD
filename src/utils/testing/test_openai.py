@@ -3,11 +3,11 @@
 OpenAI API Test - Check if your credits work
 """
 
-import os
-from openai import OpenAI
-from dotenv import load_dotenv
 import importlib.util
 from pathlib import Path
+
+from dotenv import load_dotenv
+from openai import OpenAI
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -27,6 +27,7 @@ else:
 
 load_dotenv()
 
+
 def test_openai_api():
     """Test OpenAI API connection and credits"""
 
@@ -41,12 +42,17 @@ def test_openai_api():
         # Simple test call
         response = client.chat.completions.create(
             model="gpt-4o-mini",  # Cheapest option
-            messages=[{"role": "user", "content": "Say 'Hello from OpenAI!' in exactly 5 words."}],
-            max_tokens=20
+            messages=[
+                {
+                    "role": "user",
+                    "content": "Say 'Hello from OpenAI!' in exactly 5 words.",
+                }
+            ],
+            max_tokens=20,
         )
 
         result = response.choices[0].message.content
-        print(f"✅ OpenAI API working!")
+        print("✅ OpenAI API working!")
         print(f"📝 Response: {result}")
         if response.usage:
             print(f"💰 Tokens used: {response.usage.total_tokens}")
@@ -60,6 +66,7 @@ def test_openai_api():
         elif "invalid_api_key" in str(e):
             print("🔑 Invalid API key - check your .env file")
         return False
+
 
 if __name__ == "__main__":
     print("🧪 Testing OpenAI API Connection")

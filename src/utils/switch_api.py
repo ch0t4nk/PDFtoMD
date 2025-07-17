@@ -7,7 +7,7 @@ Enhanced for MarkPDFDown enterprise security
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 
-SECURITY NOTICE: This utility now uses SSOT configuration system 
+SECURITY NOTICE: This utility now uses SSOT configuration system
 and NEVER exposes API keys in source code.
 """
 
@@ -30,6 +30,7 @@ if config_path.exists():
 else:
     raise ImportError("Config file not found")
 
+
 def switch_to_openai():
     """Switch to OpenAI API - SSOT compliant version"""
     env_content = """# OpenAI Configuration (Cloud) - ACTIVE
@@ -43,10 +44,13 @@ OPENAI_DEFAULT_MODEL="gpt-4o-mini"
 # OPENAI_API_BASE="http://192.168.56.1:1234/v1"
 # OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
 """
-    with open('.env', 'w', encoding='utf-8') as f:
+    with open(".env", "w", encoding="utf-8") as f:
         f.write(env_content)
     print("✅ Switched to OpenAI API")
-    print("🔒 SECURITY: Remember to replace 'your-openai-api-key-here' with your actual API key")
+    print(
+        "🔒 SECURITY: Remember to replace 'your-openai-api-key-here' with your actual API key"
+    )
+
 
 def switch_to_lmstudio():
     """Switch to LM Studio - SSOT compliant version"""
@@ -61,17 +65,18 @@ OPENAI_DEFAULT_MODEL="Qwen2-VL-7B-Instruct"
 # OPENAI_API_BASE="https://api.openai.com/v1"
 # OPENAI_DEFAULT_MODEL="gpt-4o-mini"
 """
-    with open('.env', 'w', encoding='utf-8') as f:
+    with open(".env", "w", encoding="utf-8") as f:
         f.write(env_content)
     print("✅ Switched to LM Studio")
+
 
 def show_current():
     """Show current configuration using SSOT system"""
     try:
-        print(f"🔧 Current API Configuration (via SSOT):")
+        print("🔧 Current API Configuration (via SSOT):")
         print(f"   API Base: {config.OPENAI_API_BASE}")
         print(f"   Model: {config.OPENAI_DEFAULT_MODEL}")
-        
+
         # Mask the API key for security
         api_key = config.OPENAI_API_KEY
         if api_key and len(api_key) > 8:
@@ -79,25 +84,29 @@ def show_current():
         else:
             masked_key = "****"
         print(f"   API Key: {masked_key}")
-        
+
         # Determine current provider based on API base
         if "api.openai.com" in config.OPENAI_API_BASE:
             print("🌐 Provider: OpenAI (Cloud)")
-        elif "192.168.56.1" in config.OPENAI_API_BASE or "localhost" in config.OPENAI_API_BASE:
+        elif (
+            "192.168.56.1" in config.OPENAI_API_BASE
+            or "localhost" in config.OPENAI_API_BASE
+        ):
             print("🖥️  Provider: LM Studio (Local)")
         else:
             print("❓ Provider: Custom/Unknown")
-            
+
         # Check .env file status
-        env_file = Path('.env')
+        env_file = Path(".env")
         if env_file.exists():
-            print(f"📄 .env file: ✅ Found")
+            print("📄 .env file: ✅ Found")
         else:
-            print(f"📄 .env file: ❌ Missing")
-            
+            print("📄 .env file: ❌ Missing")
+
     except (AttributeError, ValueError, ImportError, FileNotFoundError) as e:
         print(f"❌ Error reading configuration: {e}")
         print("💡 Tip: Ensure .env file exists with proper configuration")
+
 
 if __name__ == "__main__":
     import sys
@@ -111,20 +120,20 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         command = sys.argv[1].lower()
-        if command in ['openai', 'cloud']:
+        if command in ["openai", "cloud"]:
             switch_to_openai()
             print("🔄 Restart any running applications to use new configuration")
-        elif command in ['lmstudio', 'local', 'lms']:
+        elif command in ["lmstudio", "local", "lms"]:
             switch_to_lmstudio()
             print("🔄 Restart any running applications to use new configuration")
-        elif command in ['show', 'current', 'status']:
+        elif command in ["show", "current", "status"]:
             # Already shown above
             pass
         else:
             print("❌ Unknown command")
             print("📋 Available commands:")
             print("   python switch_api.py openai      # Switch to OpenAI")
-            print("   python switch_api.py lmstudio    # Switch to LM Studio") 
+            print("   python switch_api.py lmstudio    # Switch to LM Studio")
             print("   python switch_api.py show        # Show current config")
     else:
         print("📋 Available commands:")

@@ -1,8 +1,8 @@
 # Combine all page files into final output
 
-import os
 import glob
 import importlib.util
+import os
 from pathlib import Path
 
 # Import config using relative path
@@ -46,7 +46,7 @@ for i, md_file in enumerate(md_files, 1):
     print(f"📝 Processing page {i}: {os.path.basename(md_file)}")
 
     try:
-        with open(md_file, 'r', encoding='utf-8') as f:
+        with open(md_file, encoding="utf-8") as f:
             content = f.read().strip()
             if content:
                 combined_content += f"---\n# Page {i}\n---\n\n"
@@ -59,7 +59,7 @@ output_file = "converted/CAN-MAX485-combined.md"
 os.makedirs(str(config.DEFAULT_CONVERTED_FOLDER), exist_ok=True)
 
 try:
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(combined_content)
 
     file_size = os.path.getsize(output_file)

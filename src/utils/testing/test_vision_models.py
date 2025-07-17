@@ -1,11 +1,11 @@
 # Test Different Models for Vision Support
 
-from dotenv import load_dotenv
-import os
-from core.LLMClient import LLMClient
-import requests
 import importlib.util
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+from core.LLMClient import LLMClient
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -25,6 +25,7 @@ else:
 
 load_dotenv()
 
+
 def test_model_vision_support(model_name):
     """Test if a model supports vision by checking its capabilities"""
 
@@ -42,7 +43,7 @@ def test_model_vision_support(model_name):
             response = client.completion(
                 user_message="Hello, can you see images?",
                 max_tokens=20,
-                temperature=0.1
+                temperature=0.1,
             )
             print(f"✅ Text completion works: {response[:50]}...")
 
@@ -52,7 +53,7 @@ def test_model_vision_support(model_name):
                     user_message="Describe this image",
                     image_paths=["tests/demo_01.png"],
                     max_tokens=20,
-                    temperature=0.1
+                    temperature=0.1,
                 )
                 print(f"✅ Vision supported! Response: {response[:50]}...")
                 return True
@@ -73,6 +74,7 @@ def test_model_vision_support(model_name):
         print(f"❌ Model initialization failed: {e}")
         return False
 
+
 def main():
     # Available models from the earlier API call
     models_to_test = [
@@ -81,7 +83,7 @@ def main():
         "microsoft/phi-4-reasoning-plus",
         "lmstudio-community/qwen3-30b-a3b",
         "unsloth/qwen3-30b-a3b",
-        "deepseek-r1-distill-qwen-7b"
+        "deepseek-r1-distill-qwen-7b",
     ]
 
     print("🔍 Testing Models for Vision Support")
@@ -106,6 +108,7 @@ def main():
     print(f"📝 Text-only models: {len(text_only_models)}")
     for model in text_only_models:
         print(f"   📝 {model}")
+
 
 if __name__ == "__main__":
     main()

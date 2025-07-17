@@ -3,8 +3,8 @@ Universal File Converter (PDF/Image to Markdown).
 """
 
 import os
-import sys
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -19,7 +19,7 @@ def convert_file_direct(file_path, output_file):
 
     try:
         # Read the file as binary
-        with open(file_path, 'rb') as input_file:
+        with open(file_path, "rb") as input_file:
             file_data = input_file.read()
 
         print(f"📊 Input file size: {len(file_data):,} bytes")
@@ -27,11 +27,11 @@ def convert_file_direct(file_path, output_file):
         # Run main.py with the file data as stdin
         start_time = time.time()
         process = subprocess.Popen(
-            [sys.executable, 'src/core/main.py'],
+            [sys.executable, "src/core/main.py"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            cwd=os.getcwd()
+            cwd=os.getcwd(),
         )
 
         stdout, stderr = process.communicate(input=file_data)
@@ -44,15 +44,15 @@ def convert_file_direct(file_path, output_file):
         if process.returncode == 0:
             # Write the markdown output to file
             if stdout:
-                with open(output_file, 'w', encoding='utf-8') as f:
-                    f.write(stdout.decode('utf-8'))
+                with open(output_file, "w", encoding="utf-8") as f:
+                    f.write(stdout.decode("utf-8"))
 
                 file_size = os.path.getsize(output_file)
                 return True, end_time - start_time, file_size, ""
             else:
                 return False, end_time - start_time, 0, "No output received"
         else:
-            error_msg = stderr.decode('utf-8') if stderr else "Unknown error"
+            error_msg = stderr.decode("utf-8") if stderr else "Unknown error"
             return False, end_time - start_time, 0, error_msg
 
     except (OSError, subprocess.SubprocessError, UnicodeDecodeError) as e:
@@ -68,8 +68,9 @@ def convert_any_file(filename):
         print(f"❌ File not found: {file_path}")
         print("Available files:")
         files = [
-            f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
-            if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))
+            f
+            for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+            if f.lower().endswith((".pdf", ".png", ".jpg", ".jpeg", ".bmp"))
         ]
         for f in sorted(files):
             print(f"   - {f}")
@@ -108,8 +109,9 @@ def main():
         print("\nAvailable files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
             files = [
-                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
-                if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.bmp'))
+                f
+                for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith((".pdf", ".png", ".jpg", ".jpeg", ".bmp"))
             ]
             for f in sorted(files):
                 print(f"   - {f}")

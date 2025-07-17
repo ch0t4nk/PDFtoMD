@@ -16,18 +16,19 @@ Created: July 16, 2025
 Version: 1.0
 """
 
+import argparse
+import json
 import os
+import shutil
 import sys
 import time
-import json
-import shutil
-import argparse
-from pathlib import Path
 from datetime import datetime
-from typing import Any, Optional
+from pathlib import Path
 
 # Add root directory to path for config import
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(
+    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+)
 import importlib.util
 
 # Import config using relative path
@@ -48,19 +49,26 @@ else:
 
 # Handle imports whether running as module or script
 try:
-    from ..batch.master import PDFBatchMaster
     from ..batch.batch_api import BatchPDFConverter
+    from ..batch.master import PDFBatchMaster
 except ImportError:
     # Running as script, add src directory to path
     src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     sys.path.insert(0, src_dir)
-    from batch.master import PDFBatchMaster
     from batch.batch_api import BatchPDFConverter
+    from batch.master import PDFBatchMaster
+
 
 class AutoBatchProcessor:
     def __init__(self, pdf_folder=None, output_folder=None, enable_linting=True):
-        self.pdf_folder = Path(pdf_folder) if pdf_folder else Path(str(config.DEFAULT_PDF_FOLDER))
-        self.output_folder = Path(output_folder) if output_folder else Path(str(config.DEFAULT_CONVERTED_FOLDER))
+        self.pdf_folder = (
+            Path(pdf_folder) if pdf_folder else Path(str(config.DEFAULT_PDF_FOLDER))
+        )
+        self.output_folder = (
+            Path(output_folder)
+            if output_folder
+            else Path(str(config.DEFAULT_CONVERTED_FOLDER))
+        )
         self.enable_linting = enable_linting
         self.master = PDFBatchMaster()
         self.converter = BatchPDFConverter()
@@ -74,7 +82,7 @@ class AutoBatchProcessor:
 
     def print_step(self, step, message):
         """Print step information"""
-        timestamp = datetime.now().strftime('%H:%M:%S')
+        timestamp = datetime.now().strftime("%H:%M:%S")
         print(f"⏰ [{timestamp}] Step {step}: {message}")
 
     def discover_pdfs(self):
@@ -132,22 +140,24 @@ class AutoBatchProcessor:
         # Rough estimates based on previous runs
         estimated_pages = int(total_size_mb * 0.8)  # ~0.8 pages per MB average
         estimated_tokens = estimated_pages * 31000  # ~31k tokens per page
-        estimated_cost = estimated_tokens * (0.150 / 1_000_000) * 1.1  # Input cost + small output cost
+        estimated_cost = (
+            estimated_tokens * (0.150 / 1_000_000) * 1.1
+        )  # Input cost + small output cost
 
-        print(f"📊 Processing Estimates:")
+        print("📊 Processing Estimates:")
         print(f"   📄 Files: {len(pdf_files)}")
         print(f"   📦 Total Size: {total_size_mb:.1f} MB")
         print(f"   📃 Estimated Pages: ~{estimated_pages}")
         print(f"   🔢 Estimated Tokens: ~{estimated_tokens:,}")
         print(f"   💰 Estimated Cost: ~${estimated_cost:.4f}")
-        print(f"   ⏱️  Estimated Time: 5-15 minutes")
+        print("   ⏱️  Estimated Time: 5-15 minutes")
 
         return {
             "files": len(pdf_files),
             "size_mb": total_size_mb,
             "estimated_pages": estimated_pages,
             "estimated_tokens": estimated_tokens,
-            "estimated_cost": estimated_cost
+            "estimated_cost": estimated_cost,
         }
 
     def submit_batch(self):
@@ -181,7 +191,7 @@ class AutoBatchProcessor:
             current_batch = None
 
             for batch in batches:
-                if batch['id'] == batch_id:
+                if batch["id"] == batch_id:
                     current_batch = batch
                     break
 
@@ -189,17 +199,19 @@ class AutoBatchProcessor:
                 print("❌ Batch not found!")
                 return False
 
-            status = current_batch['status']
-            completed = current_batch['completed']
-            total = current_batch['total']
+            status = current_batch["status"]
+            completed = current_batch["completed"]
+            total = current_batch["total"]
 
             elapsed = time.time() - start_time
             progress_pct = (completed / total * 100) if total > 0 else 0
 
-            print(f"   🔄 Check #{check_count}: {status} ({completed}/{total} - {progress_pct:.1f}%) - {elapsed/60:.1f}m elapsed")
+            print(
+                f"   🔄 Check #{check_count}: {status} ({completed}/{total} - {progress_pct:.1f}%) - {elapsed / 60:.1f}m elapsed"
+            )
 
             if status == "completed":
-                print(f"✅ Batch completed in {elapsed/60:.1f} minutes!")
+                print(f"✅ Batch completed in {elapsed / 60:.1f} minutes!")
                 return True
             elif status == "failed":
                 print("❌ Batch failed!")
@@ -233,25 +245,33 @@ class AutoBatchProcessor:
         try:
             # Try to import linting functionality dynamically
             import importlib.util
+
             utils_dir = Path(__file__).parent.parent / "utils"
             linter_path = utils_dir / "linting" / "markdown_linter.py"
 
             linter = None
             if linter_path.exists() and linter_path.stat().st_size > 0:
                 try:
-                    spec = importlib.util.spec_from_file_location("markdown_linter", linter_path)
+                    spec = importlib.util.spec_from_file_location(
+                        "markdown_linter", linter_path
+                    )
                     if spec and spec.loader:
                         linter_module = importlib.util.module_from_spec(spec)
                         spec.loader.exec_module(linter_module)
 
                         # Use getattr with try-except to handle dynamic instantiation
-                        if hasattr(linter_module, 'MarkdownLinter'):
+                        if hasattr(linter_module, "MarkdownLinter"):
                             try:
-                                linter = getattr(linter_module, 'MarkdownLinter')()
+                                linter = linter_module.MarkdownLinter()
                                 # Test if the linter has the required method
-                                if not hasattr(linter, 'lint_file'):
+                                if not hasattr(linter, "lint_file"):
                                     linter = None
-                            except (TypeError, AttributeError, RuntimeError, ImportError):
+                            except (
+                                TypeError,
+                                AttributeError,
+                                RuntimeError,
+                                ImportError,
+                            ):
                                 linter = None
                 except (TypeError, AttributeError, ImportError, RuntimeError):
                     linter = None
@@ -281,30 +301,34 @@ class AutoBatchProcessor:
                 if "_batch.md" in md_file.name:  # Only lint batch files
                     result = linter.lint_file(str(md_file))  # type: ignore
 
-                    if 'error' not in result:
-                        fixes_applied = len(result.get('fixes', []))
-                        size_reduction = result.get('size_reduction', 0)
+                    if "error" not in result:
+                        fixes_applied = len(result.get("fixes", []))
+                        size_reduction = result.get("size_reduction", 0)
 
                         total_fixes += fixes_applied
                         total_size_reduction += size_reduction
                         files_processed += 1
 
                         if fixes_applied > 0:
-                            print(f"   ✅ {md_file.name}: {fixes_applied} fixes, {size_reduction} bytes saved")
+                            print(
+                                f"   ✅ {md_file.name}: {fixes_applied} fixes, {size_reduction} bytes saved"
+                            )
                         else:
                             print(f"   ✅ {md_file.name}: Already clean")
                     else:
                         print(f"   ❌ {md_file.name}: {result['error']}")
 
             linting_stats = {
-                'total_fixes': total_fixes,
-                'total_size_reduction': total_size_reduction,
-                'files_processed': files_processed,
-                'avg_fixes_per_file': total_fixes / max(files_processed, 1),
-                'avg_size_reduction': total_size_reduction / max(files_processed, 1)
+                "total_fixes": total_fixes,
+                "total_size_reduction": total_size_reduction,
+                "files_processed": files_processed,
+                "avg_fixes_per_file": total_fixes / max(files_processed, 1),
+                "avg_size_reduction": total_size_reduction / max(files_processed, 1),
             }
 
-            print(f"✅ Linting complete: {total_fixes} total fixes, {total_size_reduction:,} bytes saved")
+            print(
+                f"✅ Linting complete: {total_fixes} total fixes, {total_size_reduction:,} bytes saved"
+            )
             return linting_stats
 
         except ImportError:
@@ -325,49 +349,62 @@ class AutoBatchProcessor:
         try:
             # Try to import metadata embedder dynamically
             import importlib.util
+
             utils_dir = Path(__file__).parent.parent / "utils"
             embedder_path = utils_dir / "metadata_embedder.py"
 
             enhance_function = None
             if embedder_path.exists():
                 try:
-                    spec = importlib.util.spec_from_file_location("metadata_embedder", embedder_path)
+                    spec = importlib.util.spec_from_file_location(
+                        "metadata_embedder", embedder_path
+                    )
                     if spec and spec.loader:
                         embedder_module = importlib.util.module_from_spec(spec)
                         spec.loader.exec_module(embedder_module)
-                        if hasattr(embedder_module, 'enhance_converted_files'):
-                            enhance_function = getattr(embedder_module, 'enhance_converted_files')
+                        if hasattr(embedder_module, "enhance_converted_files"):
+                            enhance_function = embedder_module.enhance_converted_files
                 except (TypeError, AttributeError, ImportError, RuntimeError):
                     enhance_function = None
 
             if enhance_function and callable(enhance_function):
                 # Prepare batch data for metadata enhancement
                 batch_data = {
-                    'session_id': self.session_id,
-                    'batch_id': report.get('batch_id'),
-                    'total_cost': report.get('actual_results', {}).get('total_cost', 0),
-                    'total_files': report.get('actual_results', {}).get('total_requests', 0),
-                    'total_pages': report.get('actual_results', {}).get('total_pages', 0),
-                    'session_start': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),  # Approximate
-                    'session_end': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                    'files': []
+                    "session_id": self.session_id,
+                    "batch_id": report.get("batch_id"),
+                    "total_cost": report.get("actual_results", {}).get("total_cost", 0),
+                    "total_files": report.get("actual_results", {}).get(
+                        "total_requests", 0
+                    ),
+                    "total_pages": report.get("actual_results", {}).get(
+                        "total_pages", 0
+                    ),
+                    "session_start": datetime.now().strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    ),  # Approximate
+                    "session_end": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "files": [],
                 }
 
                 # Add file details if available
-                if 'file_details' in report:
-                    for file_detail in report['file_details']:
-                        batch_data['files'].append({
-                            'name': file_detail.get('file', 'unknown.pdf'),
-                            'pages': file_detail.get('pages', 0),
-                            'cost': file_detail.get('cost', 0),
-                            'cost_per_page': file_detail.get('cost_per_page', 0),
-                            'tokens': file_detail.get('tokens', 0),
-                            'final_size': file_detail.get('final_size', 'unknown')
-                        })
+                if "file_details" in report:
+                    for file_detail in report["file_details"]:
+                        batch_data["files"].append(
+                            {
+                                "name": file_detail.get("file", "unknown.pdf"),
+                                "pages": file_detail.get("pages", 0),
+                                "cost": file_detail.get("cost", 0),
+                                "cost_per_page": file_detail.get("cost_per_page", 0),
+                                "tokens": file_detail.get("tokens", 0),
+                                "final_size": file_detail.get("final_size", "unknown"),
+                            }
+                        )
 
                 # Apply metadata enhancement
                 try:
-                    enhance_function(str(config.DEFAULT_CONVERTED_FOLDER), batch_data, linting_stats)
+                    enhance_function(
+                        str(config.DEFAULT_CONVERTED_FOLDER), batch_data, linting_stats
+                    )
                     print("✅ Metadata enhancement completed")
                 except (TypeError, AttributeError, RuntimeError) as e:
                     print(f"⚠️  Metadata enhancement failed: {e}")
@@ -391,34 +428,36 @@ class AutoBatchProcessor:
             return None
 
         # Compare to estimates
-        actual_cost = usage_stats['total_cost']
-        estimated_cost = estimates['estimated_cost']
+        actual_cost = usage_stats["total_cost"]
+        estimated_cost = estimates["estimated_cost"]
         cost_diff = actual_cost - estimated_cost
         cost_diff_pct = (cost_diff / estimated_cost * 100) if estimated_cost > 0 else 0
 
         report = {
-            'session_id': self.session_id,
-            'batch_id': batch_id,
-            'timestamp': datetime.now().isoformat(),
-            'estimates': estimates,
-            'actual_results': usage_stats,
-            'comparison': {
-                'cost_difference': cost_diff,
-                'cost_difference_pct': cost_diff_pct,
-                'pages_difference': usage_stats['total_requests'] - estimates['estimated_pages'],
-                'tokens_difference': usage_stats['total_tokens'] - estimates['estimated_tokens']
-            }
+            "session_id": self.session_id,
+            "batch_id": batch_id,
+            "timestamp": datetime.now().isoformat(),
+            "estimates": estimates,
+            "actual_results": usage_stats,
+            "comparison": {
+                "cost_difference": cost_diff,
+                "cost_difference_pct": cost_diff_pct,
+                "pages_difference": usage_stats["total_requests"]
+                - estimates["estimated_pages"],
+                "tokens_difference": usage_stats["total_tokens"]
+                - estimates["estimated_tokens"],
+            },
         }
 
-        print(f"\n📊 COST ANALYSIS SUMMARY")
-        print(f"{'='*50}")
+        print("\n📊 COST ANALYSIS SUMMARY")
+        print(f"{'=' * 50}")
         print(f"💰 Estimated Cost: ${estimated_cost:.4f}")
         print(f"💰 Actual Cost: ${actual_cost:.4f}")
         print(f"💰 Difference: ${cost_diff:+.4f} ({cost_diff_pct:+.1f}%)")
         print(f"📄 Pages Processed: {usage_stats['total_requests']}")
         print(f"🔢 Tokens Used: {usage_stats['total_tokens']:,}")
         print(f"⚡ Cost per Page: ${usage_stats['avg_cost_per_page']:.4f}")
-        print(f"{'='*50}")
+        print(f"{'=' * 50}")
 
         return report
 
@@ -440,36 +479,44 @@ class AutoBatchProcessor:
         # Save cost report
         if report:
             report_file = session_folder / "cost_analysis.json"
-            with open(report_file, 'w', encoding='utf-8') as f:
+            with open(report_file, "w", encoding="utf-8") as f:
                 json.dump(report, f, indent=2)
             print(f"   📊 Saved cost analysis: {report_file}")
 
         # Create summary file
         summary_file = session_folder / "README.md"
-        with open(summary_file, 'w', encoding='utf-8') as f:
+        with open(summary_file, "w", encoding="utf-8") as f:
             f.write(f"# Batch Processing Session {self.session_id}\n\n")
-            f.write(f"## Summary\n")
+            f.write("## Summary\n")
             f.write(f"- **Session ID:** {self.session_id}\n")
-            f.write(f"- **Processed:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(
+                f"- **Processed:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            )
             if report:
                 f.write(f"- **Batch ID:** {report['batch_id']}\n")
-                f.write(f"- **Files Processed:** {report['actual_results']['total_requests']}\n")
-                f.write(f"- **Total Cost:** ${report['actual_results']['total_cost']:.4f}\n")
-                f.write(f"- **Average Cost per Page:** ${report['actual_results']['avg_cost_per_page']:.4f}\n")
-            f.write(f"\n## Contents\n")
-            f.write(f"- `markdown_files/` - Converted markdown documents\n")
-            f.write(f"- `cost_analysis.json` - Detailed cost breakdown\n")
-            f.write(f"- `README.md` - This summary file\n")
+                f.write(
+                    f"- **Files Processed:** {report['actual_results']['total_requests']}\n"
+                )
+                f.write(
+                    f"- **Total Cost:** ${report['actual_results']['total_cost']:.4f}\n"
+                )
+                f.write(
+                    f"- **Average Cost per Page:** ${report['actual_results']['avg_cost_per_page']:.4f}\n"
+                )
+            f.write("\n## Contents\n")
+            f.write("- `markdown_files/` - Converted markdown documents\n")
+            f.write("- `cost_analysis.json` - Detailed cost breakdown\n")
+            f.write("- `README.md` - This summary file\n")
 
         print(f"✅ Session organized: {session_folder}")
         return session_folder
 
     def cleanup_workspace(self):
         """Clean up temporary files"""
-        print(f"\n🧹 Cleaning up workspace...")
+        print("\n🧹 Cleaning up workspace...")
 
         cleaned = 0
-        
+
         # Clean up temp directory structure
         temp_dir = config.DEFAULT_TEMP_FOLDER
         if temp_dir and Path(temp_dir).exists():
@@ -478,16 +525,12 @@ class AutoBatchProcessor:
                 try:
                     shutil.rmtree(temp_batch_dir)
                     cleaned += 1
-                    print(f"   🗑️  Removed temp batch directory")
+                    print("   🗑️  Removed temp batch directory")
                 except (OSError, PermissionError):
-                    print(f"   ⚠️  Could not remove temp batch directory")
+                    print("   ⚠️  Could not remove temp batch directory")
 
         # Remove any remaining files in root (legacy cleanup)
-        cleanup_patterns = [
-            "batch_info_*.json",
-            "usage_stats_*.json", 
-            "page_*.jpg"
-        ]
+        cleanup_patterns = ["batch_info_*.json", "usage_stats_*.json", "page_*.jpg"]
 
         for pattern in cleanup_patterns:
             for item in Path(".").glob(pattern):
@@ -508,9 +551,9 @@ class AutoBatchProcessor:
                 shutil.rmtree(converted_dir)
                 converted_dir.mkdir(exist_ok=True)  # Recreate empty
                 cleaned += 1
-                print(f"   🗑️  Cleaned converted directory")
+                print("   🗑️  Cleaned converted directory")
             except (OSError, PermissionError):
-                print(f"   ⚠️  Could not clean converted directory")
+                print("   ⚠️  Could not clean converted directory")
 
         print(f"✅ Cleaned up {cleaned} temporary items")
 
@@ -562,20 +605,23 @@ class AutoBatchProcessor:
             # Final summary
             total_time = time.time() - start_time
             self.print_banner("PROCESSING COMPLETE! 🎉", "✅")
-            print(f"⏱️  Total Time: {total_time/60:.1f} minutes")
+            print(f"⏱️  Total Time: {total_time / 60:.1f} minutes")
             print(f"📁 Results: {final_folder}")
             if report:
                 print(f"💰 Total Cost: ${report['actual_results']['total_cost']:.4f}")
-                print(f"📄 Files Processed: {report['actual_results']['total_requests']}")
-            print(f"✅ Ready to use!")
+                print(
+                    f"📄 Files Processed: {report['actual_results']['total_requests']}"
+                )
+            print("✅ Ready to use!")
 
             return True
 
         except (RuntimeError, OSError, ValueError, KeyError) as e:
             self.print_banner("PROCESSING FAILED ❌", "❌")
             print(f"Error: {e}")
-            print(f"Manual cleanup may be required.")
+            print("Manual cleanup may be required.")
             return False
+
 
 def main():
     """Main entry point with proper argument parsing"""
@@ -592,16 +638,32 @@ Examples:
 Safety:
   ⚠️  Original PDF files are NEVER deleted or modified
   This tool only creates new .md files and cleans temporary processing files
-""")
+""",
+    )
 
-    parser.add_argument('pdf_folder', nargs='?', default=str(config.DEFAULT_PDF_FOLDER),
-                       help=f'Input folder containing PDF files (default: {config.DEFAULT_PDF_FOLDER})')
-    parser.add_argument('output_folder', nargs='?', default=str(config.DEFAULT_CONVERTED_FOLDER),
-                       help=f'Output folder for converted files (default: {config.DEFAULT_CONVERTED_FOLDER})')
-    parser.add_argument('--no-lint', '--skip-lint', action='store_true',
-                       help='Skip the markdown linting step (faster processing)')
-    parser.add_argument('--no-metadata', action='store_true',
-                       help='Skip metadata enhancement (embedded headers and summaries)')
+    parser.add_argument(
+        "pdf_folder",
+        nargs="?",
+        default=str(config.DEFAULT_PDF_FOLDER),
+        help=f"Input folder containing PDF files (default: {config.DEFAULT_PDF_FOLDER})",
+    )
+    parser.add_argument(
+        "output_folder",
+        nargs="?",
+        default=str(config.DEFAULT_CONVERTED_FOLDER),
+        help=f"Output folder for converted files (default: {config.DEFAULT_CONVERTED_FOLDER})",
+    )
+    parser.add_argument(
+        "--no-lint",
+        "--skip-lint",
+        action="store_true",
+        help="Skip the markdown linting step (faster processing)",
+    )
+    parser.add_argument(
+        "--no-metadata",
+        action="store_true",
+        help="Skip metadata enhancement (embedded headers and summaries)",
+    )
 
     # Parse arguments
     args = parser.parse_args()
@@ -633,11 +695,12 @@ Safety:
     processor = AutoBatchProcessor(
         pdf_folder=args.pdf_folder,
         output_folder=args.output_folder,
-        enable_linting=not args.no_lint
+        enable_linting=not args.no_lint,
     )
     success = processor.run_full_automation()
 
     sys.exit(0 if success else 1)
+
 
 if __name__ == "__main__":
     main()

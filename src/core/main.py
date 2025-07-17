@@ -11,12 +11,12 @@ Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 """
 
+import importlib.util
 import logging
 import os
 import shutil
 import sys
 import time
-import importlib.util
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -30,6 +30,7 @@ except ImportError:
     # If running from within src/core, use relative imports
     import sys
     from pathlib import Path
+
     sys.path.append(str(Path(__file__).parent.parent.parent))
     from src.core import LLMClient
     from src.core.FileWorker import create_worker
@@ -230,7 +231,9 @@ if __name__ == "__main__":
         if content:
             # 写入文件
             with open(
-                os.path.join(output_dir, f"{os.path.basename(img_path)}.md"), "w", encoding="utf-8"
+                os.path.join(output_dir, f"{os.path.basename(img_path)}.md"),
+                "w",
+                encoding="utf-8",
             ) as f:
                 f.write(content)
             markdown += content
@@ -243,11 +246,16 @@ if __name__ == "__main__":
     except UnicodeEncodeError:
         try:
             # Handle Unicode characters that can't be displayed in console
-            print(markdown.encode('utf-8', errors='replace').decode('utf-8', errors='replace'))
+            print(
+                markdown.encode("utf-8", errors="replace").decode(
+                    "utf-8", errors="replace"
+                )
+            )
         except UnicodeEncodeError:
             # Fallback: write to stdout with UTF-8 encoding
             import sys
-            sys.stdout.buffer.write(markdown.encode('utf-8', errors='replace'))
+
+            sys.stdout.buffer.write(markdown.encode("utf-8", errors="replace"))
             sys.stdout.buffer.flush()
     logger.info("Image conversion to Markdown completed")
     # Remote output path

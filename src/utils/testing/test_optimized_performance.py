@@ -4,14 +4,12 @@ Performance Test for Optimized LM Studio Settings
 Tests the speed improvements after configuration optimization
 """
 
-import time
-import requests
-import json
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
 import importlib.util
+import time
 from pathlib import Path
+
+from dotenv import load_dotenv
+from openai import OpenAI
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -32,14 +30,12 @@ else:
 # Load environment variables
 load_dotenv()
 
+
 def test_api_speed(prompt: str, description: str) -> float:
     """Test API response speed"""
     print(f"🧪 Testing: {description}")
 
-    client = OpenAI(
-        api_key="lm-studio",
-        base_url=config.OPENAI_API_BASE
-    )
+    client = OpenAI(api_key="lm-studio", base_url=config.OPENAI_API_BASE)
 
     start_time = time.time()
 
@@ -49,7 +45,7 @@ def test_api_speed(prompt: str, description: str) -> float:
             messages=[{"role": "user", "content": prompt}],
             temperature=0.2,
             max_tokens=100,
-            stream=False
+            stream=False,
         )
 
         end_time = time.time()
@@ -66,7 +62,8 @@ def test_api_speed(prompt: str, description: str) -> float:
 
     except Exception as e:
         print(f"   ❌ Error: {e}")
-        return float('inf')
+        return float("inf")
+
 
 def test_gpu_status():
     """Check if GPU acceleration is working"""
@@ -74,14 +71,21 @@ def test_gpu_status():
 
     try:
         import subprocess
-        result = subprocess.run(['nvidia-smi', '--query-gpu=index,name,memory.used,memory.total,utilization.gpu',
-                               '--format=csv,noheader,nounits'],
-                               capture_output=True, text=True)
+
+        result = subprocess.run(
+            [
+                "nvidia-smi",
+                "--query-gpu=index,name,memory.used,memory.total,utilization.gpu",
+                "--format=csv,noheader,nounits",
+            ],
+            capture_output=True,
+            text=True,
+        )
 
         if result.returncode == 0:
-            lines = result.stdout.strip().split('\n')
+            lines = result.stdout.strip().split("\n")
             for line in lines:
-                parts = line.split(', ')
+                parts = line.split(", ")
                 if len(parts) >= 5:
                     gpu_id, name, mem_used, mem_total, util = parts
                     print(f"   GPU {gpu_id}: {name}")
@@ -92,6 +96,7 @@ def test_gpu_status():
 
     except Exception as e:
         print(f"   ⚠️  Could not check GPU status: {e}")
+
 
 def main():
     print("🚀 LM Studio Performance Test")
@@ -105,8 +110,14 @@ def main():
     tests = [
         ("Hello, how are you?", "Simple greeting"),
         ("What is the capital of France? Explain briefly.", "Factual question"),
-        ("Describe how machine learning works in 2-3 sentences.", "Technical explanation"),
-        ("Convert this text to markdown format: Hello World Title", "Format conversion")
+        (
+            "Describe how machine learning works in 2-3 sentences.",
+            "Technical explanation",
+        ),
+        (
+            "Convert this text to markdown format: Hello World Title",
+            "Format conversion",
+        ),
     ]
 
     total_time = 0
@@ -114,14 +125,14 @@ def main():
 
     for prompt, description in tests:
         duration = test_api_speed(prompt, description)
-        if duration != float('inf'):
+        if duration != float("inf"):
             total_time += duration
             completed_tests += 1
         print()
 
     if completed_tests > 0:
         avg_time = total_time / completed_tests
-        print(f"📊 Performance Summary:")
+        print("📊 Performance Summary:")
         print(f"   Average response time: {avg_time:.2f}s")
         print(f"   Completed tests: {completed_tests}/{len(tests)}")
 
@@ -131,7 +142,7 @@ def main():
             improvement = ((baseline - avg_time) / baseline) * 100
             print(f"   🎉 {improvement:.1f}% faster than baseline!")
         else:
-            print(f"   ⚠️  {avg_time/baseline:.1f}x slower than baseline")
+            print(f"   ⚠️  {avg_time / baseline:.1f}x slower than baseline")
     else:
         print("❌ No tests completed successfully")
 
@@ -139,6 +150,7 @@ def main():
     print("   1. If performance improved: run convert_fast.py on PDFs")
     print("   2. If no improvement: restart LM Studio and try again")
     print("   3. Check GPU utilization during processing")
+
 
 if __name__ == "__main__":
     main()

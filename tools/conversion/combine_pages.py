@@ -1,7 +1,7 @@
 # Combine all page files into final output
 
-import os
 import glob
+import os
 import sys
 from pathlib import Path
 
@@ -33,9 +33,9 @@ print(f"📄 Found {len(md_files)} page files")
 combined_content = ""
 for i, md_file in enumerate(md_files, 1):
     print(f"📝 Processing page {i}: {os.path.basename(md_file)}")
-    
+
     try:
-        with open(md_file, 'r', encoding='utf-8') as f:
+        with open(md_file, encoding="utf-8") as f:
             content = f.read().strip()
             if content:
                 combined_content += f"---\n# Page {i}\n---\n\n"
@@ -48,13 +48,13 @@ output_file = "converted/CAN-MAX485-combined.md"
 os.makedirs(str(config.DEFAULT_CONVERTED_FOLDER), exist_ok=True)
 
 try:
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(combined_content)
-    
+
     file_size = os.path.getsize(output_file)
     print(f"✅ Successfully created: {output_file}")
     print(f"📊 File size: {file_size:,} bytes")
     print(f"📄 Total pages: {len(md_files)}")
-    
+
 except Exception as e:
     print(f"❌ Error writing output file: {e}")

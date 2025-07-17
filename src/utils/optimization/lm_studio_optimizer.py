@@ -7,9 +7,10 @@ Finds and modifies LM Studio configuration files for optimal performance
 import json
 import shutil
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any
 
-def find_lm_studio_configs() -> List[Path]:
+
+def find_lm_studio_configs() -> list[Path]:
     """Find all LM Studio configuration files"""
     lm_studio_dir = Path.home() / ".lmstudio"
     config_files = []
@@ -27,6 +28,7 @@ def find_lm_studio_configs() -> List[Path]:
 
     return config_files
 
+
 def backup_config(config_path: Path) -> None:
     """Create backup of config file"""
     backup_path = config_path.with_suffix(f"{config_path.suffix}.backup")
@@ -34,10 +36,11 @@ def backup_config(config_path: Path) -> None:
         shutil.copy2(config_path, backup_path)
         print(f"✅ Backed up: {config_path.name}")
 
-def optimize_config(config_path: Path, optimizations: Dict[str, Any]) -> bool:
+
+def optimize_config(config_path: Path, optimizations: dict[str, Any]) -> bool:
     """Apply optimizations to a config file"""
     try:
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
 
         # Create backup first
@@ -56,7 +59,7 @@ def optimize_config(config_path: Path, optimizations: Dict[str, Any]) -> bool:
                 modified = True
 
         if modified:
-            with open(config_path, 'w', encoding='utf-8') as f:
+            with open(config_path, "w", encoding="utf-8") as f:
                 json.dump(config, f, indent=2, ensure_ascii=False)
             return True
 
@@ -65,6 +68,7 @@ def optimize_config(config_path: Path, optimizations: Dict[str, Any]) -> bool:
     except (FileNotFoundError, json.JSONDecodeError, PermissionError) as e:
         print(f"❌ Error processing {config_path}: {e}")
         return False
+
 
 def create_optimized_preset() -> None:
     """Create an optimized preset file"""
@@ -83,7 +87,7 @@ def create_optimized_preset() -> None:
             "top_k": 40,
             "max_tokens": 2048,
             "stream": True,
-            "stop": []
+            "stop": [],
         },
         "loadSettings": {
             "n_gpu_layers": -1,
@@ -93,15 +97,16 @@ def create_optimized_preset() -> None:
             "use_mmap": True,
             "use_mlock": False,
             "flash_attn": True,
-            "cont_batching": True
-        }
+            "cont_batching": True,
+        },
     }
 
     preset_path = preset_dir / "Performance_Optimized.preset.json"
-    with open(preset_path, 'w', encoding='utf-8') as f:
+    with open(preset_path, "w", encoding="utf-8") as f:
         json.dump(optimized_preset, f, indent=2, ensure_ascii=False)
 
     print(f"✅ Created optimized preset: {preset_path}")
+
 
 def main():
     print("🚀 LM Studio Optimizer")
@@ -115,7 +120,7 @@ def main():
         "context_length": 4096,
         "use_flash_attention": True,
         "use_memory_mapping": True,
-        "continuous_batching": True
+        "continuous_batching": True,
     }
 
     inference_optimizations = {
@@ -123,7 +128,7 @@ def main():
         "top_p": 0.9,
         "top_k": 40,
         "max_tokens": 2048,
-        "stream": True
+        "stream": True,
     }
 
     # Find config files
@@ -157,6 +162,7 @@ def main():
     print("   2. Load the 'Performance Optimized' preset")
     print("   3. Ensure GPU acceleration is enabled")
     print("   4. Test with convert_fast.py")
+
 
 if __name__ == "__main__":
     main()

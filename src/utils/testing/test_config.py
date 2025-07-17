@@ -1,9 +1,9 @@
 # Test Environment Configuration
 
-import os
-from dotenv import load_dotenv
 import importlib.util
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -20,6 +20,7 @@ if config_path.exists():
         raise ImportError("Failed to load config spec")
 else:
     raise ImportError("Config file not found")
+
 
 def test_environment():
     """Test if environment variables are properly configured"""
@@ -42,6 +43,7 @@ def test_environment():
     else:
         print("❌ Missing environment variables!")
         return False
+
 
 if __name__ == "__main__":
     test_environment()

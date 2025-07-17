@@ -3,10 +3,9 @@
 Cleanup Utility - Remove stale temp directories and files.
 """
 
-import os
+import importlib.util
 import shutil
 from pathlib import Path
-import importlib.util
 
 # Import config
 current_dir = Path(__file__).parent
@@ -23,17 +22,18 @@ if config_path.exists():
 else:
     raise ImportError("Config file not found")
 
+
 def cleanup_temp_directories():
     """Clean up all temporary directories and files"""
     print("🧹 MarkPDFDown Cleanup Utility")
     print("=" * 50)
-    
+
     temp_folder = Path(str(config.DEFAULT_TEMP_FOLDER))
     cleaned = 0
-    
+
     if temp_folder.exists():
         print(f"📁 Cleaning temp folder: {temp_folder}")
-        
+
         # Remove all subdirectories in temp
         for item in temp_folder.iterdir():
             if item.is_dir():
@@ -50,16 +50,16 @@ def cleanup_temp_directories():
                     cleaned += 1
                 except (OSError, PermissionError) as e:
                     print(f"   ❌ Could not remove {item.name}: {e}")
-    
+
     # Clean up other temp patterns in root
     root_cleanup_patterns = [
         "page_*.jpg",
         "*.jpg",
         "batch_info_*.json",
         "usage_stats_*.json",
-        "temp_batch"
+        "temp_batch",
     ]
-    
+
     print("\n📁 Cleaning root directory patterns...")
     for pattern in root_cleanup_patterns:
         for item in Path(".").glob(pattern):
@@ -73,8 +73,9 @@ def cleanup_temp_directories():
                 cleaned += 1
             except (OSError, PermissionError) as e:
                 print(f"   ❌ Could not remove {item.name}: {e}")
-    
+
     print(f"\n✅ Cleanup complete! Removed {cleaned} items.")
-    
+
+
 if __name__ == "__main__":
     cleanup_temp_directories()

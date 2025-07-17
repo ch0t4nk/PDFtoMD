@@ -19,6 +19,7 @@ Version: 1.0
 import sys
 from pathlib import Path
 
+
 def cleanup_backups():
     """Remove all .backup files from the workspace"""
     root_dir = Path(__file__).parent
@@ -37,9 +38,10 @@ def cleanup_backups():
 
     print(f"\n✅ Cleaned up {len(backup_files)} backup files!")
 
+
 def main():
     """Main entry point"""
-    if len(sys.argv) > 1 and sys.argv[1] in ['-h', '--help']:
+    if len(sys.argv) > 1 and sys.argv[1] in ["-h", "--help"]:
         print("🧹 MarkPDFDown Backup Cleanup")
         print("\nUsage:")
         print("  python cleanup_backups.py")
@@ -47,6 +49,7 @@ def main():
         return
 
     cleanup_backups()
+
 
 if __name__ == "__main__":
     main()

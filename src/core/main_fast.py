@@ -13,12 +13,12 @@ Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
 Licensed under the Apache License, Version 2.0
 """
 
+import importlib.util
 import logging
 import os
 import shutil
 import sys
 import time
-import importlib.util
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -32,6 +32,7 @@ except ImportError:
     # If running from within src/core, use relative imports
     import sys
     from pathlib import Path
+
     sys.path.append(str(Path(__file__).parent.parent.parent))
     from src.core import LLMClient
     from src.core.FileWorker import create_worker
@@ -137,18 +138,18 @@ def clean_non_existent_image_references(markdown_content):
     import re
 
     # Pattern to match markdown image references: ![alt text](filename)
-    image_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
+    image_pattern = r"!\[([^\]]*)\]\(([^)]+)\)"
 
     def check_image_exists(match):
         alt_text = match.group(1)
         image_path = match.group(2)
 
         # Skip if it's already a proper relative path to our images directory
-        if image_path.startswith('images/'):
+        if image_path.startswith("images/"):
             return match.group(0)  # Keep it
 
         # Skip if it's a web URL
-        if image_path.startswith(('http://', 'https://', 'www.')):
+        if image_path.startswith(("http://", "https://", "www.")):
             return match.group(0)  # Keep it
 
         # For local file references that don't exist, replace with text
@@ -166,14 +167,14 @@ def clean_non_existent_image_references(markdown_content):
     cleaned_content = re.sub(image_pattern, check_image_exists, markdown_content)
 
     # Clean up any double newlines that might result from removed images
-    cleaned_content = re.sub(r'\n\n\n+', '\n\n', cleaned_content)
+    cleaned_content = re.sub(r"\n\n\n+", "\n\n", cleaned_content)
 
     return cleaned_content
 
 
 if __name__ == "__main__":
     # Get configuration from environment variables set by convert_fast.py
-    output_filename = os.environ.get('MARKPDF_OUTPUT_FILE', 'output.md')
+    output_filename = os.environ.get("MARKPDF_OUTPUT_FILE", "output.md")
 
     start_page = 1
     end_page = 0
@@ -194,7 +195,9 @@ if __name__ == "__main__":
         exit(1)
 
     # Create output directory
-    output_dir = config.DEFAULT_TEMP_FOLDER / f"output/{time.strftime('%Y%m%d%H%M%S')}_fast"
+    output_dir = (
+        config.DEFAULT_TEMP_FOLDER / f"output/{time.strftime('%Y%m%d%H%M%S')}_fast"
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # File type detection (same as original)
@@ -301,7 +304,7 @@ if __name__ == "__main__":
 - **Slowest Page:** {slowest_page:.1f}s
 - **Content Length:** {total_content_length:,} characters
 - **Pages with Cleaned Images:** {cleaned_images_count}
-- **Processed:** {time.strftime('%Y-%m-%d %H:%M:%S')}
+- **Processed:** {time.strftime("%Y-%m-%d %H:%M:%S")}
 
 """
 
@@ -310,21 +313,31 @@ if __name__ == "__main__":
     # Output Markdown to stdout for convert_fast.py
     # Use sys.stdout.buffer.write to handle Unicode properly
     try:
-        sys.stdout.buffer.write(markdown.encode('utf-8'))
+        sys.stdout.buffer.write(markdown.encode("utf-8"))
     except (UnicodeEncodeError, AttributeError):
         # Fallback: write to stderr log only
         logger.info("Unicode encoding issue - markdown saved to files only")
 
     logger.info("Fast conversion completed")
-    logger.info(f"Processing completed in {total_processing_time:.1f}s (avg: {avg_page_time:.1f}s/page)")
+    logger.info(
+        f"Processing completed in {total_processing_time:.1f}s (avg: {avg_page_time:.1f}s/page)"
+    )
     logger.info("No page images saved - only markdown content extracted")
 
     # Clean up temporary output directory after copying images
     try:
         if os.path.exists(output_dir):
-            temp_files_count = len([f for f in os.listdir(output_dir) if os.path.isfile(os.path.join(output_dir, f))])
+            temp_files_count = len(
+                [
+                    f
+                    for f in os.listdir(output_dir)
+                    if os.path.isfile(os.path.join(output_dir, f))
+                ]
+            )
             shutil.rmtree(output_dir)
-            logger.info(f"Temporary files cleaned up ({temp_files_count} files removed)")
+            logger.info(
+                f"Temporary files cleaned up ({temp_files_count} files removed)"
+            )
     except (OSError, PermissionError) as e:
         logger.warning(f"Could not clean up temporary files: {e}")
 
