@@ -48,6 +48,34 @@ pie title Enterprise Feature Distribution
  "Team Collaboration" : 15
 ```
 
+## 🚀 Quick Installation
+
+### Git Installation (Recommended)
+```bash
+# Clone repository
+git clone https://github.com/ch0t4nk/PDFtoMD.git
+cd PDFtoMD
+
+# Setup virtual environment
+python -m venv PDFtoMD-env
+# Windows:
+PDFtoMD-env\Scripts\activate
+# macOS/Linux:
+source PDFtoMD-env/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Verify installation
+python test_comprehensive.py
+```
+
+### Download Release
+1. Download from [GitHub Releases](https://github.com/ch0t4nk/PDFtoMD/releases/latest)
+2. Extract and follow virtual environment setup above
+
+📖 **[Complete Installation Guide](INSTALLATION_GUIDE.md)**
+
 ## ✨ Features
 
 ```mermaid
@@ -457,6 +485,7 @@ We welcome contributions! Follow these steps:
  pre-commit install
  cp .env.template .env # Add your API key
  ```
+
 4. **✨ Make your changes and ensure quality:**
  ```bash
  ruff format # Format code
@@ -464,8 +493,11 @@ We welcome contributions! Follow these steps:
  python test_comprehensive.py # Run tests
  pre-commit run --all-files # Final quality check
  ```
+
 5. **📝 Commit changes**: `git commit -m 'feat: Add amazing feature'`
+
 6. **🚀 Push to branch**: `git push origin feature/amazing-feature`
+
 7. **🔄 Open Pull Request**
 
 ### 📋 Contribution Guidelines
