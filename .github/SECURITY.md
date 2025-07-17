@@ -1,7 +1,7 @@
 # 🔒 Security Policy - PDFtoMD
 
 > **📍 This is the GitHub Security Policy for PDFtoMD**  
-> **📚 Full Security Documentation**: [docs/security/SECURITY.md](../docs/security/SECURITY.md)
+> **📚 Full Security Documentation**: This file contains the complete security policy
 
 ## 🛡️ Security Overview
 

@@ -49,7 +49,7 @@ Welcome to the comprehensive documentation for **PDFtoMD** - an enterprise-ready
 
 | Document | Coverage | Critical For |
 |---|---|---|
-| [**Security Guide**](security/SECURITY.md) | Complete security framework | Enterprise deployment |
+| [**Security Guide**](../.github/SECURITY.md) | Complete security framework | Enterprise deployment |
 
 ### 🛠️ Development & Technical
 
@@ -77,11 +77,11 @@ Welcome to the comprehensive documentation for **PDFtoMD** - an enterprise-ready
 
 - **For Developers:**
   - 🗂️ [Project Structure](development/PROJECT_STRUCTURE.md) - Understand the codebase
-  - 🔒 [Security Framework](security/SECURITY.md) - Implement secure practices
+  - 🔒 [Security Framework](../.github/SECURITY.md) - Implement secure practices
   - 🧪 [Testing Guide](../test_comprehensive.py) - Run comprehensive tests
 
 - **For Enterprise:**
-  - 🛡️ [Security Compliance](security/SECURITY.md) - Enterprise security requirements
+  - 🛡️ [Security Compliance](../.github/SECURITY.md) - Enterprise security requirements
   - 👥 [Team Setup](guides/SSOT_GUIDE.md) - Multi-user configuration
   - 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md) - Budget controls
 
@@ -102,7 +102,7 @@ This documentation follows enterprise standards:
 - **Major Updates**: [See Changelog](CHANGELOG.md)
 - **Release Notes**: [v4.1.0 Details](../RELEASE_NOTES_v4.1.0.md)
 
-- **Security Status**: [Security Guide](security/SECURITY.md)
+- **Security Status**: [Security Guide](../.github/SECURITY.md)
 
 ## 🤝 Contributing to Documentation
 

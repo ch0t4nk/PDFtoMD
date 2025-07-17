@@ -573,8 +573,8 @@ OPENAI_DEFAULT_MODEL=gpt-4o-mini
 
                         # Verify config loaded test values - skip API key test since it may not be available
                         # in test environment due to security restrictions
-                        
-                        if hasattr(config, 'OPENAI_DEFAULT_MODEL'):
+
+                        if hasattr(config, "OPENAI_DEFAULT_MODEL"):
                             if config.OPENAI_DEFAULT_MODEL != "gpt-4o-mini":
                                 self.warnings.append("Config did not load test model")
 

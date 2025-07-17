@@ -11,9 +11,10 @@ Requirements:
 """
 
 import argparse
-import requests
 import sys
-from typing import Dict, Any
+from typing import Any
+
+import requests
 
 
 class GitHubSecurityConfigurator:
@@ -24,7 +25,7 @@ class GitHubSecurityConfigurator:
         self.headers = {
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28"
+            "X-GitHub-Api-Version": "2022-11-28",
         }
 
     def enable_secret_scanning(self) -> bool:
@@ -33,7 +34,7 @@ class GitHubSecurityConfigurator:
         try:
             url = f"{self.base_url}/repos/{self.repo}"
             data = {"security_and_analysis": {"secret_scanning": {"status": "enabled"}}}
-            
+
             response = requests.patch(url, headers=self.headers, json=data)
             if response.status_code in [200, 204]:
                 print("✅ Secret scanning enabled")
@@ -51,7 +52,7 @@ class GitHubSecurityConfigurator:
         try:
             url = f"{self.base_url}/repos/{self.repo}/secret-scanning/push-protection"
             data = {"enabled": True}
-            
+
             response = requests.patch(url, headers=self.headers, json=data)
             if response.status_code in [200, 204]:
                 print("✅ Push protection enabled")
@@ -69,7 +70,7 @@ class GitHubSecurityConfigurator:
         try:
             url = f"{self.base_url}/repos/{self.repo}"
             data = {"has_vulnerability_alerts": True}
-            
+
             response = requests.patch(url, headers=self.headers, json=data)
             if response.status_code in [200, 204]:
                 print("✅ Dependency vulnerability alerts enabled")
@@ -87,19 +88,21 @@ class GitHubSecurityConfigurator:
         try:
             url = f"{self.base_url}/repos/{self.repo}"
             data = {"has_private_vulnerability_reporting": True}
-            
+
             response = requests.patch(url, headers=self.headers, json=data)
             if response.status_code in [200, 204]:
                 print("✅ Private vulnerability reporting enabled")
                 return True
             else:
-                print(f"⚠️ Private vulnerability reporting: {response.status_code} - {response.text}")
+                print(
+                    f"⚠️ Private vulnerability reporting: {response.status_code} - {response.text}"
+                )
                 return False
         except Exception as e:
             print(f"❌ Error enabling private vulnerability reporting: {e}")
             return False
 
-    def get_current_security_settings(self) -> Dict[str, Any]:
+    def get_current_security_settings(self) -> dict[str, Any]:
         """Get current security and analysis settings"""
         try:
             url = f"{self.base_url}/repos/{self.repo}"
@@ -117,11 +120,11 @@ class GitHubSecurityConfigurator:
         """Configure all security features"""
         print("🔧 Configuring GitHub Advanced Security Settings for PDFtoMD")
         print("=" * 60)
-        
+
         # Check current settings
         print("📋 Checking current security settings...")
         current_settings = self.get_current_security_settings()
-        
+
         if not current_settings:
             print("❌ Failed to fetch current settings")
             return False
@@ -132,27 +135,31 @@ class GitHubSecurityConfigurator:
         # Configure each security feature
         if self.enable_secret_scanning():
             success_count += 1
-            
+
         if self.enable_push_protection():
             success_count += 1
-            
+
         if self.enable_dependency_alerts():
             success_count += 1
-            
+
         if self.enable_private_vulnerability_reporting():
             success_count += 1
 
         print("\n" + "=" * 60)
-        print(f"🎉 Security configuration complete! ({success_count}/{total_features} features configured)")
-        print(f"📋 Verify settings at: https://github.com/{self.repo}/settings/security_analysis")
-        
+        print(
+            f"🎉 Security configuration complete! ({success_count}/{total_features} features configured)"
+        )
+        print(
+            f"📋 Verify settings at: https://github.com/{self.repo}/settings/security_analysis"
+        )
+
         print("\n🔧 PDFtoMD Security Features:")
         print("   ✅ CodeQL Security Analysis (already configured)")
         print("   ✅ Secret Scanning + Push Protection")
         print("   ✅ Dependency Review + Vulnerability Alerts")
         print("   ✅ Private Vulnerability Reporting")
         print("\n🛡️ Your PDFtoMD repository now has enterprise-grade security!")
-        
+
         return success_count == total_features
 
 
@@ -161,25 +168,25 @@ def main():
         description="Configure GitHub Advanced Security Settings for PDFtoMD"
     )
     parser.add_argument(
-        "--token", 
-        required=True, 
-        help="GitHub Personal Access Token with repo and security_events permissions"
+        "--token",
+        required=True,
+        help="GitHub Personal Access Token with repo and security_events permissions",
     )
     parser.add_argument(
-        "--repo", 
+        "--repo",
         default="ch0t4nk/PDFtoMD",
-        help="Repository in format owner/repo (default: ch0t4nk/PDFtoMD)"
+        help="Repository in format owner/repo (default: ch0t4nk/PDFtoMD)",
     )
-    
+
     args = parser.parse_args()
-    
+
     # Validate token format
-    if not args.token.startswith(('ghp_', 'github_pat_')):
+    if not args.token.startswith(("ghp_", "github_pat_")):
         print("⚠️ Warning: Token format doesn't match expected GitHub token patterns")
-    
+
     configurator = GitHubSecurityConfigurator(args.token, args.repo)
     success = configurator.configure_all_security_features()
-    
+
     sys.exit(0 if success else 1)
 
 

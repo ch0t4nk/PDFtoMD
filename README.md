@@ -3,7 +3,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub stars](https://img.shields.io/github/stars/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ch0t4nk/PDFtoMD)](https://github.com/ch0t4nk/PDFtoMD/network)
-[![Security Verified](https://img.shields.io/badge/Security-Verified-green.svg)](docs/security/SECURITY.md)
+[![Security Verified](https://img.shields.io/badge/Security-Verified-green.svg)](.github/SECURITY.md)
 [![SSOT Config](https://img.shields.io/badge/Config-SSOT-blue.svg)](docs/guides/SSOT_GUIDE.md)
 
 Enterprise-ready PDF to Markdown conversion tool powered by multimodal AI. Features secure SSOT configuration, centralized API key management, comprehensive security controls, and enterprise-grade batch processing capabilities.
@@ -262,7 +262,7 @@ python config.py
 📚 **Complete Setup Documentation:**
 
 - [SSOT Configuration Guide](docs/guides/SSOT_GUIDE.md)
-- [Security Guide](docs/security/SECURITY.md)
+- [Security Guide](.github/SECURITY.md)
 - [Quick Start Guide](docs/guides/QUICK_START.md)
 
 ## 🤖 Usage
