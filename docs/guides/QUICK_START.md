@@ -67,7 +67,7 @@ flowchart TD
 8. 🧹 **Cleanup** - Removes temporary files automatically
 
 ## Example Run
-`bash
+```bash
 $ python auto_batch.py
 🚀 AUTOMATED BATCH PDF PROCESSING
 📁 Input Folder: pdfs
@@ -103,7 +103,8 @@ $ python auto_batch.py
 
 🎉 PROCESSING COMPLETE!
 📁 Results: converted_markdown\session_20250715_202045
-`
+```
+
 ## Cost Savings Comparison
 ```mermaid
 xychart-beta
@@ -149,7 +150,7 @@ graph TD
 ```
 
 **🗂️ Organized File Structure:**
-`
+```
 outputs/
 ├── converted/
 │ └── session_20250716_202045/
@@ -161,11 +162,11 @@ outputs/
 ├── metadata/
 │ └── 20250716_summary.json # Daily processing summary
 └── temp/ # Automatically cleaned up
-`
+```
 ## Configuration (Optional)
 
 All settings are managed through the SSOT configuration system in `config.py`:
-`python
+```python
 # Configuration is automatically loaded from.env
 
 # To customize, edit.env file:
@@ -191,7 +192,7 @@ MAX_TOKENS=8192
 
 COST_WARNING_THRESHOLD=1.0
 COST_ALERT_THRESHOLD=5.0
-`
+```
 ## Troubleshooting
 
 | Problem | Solution |
