@@ -13,7 +13,6 @@ and NEVER exposes API keys in source code.
 
 import importlib.util
 from pathlib import Path
-from urllib.parse import urlparse
 
 # Import config using SSOT system
 current_dir = Path(__file__).parent
@@ -97,31 +96,9 @@ def show_current():
             masked_key = "Not Set"
         print(f"   API Key: {masked_key}")
 
-        # Determine current provider based on API base URL - secure URL validation
-        try:
-            parsed_url = urlparse(config.OPENAI_API_BASE)
-            
-            # Validate OpenAI official API
-            if (parsed_url.scheme == "https" and 
-                parsed_url.netloc == "api.openai.com" and 
-                parsed_url.path.startswith("/v1")):
-                print("🌐 Provider: OpenAI (Cloud)")
-            
-            # Validate LM Studio local endpoints
-            elif (parsed_url.scheme in ("http", "https") and 
-                  parsed_url.netloc in ("192.168.56.1:1234", "localhost:1234", "127.0.0.1:1234") and
-                  parsed_url.path.startswith("/v1")):
-                print("🖥️  Provider: LM Studio (Local)")
-            
-            # Custom/unknown but valid URL structure
-            elif parsed_url.scheme in ("http", "https") and parsed_url.netloc:
-                print("❓ Provider: Custom/Unknown")
-            
-            else:
-                print("⚠️  Provider: Invalid URL format")
-                
-        except Exception as e:
-            print(f"⚠️  Provider: URL parsing error - {e}")
+        # Get provider info from SSOT configuration system
+        provider_name, provider_emoji = config.get_provider_info()
+        print(f"{provider_emoji} Provider: {provider_name}")
 
         # Check .env file status
         env_file = Path(".env")

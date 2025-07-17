@@ -246,8 +246,43 @@ class MarkPDFDownConfig:
         except ValueError:
             return False
 
+    def get_provider_info(self) -> tuple[str, str]:
+        """Detect current API provider and return (provider_name, emoji)"""
+        from urllib.parse import urlparse
+        
+        try:
+            parsed_url = urlparse(self.OPENAI_API_BASE)
+            
+            # OpenAI official API (security critical - exact match)
+            if (parsed_url.scheme == "https" and 
+                parsed_url.netloc == "api.openai.com" and 
+                parsed_url.path in ("/v1", "/v1/")):
+                return ("OpenAI (Cloud)", "🌐")
+            
+            # Local development endpoints (flexible for user configuration)
+            elif (parsed_url.scheme in ("http", "https") and 
+                  parsed_url.netloc and
+                  # Allow any local/private network configuration
+                  (parsed_url.netloc.startswith(("localhost:", "127.0.0.1:", "192.168.", "10.", "172.")) or
+                   parsed_url.netloc in ("localhost", "127.0.0.1") or
+                   # Allow custom hostnames for development
+                   ":" in parsed_url.netloc)):
+                return ("LM Studio/Local Development", "🖥️")
+            
+            # Custom/unknown but valid URL
+            elif parsed_url.scheme in ("http", "https") and parsed_url.netloc:
+                return ("Custom/Unknown", "❓")
+            
+            else:
+                return ("Invalid URL format", "⚠️")
+                
+        except Exception as e:
+            return (f"URL parsing error: {e}", "⚠️")
+
     def print_config_summary(self):
         """Print configuration summary (without exposing API key)"""
+        provider_name, provider_emoji = self.get_provider_info()
+        
         print("🔧 MarkPDFDown Configuration Summary")
         print("=" * 50)
         print(f"📁 PDF Folder: {self.DEFAULT_PDF_FOLDER}")
@@ -262,6 +297,7 @@ class MarkPDFDownConfig:
             f"🔑 API Key: {'✅ Configured' if self.validate_api_key() else '❌ Missing'}"
         )
         print(f"🌐 API Base: {self.OPENAI_API_BASE}")
+        print(f"{provider_emoji} Provider: {provider_name}")
         print("=" * 50)
 
 
