@@ -1,24 +1,24 @@
 # 🔧 Single Source of Truth (SSOT) Configuration System
-`mermaid
+```mermaid
 graph TD
- A[🔧 config.py] --> B[📋.env Template]
- A --> C[🔒.env File]
- A --> D[🚀 All Applications]
+ A[config.py] --> B[.env Template]
+ A --> C[.env File]
+ A --> D[All Applications]
 
- B --> E[👥 Team Sharing]
- C --> F[🔑 API Keys]
- C --> G[🗂️ Paths]
- C --> H[⚙️ Settings]
+ B --> E[Team Sharing]
+ C --> F[API Keys]
+ C --> G[Paths]
+ C --> H[Settings]
 
- D --> I[🤖 Auto Batch]
- D --> J[🔄 Launchers]
- D --> K[🧪 Tests]
- D --> L[🛠️ Tools]
+ D --> I[Auto Batch]
+ D --> J[Launchers]
+ D --> K[Tests]
+ D --> L[Tools]
 
  style A fill:#4CAF50
  style C fill:#FF9800
  style B fill:#2196F3
-`
+```
 ## 🎯 Overview
 
 MarkPDFDown uses a centralized configuration system that provides a **Single Source of Truth** for all settings, API keys, and directory paths. This eliminates hardcoded values scattered throughout the codebase and provides secure, centralized configuration management.

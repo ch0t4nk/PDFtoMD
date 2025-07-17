@@ -1,5 +1,5 @@
 # 🚀 Quick Start Guide - Auto Batch Processing
-`mermaid
+```mermaid
 sequenceDiagram
  participant U as User
  participant S as Setup
@@ -8,15 +8,16 @@ sequenceDiagram
  participant R as Results
 
  Note over U,R: 30-Second Setup Process
- U->>S: 1. Copy.env template
+ U->>S: 1. Copy .env template
  U->>S: 2. Add API key
- S->>U: ✅ Config ready
+ S->>U: Config ready
  U->>A: 3. Run auto_batch.py
  A->>O: 4. Submit batch (50% savings)
  O->>A: 5. Process documents
  A->>R: 6. Organize results
- R->>U: 📄 Clean markdown files
-`
+ R->>U: Clean markdown files
+```
+
 ## TL;DR - 30 Second Setup
 
 | Step | Command | Description |
@@ -31,29 +32,31 @@ sequenceDiagram
 - --
 
 ## What Happens Automatically
-`mermaid
+```mermaid
 flowchart TD
- A[🔍 Scan for PDFs] --> B[📊 Estimate Costs]
- B --> C[🚀 Submit to Batch API]
- C --> D[⏰ Monitor Progress]
- D --> E[📥 Download Results]
- E --> F[💰 Analyze Costs]
- F --> G[📁 Organize Outputs]
- G --> H[🧹 Cleanup Temp Files]
+ A[Scan for PDFs] --> B[Estimate Costs]
+ B --> C[Submit to Batch API]
+ C --> D[Monitor Progress]
+ D --> E[Download Results]
+ E --> F[Analyze Costs]
+ F --> G[Organize Outputs]
+ G --> H[Cleanup Temp Files]
 
- subgraph "Benefits"
- I[💰 50% Cost Savings]
- J[📊 Real-time Monitoring]
- K[🗂️ Organized Structure]
- L[🔧 Auto Linting]
+ subgraph Benefits ["Benefits"]
+ I[50% Cost Savings]
+ J[Real-time Monitoring]
+ K[Organized Structure]
+ L[Auto Linting]
  end
 
+ H --> Benefits
  style I fill:#90EE90
  style J fill:#87CEEB
  style K fill:#DDA0DD
  style L fill:#F0E68C
-`
-- *🤖 AUTO BATCH PROCESSING WORKFLOW**
+```
+
+**🤖 AUTO BATCH PROCESSING WORKFLOW**
 1. 🔍 **Scan for PDFs** - Finds all.pdf files in input folder
 2. 📊 **Estimate costs** - Shows cost breakdown before processing
 3. 🚀 **Submit to OpenAI Batch API** - 50% cheaper than standard API
@@ -102,14 +105,15 @@ $ python auto_batch.py
 📁 Results: converted_markdown\session_20250715_202045
 `
 ## Cost Savings Comparison
-`mermaid
+```mermaid
 xychart-beta
  title "Cost Comparison: Standard API vs Batch API"
  x-axis [10, 50, 100, 500, 1000]
- y-axis "Cost (USD)" 0 -->
- bar [1.0, 5.0, 10.0, 50.0, 100.0]
- bar [0.5, 2.5, 5.0, 25.0, 50.0]
-`
+ y-axis "Cost (USD)" 0 --> 100
+ line [1.0, 5.0, 10.0, 50.0, 100.0]
+ line [0.5, 2.5, 5.0, 25.0, 50.0]
+```
+
 | Pages | Standard API | **Batch API** | **Savings** |
 |---|---|---|---|
 | 10 | $0.10 | **$0.05** | **$0.05 (50%)** |
@@ -121,29 +125,30 @@ xychart-beta
 > 💡 **Pro Tip:** The more documents you process, the more you save!
 
 ## Output Structure
-`mermaid
+```mermaid
 graph TD
- A[📁 outputs/] --> B[📁 converted/]
- A --> C[📁 metadata/]
- A --> D[📁 temp/]
+ A[outputs/] --> B[converted/]
+ A --> C[metadata/]
+ A --> D[temp/]
 
- B --> E[📁 session_20250716_202045/]
- E --> F[📄 document1_batch.md]
- E --> G[📄 document2_batch.md]
- E --> H[📄 document3_batch.md]
- E --> I[📄 README.md]
- E --> J[📊 cost_analysis.json]
+ B --> E[session_20250716_202045/]
+ E --> F[document1_batch.md]
+ E --> G[document2_batch.md]
+ E --> H[document3_batch.md]
+ E --> I[README.md]
+ E --> J[cost_analysis.json]
 
- C --> K[📊 20250716_summary.json]
+ C --> K[20250716_summary.json]
 
- D --> L[🧹 Auto cleaned]
+ D --> L[Auto cleaned]
 
  style E fill:#E6F3FF
  style F fill:#F0F8E6
  style G fill:#F0F8E6
  style H fill:#F0F8E6
-`
-- *🗂️ Organized File Structure:**
+```
+
+**🗂️ Organized File Structure:**
 `
 outputs/
 ├── converted/

@@ -1,28 +1,28 @@
 # 🗂️ MarkPDFDown - Project Structure
-`mermaid
+```mermaid
 graph TD
- A[📁 markpdfdown/] --> B[🔧 config.py]
- A --> C[📁 src/]
- A --> D[📁 docs/]
- A --> E[📁 tests/]
- A --> F[📁 tools/]
- A --> G[🚀 launcher.py]
+ A[markpdfdown/] --> B[config.py]
+ A --> C[src/]
+ A --> D[docs/]
+ A --> E[tests/]
+ A --> F[tools/]
+ A --> G[launcher.py]
 
- C --> H[📁 core/]
- C --> I[📁 batch/]
- C --> J[📁 scripts/]
- C --> K[📁 utils/]
+ C --> H[core/]
+ C --> I[batch/]
+ C --> J[scripts/]
+ C --> K[utils/]
 
- D --> L[📁 guides/]
- D --> M[📁 security/]
- D --> N[📁 development/]
- D --> O[📁 legal/]
+ D --> L[guides/]
+ D --> M[security/]
+ D --> N[development/]
+ D --> O[legal/]
 
  style B fill:#4CAF50
  style G fill:#FF9800
  style C fill:#2196F3
  style D fill:#9C27B0
-`
+```
 ## 📁 Current Project Organization
 
 This project follows enterprise-grade organization principles with **Single Source of Truth (SSOT) Configuration** at its core:
@@ -38,35 +38,37 @@ markpdfdown/
 ├── 📝 README.md # Main documentation
 ├── � pyproject.toml # Project dependencies & config
 └── 🔒 SECURITY_VERIFICATION_COMPLETE.md # Security audit report
-`
+```
+
 ## 📁 Source Code Structure
-`mermaid
+```mermaid
 graph TB
- subgraph "Core Application"
- A[📁 src/core/] --> A1[main.py - Single file converter]
+ subgraph CoreApp ["Core Application"]
+ A[src/core/] --> A1[main.py - Single file converter]
  A --> A2[main_fast.py - Fast conversion]
  A --> A3[LLMClient.py - AI interface]
  end
 
- subgraph "Batch Processing"
- B[📁 src/batch/] --> B1[auto_batch.py - Main processor]
+ subgraph BatchProc ["Batch Processing"]
+ B[src/batch/] --> B1[auto_batch.py - Main processor]
  B --> B2[batch_api.py - OpenAI Batch API]
  B --> B3[master.py - Management]
  B --> B4[batch_convert.py - Utilities]
  end
 
- subgraph "Entry Points"
- C[📁 src/scripts/] --> C1[Entry point wrappers]
+ subgraph EntryPoints ["Entry Points"]
+ C[src/scripts/] --> C1[Entry point wrappers]
  C --> C2[Backwards compatibility]
  end
 
- subgraph "Utilities"
- D[📁 src/utils/] --> D1[conversion/ - Converters]
+ subgraph Utilities ["Utilities"]
+ D[src/utils/] --> D1[conversion/ - Converters]
  D --> D2[testing/ - Test tools]
  D --> D3[optimization/ - LM Studio]
  D --> D4[switch_api.py - API switcher]
  end
-`
+```
+
 ### Core Components
 
 | Directory | Purpose | Key Files |
@@ -77,12 +79,12 @@ graph TB
 | **📁 src/utils/** | Utility functions | Conversion, testing, optimization |
 
 ## 📚 Documentation Structure
-`mermaid
+```mermaid
 graph TB
- A[📁 docs/] --> B[📁 guides/]
- A --> C[📁 security/]
- A --> D[📁 development/]
- A --> E[📁 legal/]
+ A[docs/] --> B[guides/]
+ A --> C[security/]
+ A --> D[development/]
+ A --> E[legal/]
 
  B --> B1[QUICK_START.md]
  B --> B2[AUTO_BATCH_GUIDE.md]
@@ -97,7 +99,7 @@ graph TB
 
  E --> E1[CONTRIBUTORS.md]
  E --> E2[COPYRIGHT]
-`
+```
 | Documentation Type | Location | Purpose |
 |---|---|---|
 | **📚 User Guides** | `docs/guides/` | How-to guides for users |
@@ -106,16 +108,16 @@ graph TB
 | **⚖️ Legal** | `docs/legal/` | Licenses and attributions |
 
 ## 🧪 Testing Structure
-`mermaid
+```mermaid
 graph LR
- A[📁 tests/] --> B[📁 unit/]
- A --> C[📁 integration/]
- A --> D[📁 samples/]
- A --> E[📁 assets/]
+ A[tests/] --> B[unit/]
+ A --> C[integration/]
+ A --> D[samples/]
+ A --> E[assets/]
 
- F[🧪 test_comprehensive.py] --> G[11 Test Categories]
+ F[test_comprehensive.py] --> G[11 Test Categories]
  G --> H[100% Pass Rate]
-`
+```
 | Component | Purpose | Coverage |
 |---|---|---|
 | **🧪 Comprehensive Suite** | `test_comprehensive.py` | Full system validation |
@@ -124,11 +126,11 @@ graph LR
 | **📁 Test Assets** | `tests/assets/` | Sample files and data |
 
 ## 🛠️ Tools & Utilities
-`mermaid
+```mermaid
 graph TD
- A[📁 tools/] --> B[📁 conversion/]
- A --> C[📁 optimization/]
- A --> D[📁 testing/]
+ A[tools/] --> B[conversion/]
+ A --> C[optimization/]
+ A --> D[testing/]
 
  B --> B1[convert_any.py]
  B --> B2[convert_fast.py]
@@ -137,7 +139,8 @@ graph TD
 
  D --> D1[test_openai.py]
  D --> D2[test_batch_api.py]
-`
+```
+
 | Tool Category | Purpose | Key Features |
 |---|---|---|
 | **🔄 Conversion** | File format conversion | Any-to-markdown, fast processing |

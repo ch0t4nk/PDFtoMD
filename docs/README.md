@@ -1,13 +1,13 @@
 # 📚 MarkPDFDown Documentation
-`mermaid
+```mermaid
 graph TB
- A[📚 Documentation Hub] --> B[🚀 Getting Started]
- A --> C[📖 User Guides]
- A --> D[🔒 Security]
- A --> E[🛠️ Development]
- A --> F[⚖️ Legal]
+ A[Documentation Hub] --> B[Getting Started]
+ A --> C[User Guides]
+ A --> D[Security]
+ A --> E[Development]
+ A --> F[Legal]
 
- B --> B1[Main README.md]
+ B --> B1[Main README]
  B --> B2[Quick Start Guide]
 
  C --> C1[Auto Batch Processing]
@@ -23,7 +23,7 @@ graph TB
 
  F --> F1[Contributors]
  F --> F2[Copyright & Licenses]
-`
+```
 Welcome to the comprehensive documentation for **MarkPDFDown** - an enterprise-ready PDF to Markdown conversion tool with AI-powered processing and secure configuration management.
 
 ## 🗺️ Documentation Navigation
