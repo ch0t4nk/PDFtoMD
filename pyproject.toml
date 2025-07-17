@@ -28,10 +28,10 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "openai==1.66.3",
-    "pymupdf==1.25.3",
-    "pypdf2==3.0.1",
-    "python-dotenv>=1.1.0",
+    "openai>=1.97.0",
+    "pymupdf>=1.26.3",
+    "pypdf>=5.8.0",
+    "python-dotenv>=1.1.1",
 ]
 
 [project.urls]

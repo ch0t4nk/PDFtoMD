@@ -65,7 +65,7 @@ When using or modifying this project, please maintain attribution to:
 
 This project incorporates the following open-source components:
 
-**PyPDF2** - PDF processing library
+**pypdf** - PDF processing library
 - License: BSD License
 - Copyright: Mathieu Fenniak and contributors
 - Usage: Core PDF reading and manipulation functionality

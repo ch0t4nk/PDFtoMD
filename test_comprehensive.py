@@ -5,7 +5,12 @@ MarkPDFDown Comprehensive Test Suite
 
 Enterprise Enhancement for MarkPDFDown
 Copyright (c) 2025 Joseph Wright (github: ch0t4nk)
-Licensed under the Apache License, Version 2.0
+Licensed under the Apa        expected_packages = {
+            'openai': '1.97.0',
+            'pymupdf': '1.26.3',
+            'pypdf': '5.8.0',
+            'python-dotenv': '1.1.1'
+        }cense, Version 2.0
 
 This file provides comprehensive testing for all MarkPDFDown components
 including core functionality, enterprise features, configuration validation,
@@ -221,7 +226,7 @@ class MarkPDFDownTestSuite:
         required_packages = {
             'openai': '1.66.3',
             'pymupdf': '1.25.3', 
-            'pypdf2': '3.0.1',
+            'pypdf': '5.1.0',
             'python-dotenv': '1.1.0'
         }
         
@@ -238,11 +243,11 @@ class MarkPDFDownTestSuite:
                         actual_version = fitz.__version__
                         if not actual_version.startswith(expected_version.split('.')[0]):
                             version_mismatches.append(f"{package}: expected {expected_version}, got {actual_version}")
-                elif package == 'pypdf2':
-                    import PyPDF2
-                    # PyPDF2 version checking
-                    if hasattr(PyPDF2, '__version__'):
-                        actual_version = PyPDF2.__version__
+                elif package == 'pypdf':
+                    import pypdf
+                    # pypdf version checking
+                    if hasattr(pypdf, '__version__'):
+                        actual_version = pypdf.__version__
                         if not actual_version.startswith(expected_version.split('.')[0]):
                             version_mismatches.append(f"{package}: expected {expected_version}, got {actual_version}")
                 elif package == 'openai':
@@ -320,7 +325,7 @@ class MarkPDFDownTestSuite:
                 content = req_path.read_text(encoding='utf-8')
                 
                 if req_file == "requirements.txt":
-                    expected_packages = ['openai', 'pymupdf', 'pypdf2', 'python-dotenv']
+                    expected_packages = ['openai', 'pymupdf', 'pypdf', 'python-dotenv']
                 else:  # requirements-dev.txt
                     expected_packages = ['pre-commit', 'pytest', 'ruff']
                     

@@ -14,7 +14,7 @@ Licensed under the Apache License, Version 2.0
 import logging
 import os
 
-import PyPDF2
+import pypdf
 
 from .FileWorker import FileWorker
 
@@ -28,7 +28,7 @@ class PDFWorker(FileWorker):
 
     def __init__(self, input_path: str, start_page: int = 1, end_page: int = 0):
         super().__init__(input_path)
-        self.reader = PyPDF2.PdfReader(input_path)
+        self.reader = pypdf.PdfReader(input_path)
         self.total_pages = len(self.reader.pages)
         self.start_page = start_page
         self.end_page = end_page
@@ -86,7 +86,7 @@ class PDFWorker(FileWorker):
             if start > end:
                 start, end = end, start  # Automatically correct page number order
 
-            writer = PyPDF2.PdfWriter()
+            writer = pypdf.PdfWriter()
 
             # Add content from specified pages
             for page_num in range(start, end + 1):

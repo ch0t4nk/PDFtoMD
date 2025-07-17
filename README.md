@@ -423,7 +423,7 @@ python test_comprehensive.py deps # Dependencies
 
 **📦 Key Dependencies:**
 - `openai` - AI processing
-- `PyPDF2` - PDF handling
+- `pypdf` - PDF handling
 - `Pillow` - Image processing
 - `python-dotenv` - Environment management
 - `ruff` - Code quality
