@@ -8,7 +8,22 @@ Helps resolve the OpenAI API key exposure alert
 import subprocess
 import json
 import sys
+import re
 from pathlib import Path
+
+def redact_sensitive_info(text):
+    """Redact sensitive information from text for safe logging"""
+    # Redact OpenAI API keys (sk-proj-xxx, sk-xxx patterns)
+    text = re.sub(r'sk-proj-[A-Za-z0-9_-]+', '[REDACTED_API_KEY]', text)
+    text = re.sub(r'sk-[A-Za-z0-9_-]+', '[REDACTED_API_KEY]', text)
+    
+    # Redact GitHub tokens (ghp_xxx patterns)  
+    text = re.sub(r'ghp_[A-Za-z0-9_-]+', '[REDACTED_GITHUB_TOKEN]', text)
+    
+    # Redact other common secret patterns
+    text = re.sub(r'[A-Za-z0-9+/=]{40,}', '[REDACTED_SECRET]', text)
+    
+    return text
 
 def check_github_cli():
     """Check if GitHub CLI is available"""
@@ -87,7 +102,7 @@ def main():
         print("⚠️  Please complete the security steps first!")
         print("📋 Instructions:")
         print("   1. Go to: https://platform.openai.com/account/api-keys")
-        print("   2. DELETE the exposed key: sk-proj-h7PUbN7JHwjcaXbU1Du...")
+        print("   2. DELETE the exposed key: [REDACTED_FOR_SECURITY]")
         print("   3. Generate a NEW API key")
         print("   4. Update .env file: OPENAI_API_KEY=\"your-new-key-here\"")
         print("   5. Run this script again")
@@ -100,7 +115,9 @@ def main():
             if success:
                 print(f"✅ Resolved alert #{alert['number']}")
             else:
-                print(f"❌ Failed to resolve alert #{alert['number']}: {error}")
+                # Redact sensitive info from error messages
+                safe_error = redact_sensitive_info(error) if error else "Unknown error"
+                print(f"❌ Failed to resolve alert #{alert['number']}: {safe_error}")
                 return False
     
     print("🎉 All alerts resolved!")
