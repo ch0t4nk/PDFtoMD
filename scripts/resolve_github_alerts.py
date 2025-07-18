@@ -83,11 +83,17 @@ def main():
     
     print(f"📋 Found {len(alerts)} alert(s):")
     for alert in alerts:
-        print(f"   Alert #{alert['number']}: {alert['secret_type_display_name']}")
+        # Redact sensitive info from alert data before logging
+        secret_type = redact_sensitive_info(alert.get('secret_type_display_name', 'Unknown'))
+        created_at = redact_sensitive_info(alert.get('created_at', 'Unknown'))
+        file_path = redact_sensitive_info(alert.get('first_location_detected', {}).get('path', 'Unknown'))
+        line_num = alert.get('first_location_detected', {}).get('start_line', 'Unknown')
+        
+        print(f"   Alert #{alert['number']}: {secret_type}")
         print(f"   State: {alert['state']}")
-        print(f"   Created: {alert['created_at']}")
-        print(f"   File: {alert['first_location_detected']['path']}")
-        print(f"   Line: {alert['first_location_detected']['start_line']}")
+        print(f"   Created: {created_at}")
+        print(f"   File: {file_path}")
+        print(f"   Line: {line_num}")
         print()
     
     print("🚨 CRITICAL: Before resolving alerts, ensure you have:")
@@ -104,7 +110,7 @@ def main():
         print("   1. Go to: https://platform.openai.com/account/api-keys")
         print("   2. DELETE the exposed key: [REDACTED_FOR_SECURITY]")
         print("   3. Generate a NEW API key")
-        print("   4. Update .env file: OPENAI_API_KEY=\"your-new-key-here\"")
+        print("   4. Update .env file: OPENAI_API_KEY=\"[YOUR_NEW_KEY_HERE]\"")
         print("   5. Run this script again")
         return False
     
