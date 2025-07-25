@@ -7,10 +7,9 @@ Available tools:
   auto-batch    - Main batch processing script
   workspace-lint - Lint and fix workspace files
   quick-lint    - Quick linting utility
-  cleanup       - Cleanup backup files
   cleanup-temp  - Cleanup temporary files and directories
-  convert-any   - Convert any file type
-  convert-fast  - Fast conversion utility
+  combine-pages - Combine PDF pages utility
+  convert-single - Single file conversion tool
   optimize-lm   - Optimize LM Studio settings
   test-llm      - Test LLM connection
 """
@@ -24,13 +23,12 @@ ROOT_DIR = Path(__file__).parent
 
 # Tool mappings
 TOOLS = {
-    "auto-batch": "src/scripts/auto_batch.py",
+    "auto-batch": "src/batch/auto_batch.py",
     "workspace-lint": "src/scripts/workspace_lint.py",
     "quick-lint": "src/scripts/quick_lint.py",
-    "cleanup": "src/scripts/cleanup_backups.py",
     "cleanup-temp": "cleanup.py",
-    "convert-any": "tools/conversion/convert_any.py",
-    "convert-fast": "tools/conversion/convert_fast.py",
+    "combine-pages": "tools/conversion/combine_pages.py",
+    "convert-single": "tools/conversion/convert_single_clean.py",
     "optimize-lm": "tools/optimization/optimize_lm_studio.py",
     "test-llm": "tools/testing/simple_llm_test.py",
 }

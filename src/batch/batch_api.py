@@ -1142,75 +1142,33 @@ def main():
         converter.retrieve_results(batch_id)
 
     elif command == "cleanup":
-        print("🧹 Cleaning up orphaned batch files...")
-        
-        # Use direct cleanup instead of subprocess to avoid encoding issues
-        cleaned = 0
-        
-        # Clean JSONL files in root (shouldn't exist after our fix)
-        root_dir = Path.cwd()
-        for jsonl_file in root_dir.glob("batch_requests_*.jsonl"):
-            try:
-                jsonl_file.unlink()
-                print(f"   🗑️  Removed: {jsonl_file.name}")
-                cleaned += 1
-            except OSError as e:
-                print(f"   ⚠️  Could not remove {jsonl_file.name}: {e}")
-        
-        # Clean old batch info files in root (legacy)
-        for batch_info in root_dir.glob("batch_info_*.json"):
-            try:
-                batch_info.unlink()
-                print(f"   🗑️  Removed: {batch_info.name}")
-                cleaned += 1
-            except OSError as e:
-                print(f"   ⚠️  Could not remove {batch_info.name}: {e}")
-        
-        # Clean usage stats files in root (legacy)
-        for usage_file in root_dir.glob("usage_stats_*.json"):
-            try:
-                usage_file.unlink()
-                print(f"   🗑️  Removed: {usage_file.name}")
-                cleaned += 1
-            except OSError as e:
-                print(f"   ⚠️  Could not remove {usage_file.name}: {e}")
-        
-        # Clean temp batch directory if empty or has old files
-        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
-        if temp_batch_dir.exists():
-            # Remove old JSONL files that shouldn't be there
-            for old_jsonl in temp_batch_dir.glob("batch_requests_*.jsonl"):
-                try:
-                    # Only remove if older than 1 hour (safety check)
-                    if time.time() - old_jsonl.stat().st_mtime > 3600:
-                        old_jsonl.unlink()
-                        print(f"   🗑️  Removed old temp batch file: {old_jsonl.name}")
-                        cleaned += 1
-                except OSError as e:
-                    print(f"   ⚠️  Could not remove {old_jsonl.name}: {e}")
+        # Use centralized cleanup manager
+        try:
+            # Import the centralized cleanup manager
+            sys.path.insert(0, str(Path(__file__).parent.parent))
+            from utils.cleanup_manager import CleanupManager
             
-            # Remove directory if empty
-            if not any(temp_batch_dir.iterdir()):
-                try:
-                    temp_batch_dir.rmdir()
-                    print(f"   🗑️  Removed empty temp batch directory")
-                    cleaned += 1
-                except OSError:
-                    pass
-        
-        # Clean any page images that might be left in root (legacy issue)
-        for page_img in root_dir.glob("page_*.jpg"):
-            try:
-                page_img.unlink()
-                print(f"   🗑️  Removed: {page_img.name}")
-                cleaned += 1
-            except OSError as e:
-                print(f"   ⚠️  Could not remove {page_img.name}: {e}")
-        
-        if cleaned > 0:
-            print(f"✅ Cleanup completed! Removed {cleaned} orphaned files.")
-        else:
-            print("✅ No orphaned files found - system is clean!")
+            cleanup_manager = CleanupManager(verbose=True)
+            cleanup_manager.cleanup_batch_files()
+        except ImportError as e:
+            print(f"⚠️  Could not import centralized cleanup manager: {e}")
+            print("   Falling back to basic cleanup...")
+            
+            # Minimal fallback cleanup
+            cleaned = 0
+            root_dir = Path.cwd()
+            
+            # Clean essential batch files
+            for pattern in ["batch_requests_*.jsonl", "batch_info_*.json", "usage_stats_*.json"]:
+                for item in root_dir.glob(pattern):
+                    try:
+                        item.unlink()
+                        print(f"   🗑️  Removed: {item.name}")
+                        cleaned += 1
+                    except OSError as e:
+                        print(f"   ⚠️  Could not remove {item.name}: {e}")
+            
+            print(f"✅ Basic cleanup completed! Removed {cleaned} files.")
 
     elif command == "list":
         # List all batch info files from temp directory
