@@ -20,6 +20,7 @@ import base64
 import importlib.util
 import json
 import os
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -288,8 +289,12 @@ class BatchPDFConverter:
     
     def _submit_single_batch(self, requests, file_mapping):
         """Submit a single batch with comprehensive error handling"""
-        # Create JSONL file
-        batch_file = f"batch_requests_{int(time.time())}.jsonl"
+        # Create temp directory for batch files
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        temp_batch_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Create JSONL file in temp directory instead of root
+        batch_file = temp_batch_dir / f"batch_requests_{int(time.time())}.jsonl"
 
         try:
             with open(batch_file, "w") as f:
@@ -309,7 +314,13 @@ class BatchPDFConverter:
                 error_type = self._handle_openai_error(e, "file upload")
                 if error_type in ["billing_limit", "insufficient_quota", "auth_error"]:
                     print(f"\n🛑 CANNOT CONTINUE: Please resolve the above issue before retrying.")
+                    # Clean up batch file on critical error
+                    if batch_file.exists():
+                        batch_file.unlink()
                     return None
+                # Clean up batch file on any upload error
+                if batch_file.exists():
+                    batch_file.unlink()
                 raise
 
             # Submit batch with error handling
@@ -327,7 +338,13 @@ class BatchPDFConverter:
                 error_type = self._handle_openai_error(e, "batch submission")
                 if error_type in ["billing_limit", "insufficient_quota", "auth_error"]:
                     print(f"\n🛑 CANNOT CONTINUE: Please resolve the above issue before retrying.")
+                    # Clean up batch file on critical error
+                    if batch_file.exists():
+                        batch_file.unlink()
                     return None
+                # Clean up batch file on any submission error
+                if batch_file.exists():
+                    batch_file.unlink()
                 raise
 
             print("✅ Batch submitted successfully!")
@@ -339,28 +356,30 @@ class BatchPDFConverter:
             batch_info = {
                 "batch_id": batch.id,
                 "file_mapping": file_mapping,
-                "batch_file": batch_file,
+                "batch_file": str(batch_file),  # Store full path for potential cleanup
                 "submitted_at": time.time(),
                 "is_chunked": False
             }
 
-            # Save batch info to temp directory instead of root
-            temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
-            temp_batch_dir.mkdir(parents=True, exist_ok=True)
             batch_info_file = temp_batch_dir / f"batch_info_{batch.id}.json"
 
             with open(batch_info_file, "w") as f:
                 json.dump(batch_info, f, indent=2)
 
-            # Clean up local batch file
-            os.remove(batch_file)
+            # Clean up local batch file after successful submission
+            if batch_file.exists():
+                batch_file.unlink()
 
             return batch.id
 
         except Exception as e:
-            # Clean up batch file on any error
-            if os.path.exists(batch_file):
-                os.remove(batch_file)
+            # Force cleanup batch file on any error
+            if batch_file.exists():
+                try:
+                    batch_file.unlink()
+                    print(f"🧹 Cleaned up batch file: {batch_file.name}")
+                except OSError:
+                    print(f"⚠️  Could not remove batch file: {batch_file}")
             
             print(f"\n❌ BATCH SUBMISSION FAILED")
             print(f"   Error: {e}")
@@ -862,8 +881,6 @@ class BatchPDFConverter:
                         _, _, temp_dir_str = file_mapping[custom_id]
                         temp_dir = Path(temp_dir_str)
                         if temp_dir.exists():
-                            import shutil
-
                             shutil.rmtree(temp_dir, ignore_errors=True)
                     except (OSError, PermissionError, RuntimeError):
                         continue  # Skip cleanup errors
@@ -1074,6 +1091,7 @@ def main():
         print("  python batch_api.py status <id>    # Check batch status")
         print("  python batch_api.py retrieve <id>  # Retrieve batch results")
         print("  python batch_api.py list           # List pending batches")
+        print("  python batch_api.py cleanup        # Clean up orphaned batch files")
         return
 
     command = sys.argv[1].lower()
@@ -1102,9 +1120,12 @@ def main():
 
         # Submit batch
         batch_id = converter.submit_batch(requests, file_mapping)
-        print("\n✅ Batch submitted! Use this ID to check status:")
-        print(f"   python batch_api.py status {batch_id}")
-        print(f"   python batch_api.py retrieve {batch_id}")
+        if batch_id:
+            print("\n✅ Batch submitted! Use this ID to check status:")
+            print(f"   python batch_api.py status {batch_id}")
+            print(f"   python batch_api.py retrieve {batch_id}")
+        else:
+            print("\n❌ Batch submission failed. Check error messages above.")
 
     elif command == "status":
         if len(sys.argv) < 3:
@@ -1119,6 +1140,77 @@ def main():
             return
         batch_id = sys.argv[2]
         converter.retrieve_results(batch_id)
+
+    elif command == "cleanup":
+        print("🧹 Cleaning up orphaned batch files...")
+        
+        # Use direct cleanup instead of subprocess to avoid encoding issues
+        cleaned = 0
+        
+        # Clean JSONL files in root (shouldn't exist after our fix)
+        root_dir = Path.cwd()
+        for jsonl_file in root_dir.glob("batch_requests_*.jsonl"):
+            try:
+                jsonl_file.unlink()
+                print(f"   🗑️  Removed: {jsonl_file.name}")
+                cleaned += 1
+            except OSError as e:
+                print(f"   ⚠️  Could not remove {jsonl_file.name}: {e}")
+        
+        # Clean old batch info files in root (legacy)
+        for batch_info in root_dir.glob("batch_info_*.json"):
+            try:
+                batch_info.unlink()
+                print(f"   🗑️  Removed: {batch_info.name}")
+                cleaned += 1
+            except OSError as e:
+                print(f"   ⚠️  Could not remove {batch_info.name}: {e}")
+        
+        # Clean usage stats files in root (legacy)
+        for usage_file in root_dir.glob("usage_stats_*.json"):
+            try:
+                usage_file.unlink()
+                print(f"   🗑️  Removed: {usage_file.name}")
+                cleaned += 1
+            except OSError as e:
+                print(f"   ⚠️  Could not remove {usage_file.name}: {e}")
+        
+        # Clean temp batch directory if empty or has old files
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        if temp_batch_dir.exists():
+            # Remove old JSONL files that shouldn't be there
+            for old_jsonl in temp_batch_dir.glob("batch_requests_*.jsonl"):
+                try:
+                    # Only remove if older than 1 hour (safety check)
+                    if time.time() - old_jsonl.stat().st_mtime > 3600:
+                        old_jsonl.unlink()
+                        print(f"   🗑️  Removed old temp batch file: {old_jsonl.name}")
+                        cleaned += 1
+                except OSError as e:
+                    print(f"   ⚠️  Could not remove {old_jsonl.name}: {e}")
+            
+            # Remove directory if empty
+            if not any(temp_batch_dir.iterdir()):
+                try:
+                    temp_batch_dir.rmdir()
+                    print(f"   🗑️  Removed empty temp batch directory")
+                    cleaned += 1
+                except OSError:
+                    pass
+        
+        # Clean any page images that might be left in root (legacy issue)
+        for page_img in root_dir.glob("page_*.jpg"):
+            try:
+                page_img.unlink()
+                print(f"   🗑️  Removed: {page_img.name}")
+                cleaned += 1
+            except OSError as e:
+                print(f"   ⚠️  Could not remove {page_img.name}: {e}")
+        
+        if cleaned > 0:
+            print(f"✅ Cleanup completed! Removed {cleaned} orphaned files.")
+        else:
+            print("✅ No orphaned files found - system is clean!")
 
     elif command == "list":
         # List all batch info files from temp directory
