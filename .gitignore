@@ -238,9 +238,11 @@ test_report*.json
 test_*.mmd
 temp_*.mmd
 
-# Completion reports and temporary summaries (should be in docs/)
+# Completion reports and temporary summaries in root (organized ones in docs/ are allowed)
 *_COMPLETE.md
 *_SUMMARY.md
+!docs/**/*_COMPLETE.md
+!docs/**/*_SUMMARY.md
 MERMAID_TEST.md
 fix_markdown_codeblocks.py
 
