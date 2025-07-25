@@ -138,6 +138,9 @@ celerybeat.pid
 .venv
 env/
 venv/
+
+# Backup files created by enhanced linter
+*.backup
 ENV/
 env.bak/
 venv.bak/
