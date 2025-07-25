@@ -1,6 +1,7 @@
 # a
 
 # Published as a conference paper at COLM
+
 | Model | COPA | HellaSwag | MMLU | Humaneval | Triviaqa | Lambda | Squad2.0 | GSM8k | C-Eval | CMMLU |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Qwen1.5-1.8B | 53.0 | 55.99 | 47.06 | 18.9 | 31.15 | 56.39 | 30.06 | 35.1 | 59.38 | 57.1 |
@@ -32,4 +33,4 @@ We also compared the performance of our model, which was fine-tuned using a 2:1 
 
 Table 3: Performance of aligned models with a scale of around 2B on benchmark. The best result are in blue, the second-best are underline, and the third-best are in fbox.
 
-Safety Evaluation We also evaluate the safety score of CT-LLM-SFT-DPO compared with baselines such as MiniCPM-2B-sft-fp, Bloom-1.7B, and StableIm-zephyr-3B, etc on evalues responsibility benchmark (Xu et al., 2023). The evaluation consists of two parts: multiple-choice and question-answering. The multiple-choice part includes 1,712 input examples, each comprising a human query and two candidate responses. The evaluated models are
+Safety Evaluation We also evaluate the safety score of CT-LLM-SFT-DPO compared with baselines such as MiniCPM-2B-sft-fp, Bloom-1.7B, and StableIm-zephyr-3B, etc on evalues responsibility benchmark (Xu et al., 2023). The evaluation consists of two parts: multiple-choice and question-answering. The multiple-choice part includes 1,712 input examples, each comprising a human query and two candidate responses. The evaluated models are\n

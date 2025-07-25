@@ -592,6 +592,55 @@ class AutoBatchProcessor:
 
         print(f"✅ Cleaned up {cleaned} temporary items")
 
+    def cleanup_failed_session(self):
+        """Aggressive cleanup for failed sessions including session folders"""
+        print("\n🧹 Cleaning up failed session...")
+        
+        cleaned = 0
+        
+        # Clean up the specific failed session folder
+        session_folder = self.output_folder / f"session_{self.session_id}"
+        if session_folder.exists():
+            try:
+                shutil.rmtree(session_folder)
+                print(f"   🗑️  Removed failed session folder: {session_folder.name}")
+                cleaned += 1
+            except (OSError, PermissionError) as e:
+                print(f"   ⚠️  Could not remove session folder: {e}")
+        
+        # Clean up temp batch directory
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        if temp_batch_dir.exists():
+            try:
+                shutil.rmtree(temp_batch_dir)
+                print(f"   🗑️  Removed temp batch directory")
+                cleaned += 1
+            except (OSError, PermissionError) as e:
+                print(f"   ⚠️  Could not remove temp batch directory: {e}")
+        
+        # Clean up any batch info files for this session
+        for pattern in [f"batch_info_*{self.session_id}*.json", "batch_info_*.json"]:
+            for item in Path(".").glob(pattern):
+                try:
+                    item.unlink()
+                    print(f"   🗑️  Removed batch info file: {item.name}")
+                    cleaned += 1
+                except (OSError, PermissionError):
+                    pass
+        
+        # Clean up any stray page images in the root directory
+        for pattern in ["page_*.jpg", "*.jpg"]:
+            for item in Path(".").glob(pattern):
+                if item.name.startswith("page_") or item.stat().st_size < 1024*1024:  # Small images likely from processing
+                    try:
+                        item.unlink()
+                        print(f"   🗑️  Removed stray image: {item.name}")
+                        cleaned += 1
+                    except (OSError, PermissionError):
+                        pass
+        
+        print(f"✅ Cleaned up {cleaned} items from failed session")
+
     def run_full_automation(self):
         """Run the complete automated process"""
         start_time = time.time()
@@ -661,7 +710,24 @@ class AutoBatchProcessor:
         except (RuntimeError, OSError, ValueError, TypeError) as e:
             self.print_banner("PROCESSING FAILED ❌", "❌")
             print(f"Error: {e}")
-            print("Manual cleanup may be required.")
+            
+            # Always attempt cleanup on failure - use aggressive cleanup for failed sessions
+            try:
+                print("🧹 Attempting cleanup of failed session...")
+                self.cleanup_failed_session()
+                print("✅ Failed session cleanup completed successfully")
+            except Exception as cleanup_error:
+                print(f"⚠️  Warning: Failed session cleanup failed: {cleanup_error}")
+                # Fallback to regular cleanup
+                try:
+                    self.cleanup_workspace()
+                    print("✅ Fallback cleanup completed")
+                except Exception as fallback_error:
+                    print(f"⚠️  Warning: All cleanup attempts failed: {fallback_error}")
+                    print("Manual cleanup may be required.")
+                    print(f"💡 Run manual cleanup: python manual_cleanup.py \"{self.output_folder}\"")
+                    print(f"💡 Or check for leftover files in: {self.output_folder}")
+            
             return False
 
 

@@ -8,27 +8,27 @@ The `auto_batch.py` script now supports several command-line options including *
 
 ### **Disable Linting**
 
-```bash
+`bash
 python batch/auto_batch.py --no-lint
 python batch/auto_batch.py --skip-lint
 python batch/auto_batch.py pdfs output --no-lint
-```
+`
 
 ### **Disable Metadata Enhancement**
 
-```bash
+`bash
 python batch/auto_batch.py --no-metadata
-```
+`
 
 ### **Combine Options**
 
-```bash
+`bash
 python batch/auto_batch.py pdfs output --no-lint --no-metadata
-```
+`
 
 ## 📋 **Complete Usage Examples**
 
-```bash
+`bash
 
 # Default (everything enabled)
 
@@ -45,7 +45,7 @@ python batch/auto_batch.py pdfs output --no-lint --no-metadata
 # See all options
 
 python batch/auto_batch.py --help
-```
+`
 
 ## 🚀 **What Changed**
 
@@ -67,4 +67,4 @@ For your large batch of 2300 PDFs, you can now:
 - **Full Run**: Default mode when you want clean, optimized output with metadata
 - **Comparison**: Use metadata summaries to compare different batch runs
 
-The system preserves your **Option B & C** metadata features while giving you speed control!
+The system preserves your **Option B & C** metadata features while giving you speed control!\n

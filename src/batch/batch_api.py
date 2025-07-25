@@ -247,6 +247,56 @@ Focus on creating clean, professional documentation that preserves all informati
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode("utf-8")
 
+    def cleanup_temp_directories(self, file_mapping=None):
+        """Clean up temporary directories created during PDF processing"""
+        import shutil
+        
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        if not temp_batch_dir.exists():
+            return
+            
+        cleaned_dirs = []
+        
+        try:
+            if file_mapping:
+                # Clean up specific directories from file mapping
+                temp_dirs_to_clean = set()
+                for custom_id, (pdf_name, page_num, temp_dir_str) in file_mapping.items():
+                    temp_dir_path = Path(temp_dir_str)
+                    if temp_dir_path.exists():
+                        temp_dirs_to_clean.add(temp_dir_path)
+                
+                for temp_dir in temp_dirs_to_clean:
+                    try:
+                        shutil.rmtree(temp_dir, ignore_errors=True)
+                        cleaned_dirs.append(temp_dir.name)
+                    except (OSError, PermissionError):
+                        continue
+            else:
+                # Clean up all subdirectories in temp_batch
+                if temp_batch_dir.exists():
+                    for item in temp_batch_dir.iterdir():
+                        if item.is_dir():
+                            try:
+                                shutil.rmtree(item, ignore_errors=True)
+                                cleaned_dirs.append(item.name)
+                            except (OSError, PermissionError):
+                                continue
+            
+            # Remove the temp_batch directory itself if it's empty
+            try:
+                if temp_batch_dir.exists() and not any(temp_batch_dir.iterdir()):
+                    temp_batch_dir.rmdir()
+                    print(f"🧹 Removed empty temp_batch directory")
+            except (OSError, PermissionError):
+                pass  # If we can't remove it, that's okay
+            
+            if cleaned_dirs:
+                print(f"🧹 Cleaned up {len(cleaned_dirs)} temp directories")
+                
+        except Exception as e:
+            print(f"⚠️  Warning: Could not clean up some temp directories: {e}")
+
     def extract_pdf_pages(self, pdf_path):
         """Extract pages from PDF as images"""
         # Import the core modules from src/core directory
@@ -258,7 +308,17 @@ Focus on creating clean, professional documentation that preserves all informati
         if str(src_dir) not in sys.path:
             sys.path.insert(0, str(src_dir))
 
-        from core.PDFWorker import PDFWorker
+        # Use absolute import to avoid conflicts with system-wide packages
+        import sys
+        import importlib.util
+        
+        pdf_worker_path = src_dir / "core" / "PDFWorker.py"
+        spec = importlib.util.spec_from_file_location("PDFWorker", pdf_worker_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Could not load PDFWorker from {pdf_worker_path}")
+        pdf_worker_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(pdf_worker_module)
+        PDFWorker = pdf_worker_module.PDFWorker
 
         # Create temporary directory for this PDF
         pdf_name = Path(pdf_path).stem
@@ -377,10 +437,15 @@ Focus on creating clean, professional documentation that preserves all informati
                     # Clean up batch file on critical error
                     if batch_file.exists():
                         batch_file.unlink()
+                    # Clean up temp directories from PDF extraction
+                    print(f"🧹 Cleaning up temporary files...")
+                    self.cleanup_temp_directories(file_mapping)
                     return None
                 # Clean up batch file on any upload error
                 if batch_file.exists():
                     batch_file.unlink()
+                # Clean up temp directories on any upload error
+                self.cleanup_temp_directories(file_mapping)
                 raise
 
             # Submit batch with error handling
@@ -405,6 +470,9 @@ Focus on creating clean, professional documentation that preserves all informati
                     # Clean up batch file on critical error
                     if batch_file.exists():
                         batch_file.unlink()
+                    # Clean up temp directories from PDF extraction
+                    print(f"🧹 Cleaning up temporary files...")
+                    self.cleanup_temp_directories(file_mapping)
                     return None
                 # Clean up batch file on any submission error
                 if batch_file.exists():
@@ -444,6 +512,10 @@ Focus on creating clean, professional documentation that preserves all informati
                     print(f"🧹 Cleaned up batch file: {batch_file.name}")
                 except OSError:
                     print(f"⚠️  Could not remove batch file: {batch_file}")
+
+            # Also clean up temp directories created during PDF extraction
+            print(f"🧹 Cleaning up temporary files...")
+            self.cleanup_temp_directories(file_mapping)
 
             print(f"\n❌ BATCH SUBMISSION FAILED")
             print(f"   Error: {e}")

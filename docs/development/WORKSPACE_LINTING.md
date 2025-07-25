@@ -8,7 +8,7 @@ Comprehensive workspace linting tool that fixes common formatting and style issu
 
 ### Usage
 
-```bash
+`bash
 
 # Run workspace linting
 
@@ -17,7 +17,7 @@ python workspace_lint.py
 # Show help
 
 python workspace_lint.py --help
-```
+`
 
 ### What it does
 
@@ -28,7 +28,7 @@ python workspace_lint.py --help
 
 ### Example Output
 
-```
+`
 🔧 PDFtoMD Workspace Linter
 ============================================================
 📁 Scanning workspace: C:\Users\joeyw\pdftomd
@@ -53,7 +53,7 @@ python workspace_lint.py --help
 📄 Files with Fixes:
 ❌ Errors Encountered:
 ✅ Workspace linting completed with fixes applied!
-```
+`
 
 ## 🧹 cleanup_backups.py
 
@@ -61,7 +61,7 @@ Simple utility to remove backup files created by the workspace linter.
 
 ### Usage
 
-```bash
+`bash
 
 # Remove all.backup files
 
@@ -70,7 +70,7 @@ python cleanup_backups.py
 # Show help
 
 python cleanup_backups.py --help
-```
+`
 
 ### What it does
 
@@ -80,12 +80,12 @@ python cleanup_backups.py --help
 
 ### Example Output
 
-```
+`
 🧹 Found 57 backup files to remove:
  🗑️ batch\auto_batch.py.backup
  🗑️ utils\metadata_embedder.py.backup...
 ✅ Cleaned up 57 backup files!
-```
+`
 
 ## 🚫 Ignored Directories
 
@@ -122,4 +122,4 @@ These tools integrate with:
 - **quick_lint.py**: Individual file linting
 - **utils.linting.markdown_linter**: Core markdown linting engine
 - **Git workflow**: Safe to run before commits
-- **CI/CD**: Can be automated for continuous quality
+- **CI/CD**: Can be automated for continuous quality\n

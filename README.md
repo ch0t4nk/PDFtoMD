@@ -52,24 +52,33 @@ pie title Enterprise Feature Distribution
 
 ### Git Installation (Recommended)
 
-```bash
+`bash
+
 # Clone repository
+
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Setup virtual environment
+
 python -m venv PDFtoMD-env
+
 # Windows:
+
 PDFtoMD-env\Scripts\activate
+
 # macOS/Linux:
+
 source PDFtoMD-env/bin/activate
 
 # Install dependencies
+
 pip install -r requirements.txt
 
 # Verify installation
+
 python test_comprehensive.py
-```
+`
 
 ### Download Release
 
@@ -130,12 +139,12 @@ sequenceDiagram
 
 | Step | Command | Description |
 |---|---|---|
-| **1** | `cp .env.template .env` | Create configuration file |
+| **1** | `cp.env.template.env` | Create configuration file |
 | **2** | Edit `.env` file | Add your OpenAI API key |
 | **3** | `python config.py` | Verify configuration |
 | **4** | `python src/batch/auto_batch.py` | Start processing! |
 
-**🎉 That's it!** Your PDFs will be converted with 50% cost savings and organized automatically.
+- *🎉 That's it!** Your PDFs will be converted with 50% cost savings and organized automatically.
 
 ## 📦 Installation
 
@@ -152,7 +161,8 @@ graph LR
 
 ### 🚀 Using uv (Recommended - Fastest)
 
-```bash
+`bash
+
 # Install uv package manager
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -162,41 +172,49 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 uv sync # Creates venv + installs dependencies automatically
-```
+`
 
 ### 🐍 Using pip (Traditional)
 
-```bash
+`bash
+
 # Clone repository
+
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Create virtual environment
+
 python -m venv venv
 source venv/bin/activate # Windows: venv\Scripts\activate
 
 # Install dependencies
+
 pip install -r requirements.txt
-```
+`
 
 ### � Using conda (Data Science Environments)
 
-```bash
+`bash
+
 # Clone repository
+
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Create conda environment
+
 conda create -n pdftomd python=3.11
 conda activate pdftomd
 
 # Install dependencies
+
 pip install -r requirements.txt
-```
+`
 
 ### 🐍 Using conda
 
-```bash
+`bash
 
 # Create environment
 
@@ -208,7 +226,7 @@ conda activate pdftomd
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 pip install -r requirements.txt
-```
+`
 
 ## 🔧 Configuration
 
@@ -231,23 +249,22 @@ graph TD
  E --> SecurityFeatures
 ```
 
-**Before first use, configure your API key using our secure SSOT system:**
+- *Before first use, configure your API key using our secure SSOT system:**
+`bash
 
-```bash
-# Copy the template to create your .env file
+# Copy the template to create your.env file
 
-cp .env.template .env
+cp.env.template.env
 
-# Edit .env and add your OpenAI API key
+# Edit.env and add your OpenAI API key
 
 # OPENAI_API_KEY="sk-your-actual-api-key-here"
 
 # Test configuration
 
 python config.py
-```
-
-**✅ Security Features:**
+`
+- *✅ Security Features:**
 
 - 🔒 API keys never stored in source code
 - 📋 Template system for easy setup
@@ -280,8 +297,8 @@ flowchart TD
 ```
 
 For processing multiple PDFs with **50% cost savings** using OpenAI Batch API:
+`bash
 
-```bash
 # Quick start - process all PDFs in pdfs/ folder
 
 python src/batch/auto_batch.py
@@ -293,9 +310,8 @@ python src/batch/auto_batch.py documents outputs
 # Windows users can double-click
 
 auto_batch_launcher.bat
-```
-
-**📊 Batch Processing Features:**
+`
+- *📊 Batch Processing Features:**
 
 - ✅ Fully automated workflow (set it and forget it)
 - 💰 50% cost savings with OpenAI Batch API
@@ -304,17 +320,14 @@ auto_batch_launcher.bat
 - 🔧 Automatic markdown linting and formatting
 - 🧹 Smart cleanup of temporary files and old sessions
 
-**🛠️ Utility Commands:**
-
-```bash
+- *🛠️ Utility Commands:**
+`bash
 python src/batch/auto_batch.py --list-recent # Show recent conversions
 python src/batch/auto_batch.py --summary # Daily cost summary
 python src/batch/auto_batch.py --cleanup # Manual cleanup
-```
-
-**🔧 Local Linting (Zero API Cost):**
-
-```bash
+`
+- *🔧 Local Linting (Zero API Cost):**
+`bash
 
 # Lint all converted files
 
@@ -323,15 +336,13 @@ python launcher.py quick-lint outputs/converted
 # Lint single file
 
 python launcher.py quick-lint myfile.md
-```
-
+`
 📚 **Complete Documentation:** [Auto Batch Guide](docs/guides/AUTO_BATCH_GUIDE.md)
 
 ### Single File Processing
 
-**Using the SSOT Configuration System:**
-
-```bash
+- *Using the SSOT Configuration System:**
+`bash
 
 # Configuration is automatically loaded from.env file
 
@@ -348,11 +359,11 @@ python src/core/main.py < input_image.png > output.md
 # Process specific pages
 
 python src/core/main.py 1 5 < input.pdf > output.md
-```
+`
 
 ### Advanced Usage with Launcher
 
-```bash
+`bash
 
 # Universal launcher for all tools
 
@@ -361,7 +372,7 @@ python launcher.py convert-any input.pdf # Single file conversion
 python launcher.py test-llm # Test API connection
 python launcher.py optimize-lm # Optimize LM Studio settings
 python launcher.py cleanup-temp # Clean temporary files
-```
+`
 
 ## 🛠️ Development
 
@@ -386,7 +397,7 @@ graph TD
 
 ### Development Setup
 
-```bash
+`bash
 
 # Clone and setup
 
@@ -401,9 +412,9 @@ uv sync --group dev
 
 # Setup configuration
 
-cp .env.template .env
+cp.env.template.env
 
-# Edit .env with your API key
+# Edit.env with your API key
 
 # Install pre-commit hooks
 
@@ -412,7 +423,7 @@ pre-commit install
 # Run comprehensive tests
 
 python test_comprehensive.py
-```
+`
 
 ### Code Quality & Testing
 
@@ -426,7 +437,7 @@ python test_comprehensive.py
 
 ### Testing Framework
 
-```bash
+`bash
 
 # Full test suite (11 categories)
 
@@ -441,9 +452,8 @@ python test_comprehensive.py quick
 python test_comprehensive.py structure # Project structure
 python test_comprehensive.py config # Configuration testing
 python test_comprehensive.py deps # Dependencies
-```
-
-**🧪 Test Coverage:**
+`
+- *🧪 Test Coverage:**
 
 - ✅ Project Structure Validation
 - ✅ Configuration System Testing
@@ -461,7 +471,7 @@ python test_comprehensive.py deps # Dependencies
 | **Package Manager** | uv/pip/conda | Dependency management |
 | **OS Support** | Windows/Linux/macOS | Cross-platform |
 
-**📦 Key Dependencies:**
+- *📦 Key Dependencies:**
 
 - `openai` - AI processing
 - `pypdf` - PDF handling
@@ -494,21 +504,19 @@ We welcome contributions! Follow these steps:
 2. **🌿 Create feature branch**: `git checkout -b feature/amazing-feature`
 3. **🛠️ Setup development environment:**
 
- ```bash
+ `bash
  uv sync --group dev
  pre-commit install
- cp .env.template .env # Add your API key
- ```
-
+ cp.env.template.env # Add your API key
+ `
 1. **✨ Make your changes and ensure quality:**
 
- ```bash
+ `bash
  ruff format # Format code
  ruff check --fix # Fix linting issues
  python test_comprehensive.py # Run tests
  pre-commit run --all-files # Final quality check
- ```
-
+ `
 2. **📝 Commit changes**: `git commit -m 'feat: Add amazing feature'`
 
 3. **🚀 Push to branch**: `git push origin feature/amazing-feature`
@@ -543,10 +551,10 @@ graph LR
 
 This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdown) by the original MarkPDFDown team.
 
-**Original Project:** [MarkPDFDown Repository](https://github.com/MarkPDFdown/markpdfdown)
-**Original License:** Apache License 2.0
+- *Original Project:** [MarkPDFDown Repository](https://github.com/MarkPDFdown/markpdfdown)
+- *Original License:** Apache License 2.0
 
-**Enterprise Enhancements by Joseph Wright ([@ch0t4nk](https://github.com/ch0t4nk)):**
+- *Enterprise Enhancements by Joseph Wright ([@ch0t4nk](https://github.com/ch0t4nk)):**
 
 - 🔧 Single Source of Truth (SSOT) Configuration System v4.1
 - 🔒 Enterprise Security Framework with API key protection and git history cleanup
@@ -558,4 +566,4 @@ This project is based on [MarkPDFDown](https://github.com/MarkPDFdown/markpdfdow
 ## Acknowledgments
 
 - Thanks to the developers of the multimodal AI models that power this tool
-- Inspired by the need for better PDF to Markdown conversion tools
+- Inspired by the need for better PDF to Markdown conversion tools\n

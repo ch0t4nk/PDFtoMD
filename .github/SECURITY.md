@@ -1,6 +1,6 @@
 # 🔒 Security Policy - PDFtoMD
 
-> **📍 This is the GitHub Security Policy for PDFtoMD**  
+> **📍 This is the GitHub Security Policy for PDFtoMD**
 > **📚 Full Security Documentation**: This file contains the complete security policy
 
 ## 🛡️ Security Overview
@@ -27,7 +27,9 @@ PDFtoMD v3.0+ implements comprehensive security measures to protect your API key
 ## 🚀 Security Best Practices
 
 ### **Initial Setup**
-```bash
+
+`bash
+
 # ✅ Always use the template
 
 cp.env.template.env
@@ -37,9 +39,13 @@ cp.env.template.env
 # OPENAI_API_KEY="sk-your-real-key-here"
 
 # ❌ Never edit source files directly
-```
+
+`
+
 ### **Key Rotation**
-```bash
+
+`bash
+
 # When rotating API keys:
 
 # Revoke old key from OpenAI dashboard
@@ -49,9 +55,13 @@ cp.env.template.env
 # Update.env file only
 
 # Test with: python config.py
-```
+
+`
+
 ### **Version Control**
-```bash
+
+`bash
+
 # ✅.env is automatically ignored
 
 git status #.env should not appear
@@ -59,11 +69,15 @@ git status #.env should not appear
 # ❌ Never force-add.env
 
 # git add -f.env # DON'T DO THIS
-```
+
+`
+
 ## 🔍 Security Validation
 
 ### Test Your Setup
-```bash
+
+`bash
+
 # Check configuration loads correctly
 
 python config.py
@@ -79,9 +93,13 @@ grep -r "sk-proj" src/ tools/ config/
 git check-ignore.env
 
 # Should output:.env
-```
+
+`
+
 ### Validate Environment
-```bash
+
+`bash
+
 # Ensure.env exists and has proper permissions
 
 ls -la.env
@@ -93,7 +111,9 @@ ls -la.env
 grep "OPENAI_API_KEY".env
 
 # Should show: OPENAI_API_KEY="sk-..."
-```
+
+`
+
 ## 🚨 Security Incident Response
 
 ### If API Key is Exposed
@@ -144,7 +164,9 @@ grep "OPENAI_API_KEY".env
 5. **Monitor API usage for anomalies**
 
 ### Example Team Workflow
-```bash
+
+`bash
+
 # New team member setup:
 
 # Clone repository
@@ -166,7 +188,9 @@ python config.py
 # Never commit.env
 
 # (Already gitignored)
-```
+
+`
+
 ## 📞 Support
 
 If you discover a security issue:
@@ -184,4 +208,4 @@ If you discover a security issue:
 
 - --
 
-- *Remember: Security is everyone's responsibility. When in doubt, ask for help rather than risk exposure.**
+- *Remember: Security is everyone's responsibility. When in doubt, ask for help rather than risk exposure.**\n

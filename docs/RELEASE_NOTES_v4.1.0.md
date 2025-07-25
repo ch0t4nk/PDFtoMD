@@ -26,7 +26,7 @@ This major release represents a comprehensive overhaul of PDFtoMD with a focus o
 - **Improved error messages** for better user experience
 - **Comprehensive changelog** with detailed version history
 
-### 🧪 Testing & Reliability  
+### 🧪 Testing & Reliability
 
 - **11-category comprehensive test suite** maintains 100% pass rate
 - **Integration testing** for all core workflows
@@ -44,11 +44,11 @@ This major release represents a comprehensive overhaul of PDFtoMD with a focus o
 
 ### Git Installation (Recommended)
 
-```bash
+`bash
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 pip install -r requirements.txt
-```
+`
 
 ### Direct Download
 
@@ -91,9 +91,9 @@ We welcome contributions! Please see our comprehensive testing framework and cod
 
 ## 📊 Release Statistics
 
-- **Files Modified**: 67
+- **Files Modified**:
 - **Linting Fixes**: 760+
-- **Security Issues Resolved**: 2
+- **Security Issues Resolved**:
 - **Test Coverage**: 11 comprehensive test categories
 - **Code Quality**: Enterprise-grade standards achieved
 
@@ -101,6 +101,6 @@ We welcome contributions! Please see our comprehensive testing framework and cod
 
 Special thanks to the community for feedback and the security researchers who identified vulnerabilities through GitHub Dependabot.
 
----
+- --
 
-**Full Changelog**: [View detailed changes](https://github.com/ch0t4nk/PDFtoMD/commits/v4.1.0)
+- *Full Changelog**: [View detailed changes](https://github.com/ch0t4nk/PDFtoMD/commits/v4.1.0)\n

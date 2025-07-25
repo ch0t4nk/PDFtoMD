@@ -27,6 +27,6 @@ Output Example:
 # STANDARD PROCESSING SETTINGS
 # =================================================================================
 
-STANDARD_TEMPERATURE = 0.3   # Balanced for quality and variation
-STANDARD_MAX_TOKENS = 8192   # Generous limit for full pages
+STANDARD_TEMPERATURE = 0.3  # Balanced for quality and variation
+STANDARD_MAX_TOKENS = 8192  # Generous limit for full pages
 STANDARD_MODEL_FALLBACK = "gpt-4o"  # Fallback if config model not available

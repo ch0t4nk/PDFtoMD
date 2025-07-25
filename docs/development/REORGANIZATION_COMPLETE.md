@@ -25,7 +25,8 @@ pdftomd/
 ## Quick Access
 
 Use the `launcher.py` script for easy access to tools:
-```bash
+`bash
+
 # Main batch processing
 
 python launcher.py auto-batch --help
@@ -40,7 +41,8 @@ python launcher.py quick-lint
 python launcher.py cleanup
 python launcher.py convert-any input.pdf
 python launcher.py optimize-lm
-```
+`
+
 ## Key Scripts
 
 ### Main Processing
@@ -96,4 +98,4 @@ python launcher.py optimize-lm
 
 ## Migration Notes
 
-All import paths have been updated to reflect the new structure. The reorganization preserves git history through proper `git mv` operations.
+All import paths have been updated to reflect the new structure. The reorganization preserves git history through proper `git mv` operations.\n

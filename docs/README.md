@@ -53,11 +53,31 @@ Welcome to the comprehensive documentation for **PDFtoMD** - an enterprise-ready
 
 ### 🛠️ Development & Technical
 
-| Resource | Content | Target Audience |
-|---|---|---|
-| [**Project Structure**](development/PROJECT_STRUCTURE.md) | Complete codebase organization | Developers |
-| [**Implementation Guide**](development/IMPLEMENTATION.md) | Technical implementation details | Contributors |
-| [**Workspace Linting**](development/WORKSPACE_LINTING.md) | Code quality and formatting | Developers |
+| Resource | Content | Target Audience | Status |
+|---|---|---|---|
+| [**Project Structure**](development/PROJECT_STRUCTURE.md) | Complete codebase organization | Developers | ✅ Updated July 2025 |
+| [**Implementation Guide**](development/IMPLEMENTATION.md) | Technical implementation details | Contributors | ✅ Current |
+| [**Workspace Linting**](development/WORKSPACE_LINTING.md) | Code quality and formatting | Developers | ✅ Maintained |
+
+## 🧹 Recent Major Updates (July 2025)
+
+- *Comprehensive codebase cleanup completed:**
+
+### 📊 Cleanup Results
+
+- **16 duplicate files removed** via proper git operations
+- **~500+ lines of duplicated code eliminated**
+- **2 centralized utilities created**:
+ - `src/utils/cleanup_manager.py` - Unified cleanup functionality
+ - `src/utils/markdown_cleaner.py` - Centralized markdown processing
+- **Clean, maintainable architecture** established
+
+### 🆕 Enhanced Features
+
+- **Centralized cleanup system** - All cleanup functionality unified
+- **Enhanced markdown processing** - Improved text processing pipeline
+- **Updated launcher system** - Reflects current file structure
+- **Improved documentation** - All guides updated to current state
 
 ### ⚖️ Legal & Attribution
 
@@ -71,19 +91,19 @@ Welcome to the comprehensive documentation for **PDFtoMD** - an enterprise-ready
 ### 🏃‍♂️ Quick Access Links
 
 - **For New Users:**
-  - 🚀 [30-Second Setup](guides/QUICK_START.md) - Get started immediately
-  - 🔧 [Configuration Guide](guides/SSOT_GUIDE.md) - Set up your API keys securely
-  - 💡 [Auto Batch Processing](guides/AUTO_BATCH_GUIDE.md) - Process multiple PDFs with 50% savings
+ - 🚀 [30-Second Setup](guides/QUICK_START.md) - Get started immediately
+ - 🔧 [Configuration Guide](guides/SSOT_GUIDE.md) - Set up your API keys securely
+ - 💡 [Auto Batch Processing](guides/AUTO_BATCH_GUIDE.md) - Process multiple PDFs with 50% savings
 
 - **For Developers:**
-  - 🗂️ [Project Structure](development/PROJECT_STRUCTURE.md) - Understand the codebase
-  - 🔒 [Security Framework](../.github/SECURITY.md) - Implement secure practices
-  - 🧪 [Testing Guide](../test_comprehensive.py) - Run comprehensive tests
+ - 🗂️ [Project Structure](development/PROJECT_STRUCTURE.md) - Understand the codebase
+ - 🔒 [Security Framework](../.github/SECURITY.md) - Implement secure practices
+ - 🧪 [Testing Guide](../test_comprehensive.py) - Run comprehensive tests
 
 - **For Enterprise:**
-  - 🛡️ [Security Compliance](../.github/SECURITY.md) - Enterprise security requirements
-  - 👥 [Team Setup](guides/SSOT_GUIDE.md) - Multi-user configuration
-  - 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md) - Budget controls
+ - 🛡️ [Security Compliance](../.github/SECURITY.md) - Enterprise security requirements
+ - 👥 [Team Setup](guides/SSOT_GUIDE.md) - Multi-user configuration
+ - 📊 [Cost Management](guides/AUTO_BATCH_GUIDE.md) - Budget controls
 
 ## 📋 Documentation Standards
 
@@ -112,6 +132,6 @@ Found an issue or want to improve our docs?
 2. 🔄 Submit a pull request
 3. 📚 Follow our [contribution guidelines](../README.md)
 
----
+- --
 
-**📍 You are here:** `/docs/` → Use the navigation above to find exactly what you need!
+- *📍 You are here:** `/docs/` → Use the navigation above to find exactly what you need!\n

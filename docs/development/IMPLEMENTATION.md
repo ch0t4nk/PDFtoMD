@@ -8,13 +8,17 @@ The auto-batch system consists of several interconnected components that work to
 
 ### `auto_batch.py` - Main Orchestrator
 
+- *Location**: `src/batch/auto_batch.py` (canonical)
+
 - *Purpose**: Entry point and workflow coordinator
+
 - *Key Features**:
 - 8-step automated workflow
 - Session management with timestamps
 - Progress monitoring and user feedback
 - Error handling and recovery
-```python
+- Integration with centralized cleanup utilities
+`python
 class AutoBatchProcessor:
  def __init__(self, pdf_folder="pdfs", output_folder="converted_markdown")
  def run() # Main workflow orchestrator
@@ -26,45 +30,97 @@ class AutoBatchProcessor:
  def retrieve_results() # Step 6: Results download
  def analyze_costs() # Step 7: Cost analysis
  def organize_outputs() # Step 8: Final organization
-```
+`
+
 ### `batch_api.py` - OpenAI Batch API Interface
 
+- *Location**: `src/batch/batch_api.py`
+
 - *Purpose**: Direct interface to OpenAI's Batch API
+
 - *Key Features**:
 - Enhanced prompting system (temperature 0.05)
 - Request batching and optimization
 - Comprehensive metadata tracking
 - Advanced error handling
-```python
+- **NEW**: Integrated with centralized CleanupManager
+`python
 class BatchPDFConverter:
  def submit_batch(pdf_folder, output_folder="converted")
  def monitor_batch(batch_id, check_interval=30)
  def download_results(batch_id, output_folder)
  def get_batch_status(batch_id)
  def estimate_batch_cost(pdf_folder)
-```
+`
+
 ### `master.py` - Batch Management & Analytics
 
+- *Location**: `src/batch/master.py` (canonical)
+
 - *Purpose**: High-level batch management and usage analysis
-- *Key Features**:
 - Usage statistics and cost analysis
 - Batch history management
 - Cleanup utilities
 - Performance reporting
-```python
+`python
 class PDFBatchMaster:
  def analyze_batch_usage(batch_id)
  def print_usage_summary()
  def cleanup()
  def get_batch_history()
-```
+`
+
 ### Configuration System
 
 - *Files**: `auto_batch_config_sample.py` → `auto_batch_config.py`
+
 - *Purpose**: Customizable settings for all aspects of processing
 
+### Centralized Utilities (July 2025)
+
+#### `cleanup_manager.py` - Unified Cleanup System
+
+- *Location**: `src/utils/cleanup_manager.py`
+
+- *Purpose**: Consolidates cleanup functionality from 6+ scattered files
+
+- *Key Features**:
+- Centralized CleanupManager class
+- Batch file cleanup
+- Workspace cleanup
+- Temp file management
+- Unified error handling
+`python
+class CleanupManager:
+ def __init__(self, verbose=False)
+ def cleanup_batch_files() # Clean batch-specific files
+ def cleanup_workspace() # Clean workspace temp files
+ def cleanup_temp_files() # Clean all temp files
+ def cleanup_temp_directories() # Clean temp directories
+`
+
+#### `markdown_cleaner.py` - Centralized Markdown Processing
+
+- *Location**: `src/utils/markdown_cleaner.py`
+
+- *Purpose**: Unifies markdown processing functions
+
+- *Key Features**:
+- Image reference cleaning
+- Markdown format standardization
+- Code block wrapper removal
+- Comprehensive text processing
+`python
+def clean_non_existent_image_references(content)
+def remove_markdown_warp(content)
+def clean_markdown_formatting(content)
+def convert_images_to_descriptions(content)
+def normalize_line_endings(content)
+`
+
 ## Data Flow
-```
+
+`
 1. PDF Discovery
  ├── Scan input folder for.pdf files
  ├── Calculate total size and estimate pages
@@ -109,22 +165,27 @@ class PDFBatchMaster:
  ├── Generate session README.md
  ├── Create cost_analysis.json
  └── Cleanup temporary files
-```
+`
+
 ## Enhanced Prompting System
 
 ### System Prompt
-```python
+
+`python
 SYSTEM_PROMPT = """You are an expert document conversion specialist...
 Your task is to convert PDF page images into clean, well-formatted Markdown...
 [9-point detailed requirements for consistent output]"""
-```
+`
+
 ### User Prompt Template
-```python
+
+`python
 USER_PROMPT = """Convert this PDF page to Markdown following these requirements:
 1. Use clean, semantic Markdown formatting
 2. Preserve all text content and structure
 [Additional specific requirements per page]"""
-```
+`
+
 ### Quality Parameters
 
 - **Temperature**: 0.05 (high consistency, low creativity)
@@ -146,7 +207,8 @@ USER_PROMPT = """Convert this PDF page to Markdown following these requirements:
 - Minimize API round trips
 
 ### Cost Tracking
-```python
+
+`python
 {
  "batch_id": "batch_xxx",
  "total_cost": 0.4676,
@@ -161,11 +223,13 @@ USER_PROMPT = """Convert this PDF page to Markdown following these requirements:
  }
  ]
 }
-```
+`
+
 ## Session Management
 
 ### Folder Structure
-```
+
+`
 converted_markdown/
 └── session_20250715_202045/
  ├── markdown_files/ # Converted documents
@@ -174,7 +238,8 @@ converted_markdown/
  ├── cost_analysis.json # Financial breakdown
  ├── README.md # Session summary
  └── usage_stats_batch_xxx.json # Detailed usage data
-```
+`
+
 ### Session Metadata
 
 - **Session ID**: `YYYYMMDD_HHMMSS` format
@@ -186,7 +251,8 @@ converted_markdown/
 ## Error Handling & Recovery
 
 ### Batch Status Monitoring
-```python
+
+`python
 def monitor_batch(batch_id):
  while True:
  status = get_batch_status(batch_id)
@@ -197,7 +263,8 @@ def monitor_batch(batch_id):
  elif status == "cancelled":
  handle_batch_cancellation()
  time.sleep(check_interval)
-```
+`
+
 ### Failure Recovery
 
 - **Network Issues**: Automatic retry with exponential backoff
@@ -228,13 +295,17 @@ def monitor_batch(batch_id):
 ## Integration Points
 
 ### Environment Variables
-```bash
+
+`bash
 OPENAI_API_KEY # Required: OpenAI API key
 OPENAI_API_BASE # Optional: Custom API endpoint
 OPENAI_DEFAULT_MODEL # Optional: Override default model
-```
+`
+
 ### Configuration Override
-```python
+
+`python
+
 # auto_batch_config.py
 
 DEFAULT_PDF_FOLDER = "custom_input"
@@ -242,9 +313,12 @@ DEFAULT_OUTPUT_FOLDER = "custom_output"
 TEMPERATURE = 0.1 # More creative output
 MAX_TOKENS = 4096 # Shorter responses
 COST_WARNING_THRESHOLD = 2.00 # Higher threshold
-```
+`
+
 ### External Tools Integration
-```bash
+
+`bash
+
 # Standalone monitoring
 
 python monitor_batch.py batch_12345
@@ -260,7 +334,8 @@ python master.py analyze batch_12345
 # Cleanup utilities
 
 python master.py cleanup
-```
+`
+
 ## Testing & Validation
 
 ### Unit Tests
@@ -311,4 +386,4 @@ python master.py cleanup
 
 - --
 
-This implementation provides a robust, scalable, and cost-effective solution for batch PDF to Markdown conversion with comprehensive monitoring, analytics, and error handling.
+This implementation provides a robust, scalable, and cost-effective solution for batch PDF to Markdown conversion with comprehensive monitoring, analytics, and error handling.\n

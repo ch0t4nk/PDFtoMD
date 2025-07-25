@@ -14,10 +14,18 @@ Licensed under the Apache License, Version 2.0
 import logging
 import os
 from typing import Optional
+import sys
+from pathlib import Path
 
 import pypdf
 
-from .FileWorker import FileWorker
+# Add src directory to path for absolute imports
+current_dir = Path(__file__).parent
+src_dir = current_dir.parent
+if str(src_dir) not in sys.path:
+    sys.path.insert(0, str(src_dir))
+
+from core.FileWorker import FileWorker
 
 logger = logging.getLogger(__name__)
 

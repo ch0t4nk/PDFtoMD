@@ -9,7 +9,8 @@
 - Example/demo files at root level
 
 ## Proposed New Structure
-```
+
+`
 pdftomd/
 ├── 📁 src/ # Main source code
 │ ├── batch/ # Batch processing (existing)
@@ -72,11 +73,11 @@ pdftomd/
  ├── README.md
  ├── LICENSE
  ├── pyproject.toml
- ├── pyproject.toml
  ├── Makefile
  ├──.gitignore
  └── auto_batch.bat (Windows launcher)
-```
+`
+
 ## Files to Move
 
 ### To src/scripts/
@@ -165,4 +166,4 @@ pdftomd/
 3. Update import paths
 4. Update documentation references
 5. Test that everything still works
-6. Commit the reorganization
+6. Commit the reorganization\n

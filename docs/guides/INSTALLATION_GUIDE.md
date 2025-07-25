@@ -3,32 +3,42 @@
 ## 🚀 Quick Start Installation
 
 ### Prerequisites
+
 - Python 3.8 or higher
 - Git (for cloning repository)
 - Virtual environment (recommended)
 
 ### Method 1: Git Clone (Recommended)
 
-```bash
+`bash
+
 # Clone the repository
+
 git clone https://github.com/ch0t4nk/PDFtoMD.git
 cd PDFtoMD
 
 # Create virtual environment (recommended)
+
 python -m venv PDFtoMD-env
 
 # Activate virtual environment
+
 # On Windows:
+
 PDFtoMD-env\Scripts\activate
+
 # On macOS/Linux:
+
 source PDFtoMD-env/bin/activate
 
 # Install dependencies
+
 pip install -r requirements.txt
 
 # Verify installation
+
 python test_comprehensive.py
-```
+`
 
 ### Method 2: Download Release Archive
 
@@ -39,47 +49,50 @@ python test_comprehensive.py
 ## 🔧 Configuration
 
 ### Basic Setup
-1. Copy the sample configuration:
-   ```bash
-   cp config/auto_batch_config_sample.py config/auto_batch_config.py
-   ```
 
+1. Copy the sample configuration:
+ `bash
+ cp config/auto_batch_config_sample.py config/auto_batch_config.py
+ `
 2. Edit configuration with your preferences:
-   ```bash
-   # Edit config/auto_batch_config.py
-   # Add your OpenAI API key and customize settings
-   ```
+ `bash
+ # Edit config/auto_batch_config.py
+ # Add your OpenAI API key and customize settings
+ `
 
 ### Environment Variables
+
 Create a `.env` file in the project root:
-```env
+`env
 OPENAI_API_KEY=your_api_key_here
-```
+`
 
 ## 🎯 Usage Examples
 
 ### Basic PDF Conversion
-```bash
+
+`bash
 python launcher.py path/to/your/document.pdf
-```
+`
 
 ### Batch Processing
-```bash
+
+`bash
 python launcher.py --batch path/to/pdf/directory/
-```
+`
 
 ### Auto-batch with Configuration
-```bash
+
+`bash
 python auto_batch_launcher.bat
-```
+`
 
 ## 🧪 Verification
 
 Run the comprehensive test suite to verify your installation:
-```bash
+`bash
 python test_comprehensive.py
-```
-
+`
 Expected output: `✅ All 11 comprehensive tests passed!`
 
 ## 🔒 Security Notes
@@ -105,28 +118,29 @@ Expected output: `✅ All 11 comprehensive tests passed!`
 ## 📝 Development Installation
 
 For contributing to the project:
+`bash
 
-```bash
 # Install development dependencies
+
 pip install -r requirements-dev.txt
 
 # Run linting
-ruff check .
-ruff format .
+
+ruff check.
+ruff format.
 
 # Run tests
+
 python test_comprehensive.py
-```
+`
 
 ## 🔄 Updating
 
 To update to the latest version:
-
-```bash
+`bash
 git pull origin master
 pip install -r requirements.txt --upgrade
-```
+`
+- --
 
----
-
-**Need help?** Open an issue on [GitHub](https://github.com/ch0t4nk/PDFtoMD/issues)
+- *Need help?** Open an issue on [GitHub](https://github.com/ch0t4nk/PDFtoMD/issues)\n

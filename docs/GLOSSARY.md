@@ -48,6 +48,18 @@ Data that provides information about other data (file properties, processing his
 
 Initial data preparation and cleaning before main processing.
 
+### **Cleanup Manager**
+
+Centralized utility (`src/utils/cleanup_manager.py`) that consolidates all cleanup functionality from across the codebase into a unified CleanupManager class.
+
+### **Markdown Cleaner**
+
+Centralized utility (`src/utils/markdown_cleaner.py`) that unifies markdown processing functions including image reference cleaning and format standardization.
+
+### **Code Duplication**
+
+Identical or similar code appearing in multiple locations, which was eliminated during the July 2025 workspace cleanup.
+
 ### **Postprocessing**
 
 Final data manipulation and formatting after main processing.
@@ -264,4 +276,4 @@ Symbolic link pointing to another file or directory.
 
 - --
 
-- This glossary is maintained as part of the PDFtoMD project documentation and is used for spell checking consistency across all project files.
+- This glossary is maintained as part of the PDFtoMD project documentation and is used for spell checking consistency across all project files.\n

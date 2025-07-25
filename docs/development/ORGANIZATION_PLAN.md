@@ -10,7 +10,7 @@
 
 ## Proposed Structure
 
-```
+`
 markpdfdown/
 ├── 📁 core/ # Core application code
 │ ├── main.py # Main single-file converter
@@ -48,7 +48,7 @@ markpdfdown/
 └── 📁 outputs/ # Generated outputs
  ├── converted_markdown/ # Batch outputs
  └── temp/ # Temporary files
-```
+`
 
 ## Implementation Steps
 
@@ -61,4 +61,4 @@ markpdfdown/
 7. Consolidate test files and assets
 8. Create examples directory
 9. Update import paths in code
-10. Update documentation references
+10. Update documentation references\n

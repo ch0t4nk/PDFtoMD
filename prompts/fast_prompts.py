@@ -25,6 +25,6 @@ FAST_USER_PROMPT = """Convert this document page to Markdown format:
 # FAST PROCESSING SETTINGS
 # =================================================================================
 
-FAST_TEMPERATURE = 0.1    # Lower for consistency and speed
-FAST_MAX_TOKENS = 4096    # Reduced for speed
+FAST_TEMPERATURE = 0.1  # Lower for consistency and speed
+FAST_MAX_TOKENS = 4096  # Reduced for speed
 FAST_MODEL_FALLBACK = "gpt-4o"  # Fallback if config model not available

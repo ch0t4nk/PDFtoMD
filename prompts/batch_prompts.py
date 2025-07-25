@@ -32,5 +32,5 @@ Focus on creating clean, professional documentation that preserves all informati
 # =================================================================================
 
 BATCH_TEMPERATURE = 0.05  # Very low for consistency
-BATCH_MAX_TOKENS = 8192   # Higher for complete conversion
+BATCH_MAX_TOKENS = 8192  # Higher for complete conversion
 BATCH_MODEL_FALLBACK = "gpt-4o"  # Fallback if config model not available

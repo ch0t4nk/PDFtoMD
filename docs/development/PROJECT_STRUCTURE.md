@@ -1,4 +1,5 @@
 # 🗂️ PDFtoMD - Project Structure
+
 ```mermaid
 graph TD
  A[pdftomd/] --> B[config.py]
@@ -23,11 +24,11 @@ graph TD
  style C fill:#2196F3
  style D fill:#9C27B0
 ```
+
 ## 📁 Current Project Organization
 
 This project follows enterprise-grade organization principles with **Single Source of Truth (SSOT) Configuration** at its core:
-
-```
+`
 pdftomd/
 ├── 🔧 config.py # ⭐ SSOT Configuration System
 ├── 🔒.env # Environment variables (DO NOT COMMIT)
@@ -39,15 +40,20 @@ pdftomd/
 ├── 📝 README.md # Main documentation
 ├── 📦 pyproject.toml # Project dependencies & config
 └── 🔒 SECURITY_VERIFICATION_COMPLETE.md # Security audit report
-```
+`
 
 ## 📁 Source Code Structure
+
 ```mermaid
 graph TB
  subgraph CoreApp ["Core Application"]
  A[src/core/] --> A1[main.py - Single file converter]
  A --> A2[main_fast.py - Fast conversion]
  A --> A3[LLMClient.py - AI interface]
+ A --> A4[PDFWorker.py - PDF processing]
+ A --> A5[ImageWorker.py - Image handling]
+ A --> A6[FileWorker.py - File operations]
+ A --> A7[Util.py - Core utilities]
  end
 
  subgraph BatchProc ["Batch Processing"]
@@ -55,31 +61,63 @@ graph TB
  B --> B2[batch_api.py - OpenAI Batch API]
  B --> B3[master.py - Management]
  B --> B4[batch_convert.py - Utilities]
+ B --> B5[monitor_batch.py - Progress monitoring]
+ B --> B6[track_batch_cost.py - Cost tracking]
  end
 
- subgraph EntryPoints ["Entry Points"]
- C[src/scripts/] --> C1[Entry point wrappers]
- C --> C2[Backwards compatibility]
+ subgraph Utilities ["Centralized Utilities"]
+ C[src/utils/] --> C1[cleanup_manager.py - Centralized cleanup]
+ C --> C2[markdown_cleaner.py - Markdown processing]
+ C --> C3[combine_pages.py - Page combination]
+ C --> C4[metadata_embedder.py - Metadata handling]
+ C --> C5[switch_api.py - API switcher]
+ C --> C6[linting/ - Code quality tools]
+ C --> C7[optimization/ - Performance tools]
+ C --> C8[testing/ - Test utilities]
  end
 
- subgraph Utilities ["Utilities"]
- D[src/utils/] --> D1[conversion/ - Converters]
- D --> D2[testing/ - Test tools]
- D --> D3[optimization/ - LM Studio]
- D --> D4[switch_api.py - API switcher]
+ subgraph Scripts ["Script Utilities"]
+ D[src/scripts/] --> D1[workspace_lint.py - Workspace maintenance]
+ D --> D2[quick_lint.py - Quick linting]
+ D --> D3[lint.py - General linting]
  end
 ```
 
 ### Core Components
 
-| Directory | Purpose | Key Files |
-|---|---|---|
-| **📁 src/core/** | Main application logic | `main.py`, `LLMClient.py` |
-| **📁 src/batch/** | Batch processing system | `auto_batch.py`, `batch_api.py` |
-| **📁 src/scripts/** | Entry point wrappers | Backwards compatibility |
-| **📁 src/utils/** | Utility functions | Conversion, testing, optimization |
+| Directory | Purpose | Key Files | Status |
+|---|---|---|---|
+| **📁 src/core/** | Main application logic | `main.py`, `LLMClient.py`, `PDFWorker.py` | ✅ Canonical |
+| **📁 src/batch/** | Batch processing system | `auto_batch.py`, `batch_api.py`, `master.py` | ✅ Canonical |
+| **📁 src/utils/** | Centralized utilities | `cleanup_manager.py`, `markdown_cleaner.py` | 🆕 Centralized |
+| **📁 src/scripts/** | Script utilities | `workspace_lint.py`, `quick_lint.py` | ✅ Maintained |
+
+## 🧹 Recent Cleanup (July 2025)
+
+- *Major code duplication elimination and centralization:**
+
+### ❌ Removed Duplicate Files
+
+- `src/scripts/main.py` & `src/scripts/main_fast.py` (kept canonical in `src/core/`)
+- `src/scripts/auto_batch.py` & `src/scripts/master.py` (kept canonical in `src/batch/`)
+- `src/scripts/cleanup_backups.py` (functionality centralized)
+- Entire `src/utils/conversion/` directory (duplicated from `tools/conversion/`)
+- 6 backup/duplicate files from `tools/conversion/`
+
+### ✅ Centralized Utilities Created
+
+- **`src/utils/cleanup_manager.py`** - Consolidates cleanup functionality from 6+ scattered files
+- **`src/utils/markdown_cleaner.py`** - Unifies markdown processing functions
+
+### 📊 Impact
+
+- **~500+ lines of duplicated code eliminated**
+- **16 duplicate files removed**
+- **Centralized, maintainable utilities**
+- **Clean git history maintained**
 
 ## 📚 Documentation Structure
+
 ```mermaid
 graph TB
  A[docs/] --> B[guides/]
@@ -101,6 +139,7 @@ graph TB
  E --> E1[CONTRIBUTORS.md]
  E --> E2[COPYRIGHT]
 ```
+
 | Documentation Type | Location | Purpose |
 |---|---|---|
 | **📚 User Guides** | `docs/guides/` | How-to guides for users |
@@ -109,6 +148,7 @@ graph TB
 | **⚖️ Legal** | `docs/legal/` | Licenses and attributions |
 
 ## 🧪 Testing Structure
+
 ```mermaid
 graph LR
  A[tests/] --> B[unit/]
@@ -119,6 +159,7 @@ graph LR
  F[test_comprehensive.py] --> G[11 Test Categories]
  G --> H[100% Pass Rate]
 ```
+
 | Component | Purpose | Coverage |
 |---|---|---|
 | **🧪 Comprehensive Suite** | `test_comprehensive.py` | Full system validation |
@@ -127,6 +168,7 @@ graph LR
 | **📁 Test Assets** | `tests/assets/` | Sample files and data |
 
 ## 🛠️ Tools & Utilities
+
 ```mermaid
 graph TD
  A[tools/] --> B[conversion/]
@@ -150,7 +192,7 @@ graph TD
 
 ## 📁 Complete Directory Structure
 
-```
+`
 pdftomd/
 ├── 📁 tools/ # Development tools
 │ ├── conversion/ # Conversion tools
@@ -196,13 +238,14 @@ pdftomd/
 ├── 📄 LICENSE # Apache 2.0 License
 ├── 📄 pyproject.toml # Python project configuration
 └── 📄 Makefile # Build configuration
-└── 📄 Makefile # Build configuration
-```
+`
 
 ## 🚀 Quick Start (Updated Paths)
 
 ### Auto Batch Processing (Recommended)
-```bash
+
+`bash
+
 # Windows users - double click:
 
 auto_batch_launcher.bat
@@ -214,20 +257,21 @@ python src/batch/auto_batch.py
 # Custom folders:
 
 python src/batch/auto_batch.py "my_pdfs" "my_output"
-```
+`
+
 ### Single File Processing
 
-```bash
+`bash
 
 # Core application:
 
 python core/main.py < input.pdf > output.md
 python core/main_fast.py < input.pdf > output.md
-```
+`
 
 ### Utility Scripts
 
-```bash
+`bash
 
 # Conversion utilities:
 
@@ -242,13 +286,13 @@ python utils/testing/simple_llm_test.py
 # LM Studio optimization:
 
 python utils/optimization/optimize_lm_studio.py
-```
+`
 
 ## 📋 Configuration
 
 ### Environment Setup
 
-```bash
+`bash
 
 # Copy configuration template:
 
@@ -258,11 +302,11 @@ cp config/.env.sample.env
 
 # OPENAI_API_KEY=sk-your-key-here
 
-```
+`
 
 ### Auto Batch Configuration
 
-```bash
+`bash
 
 # Copy batch config template:
 
@@ -273,7 +317,8 @@ cp config/auto_batch_config_sample.py auto_batch_config.py
 # DEFAULT_PDF_FOLDER = "examples/pdfs"
 
 # DEFAULT_OUTPUT_FOLDER = "outputs/converted_markdown"
-```
+
+`
 
 ## 🎯 Benefits of New Organization
 
@@ -346,4 +391,4 @@ cp config/auto_batch_config_sample.py auto_batch_config.py
 
 - **The new structure makes PDFtoMD more professional, maintainable, and user-friendly!** 🎉
 
-For detailed usage instructions, see the [Quick Start Guide](../guides/QUICK_START.md) and [Complete Documentation](../README.md).
+For detailed usage instructions, see the [Quick Start Guide](../guides/QUICK_START.md) and [Complete Documentation](../README.md).\n

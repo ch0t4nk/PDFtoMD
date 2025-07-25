@@ -5,8 +5,8 @@ Usage: python convert_single.py <pdf_filename>
 """
 
 import os
-import sys
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -25,8 +25,9 @@ def convert_single_pdf(pdf_filename):
         print(f"❌ File not found: {pdf_path}")
         print("Available PDF files:")
         pdf_files = [
-            f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
-            if f.lower().endswith('.pdf')
+            f
+            for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+            if f.lower().endswith(".pdf")
         ]
         for f in sorted(pdf_files):
             print(f"   - {f}")
@@ -46,9 +47,10 @@ def convert_single_pdf(pdf_filename):
     try:
         # Use PowerShell to pipe the PDF content to main.py
         cmd = [
-            "powershell", "-Command",
+            "powershell",
+            "-Command",
             f'Get-Content "{pdf_path}" -Encoding Byte -Raw | '
-            f'C:/Python313/python.exe src/core/main.py > "{output_file}"'
+            f'C:/Python313/python.exe src/core/main.py > "{output_file}"',
         ]
 
         start_time = time.time()
@@ -58,7 +60,9 @@ def convert_single_pdf(pdf_filename):
         end_time = time.time()
 
         if result.returncode == 0:
-            file_size = os.path.getsize(output_file) if os.path.exists(output_file) else 0
+            file_size = (
+                os.path.getsize(output_file) if os.path.exists(output_file) else 0
+            )
             print("✅ Conversion successful!")
             print(f"   ⏱️  Time: {end_time - start_time:.1f} seconds")
             print(f"   📊 Output size: {file_size:,} bytes")
@@ -82,8 +86,9 @@ def main():
         print("\nAvailable PDF files:")
         if os.path.exists(str(config.DEFAULT_PDF_FOLDER)):
             pdf_files = [
-                f for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
-                if f.lower().endswith('.pdf')
+                f
+                for f in os.listdir(str(config.DEFAULT_PDF_FOLDER))
+                if f.lower().endswith(".pdf")
             ]
             for f in sorted(pdf_files):
                 print(f"   - {f}")

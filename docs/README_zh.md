@@ -25,7 +25,9 @@ PDFtoMD 是一款智能PDF转换Markdown工具，通过先进的多模态AI模�
 ## 安装指南
 
 ### 使用 uv（推荐）
-```bash
+
+`bash
+
 # 安装 uv（如果尚未安装）
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -38,9 +40,11 @@ cd PDFtoMD
 # 安装依赖并创建虚拟环境
 
 uv sync
-```
+`
+
 ## 使用 conda
-```bash
+
+`bash
 conda create -n pdftomd python=3.9
 conda activate pdftomd
 
@@ -52,10 +56,11 @@ cd PDFtoMD
 # 安装依赖
 
 pip install -e.
-```
+`
+
 ## 使用指南
 
-```bash
+`bash
 
 # 设置OpenAI API密钥
 
@@ -76,16 +81,16 @@ python main.py < input.pdf > output.md
 # 图片转换Markdown
 
 python main.py < input_image.png > output.md
-```
+`
 
 ## 高级用法
 
-```bash
+`bash
 
 # 转换指定页码范围（限PDF）
 
 python main.py 起始页码 结束页码 < input.pdf > output.md
-```
+`
 
 ## 使用方法
 
@@ -99,7 +104,7 @@ python main.py 起始页码 结束页码 < input.pdf > output.md
 
 #### 安装开发依赖
 
-```bash
+`bash
 
 # 如果使用 uv
 
@@ -108,11 +113,11 @@ uv sync --group dev
 # 如果使用 pip
 
 pip install -e ".[dev]"
-```
+`
 
 #### 设置 pre-commit 钩子
 
-```bash
+`bash
 
 # 安装 pre-commit 钩子
 
@@ -121,11 +126,11 @@ pre-commit install
 # 在所有文件上运行 pre-commit（可选）
 
 pre-commit run --all-files
-```
+`
 
 #### 代码格式化和检查
 
-```bash
+`bash
 
 # 使用 ruff 格式化代码
 
@@ -138,7 +143,7 @@ ruff check
 # 修复可自动修复的问题
 
 ruff check --fix
-```
+`
 
 ## 依赖环境
 
@@ -177,4 +182,4 @@ ruff check --fix
 ## 致谢
 
 - 感谢多模态AI模型的技术支持
-- 受PDF转Markdown工具需求启发而开发
+- 受PDF转Markdown工具需求启发而开发\n

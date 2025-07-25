@@ -18,6 +18,7 @@ Version: 1.0
 """
 
 import os
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -120,9 +121,109 @@ class WorkspaceLinter:
         return False
 
     def fix_markdown_file(self, file_path: Path) -> dict:
-        """Fix common markdown issues"""
-        # Use basic markdown fixes since advanced linter may not be available
-        return self._apply_basic_markdown_fixes(file_path)
+        """Fix common markdown issues with Mermaid diagram protection"""
+        try:
+            # First try to use the comprehensive markdown linter
+            sys.path.insert(0, str(self.root_dir.parent.parent / "src"))
+            from utils.linting.markdown_linter import MarkdownLinter
+
+            markdown_linter = MarkdownLinter()
+            # Disable code block cleanup to protect Mermaid
+            markdown_linter.rules["code_block_cleanup"] = False
+
+            result = markdown_linter.lint_file(str(file_path), backup=False)
+            if "error" not in result:
+                fixes_count = len(result.get("fixes", []))
+                return {
+                    "success": True,
+                    "fixes": fixes_count,
+                    "fixes_list": result.get("fixes", []),
+                    "size_reduction": result.get("size_before", 0)
+                    - result.get("size_after", 0),
+                }
+        except ImportError:
+            pass
+
+        # Fallback to basic fixes with Mermaid protection
+        return self._apply_basic_markdown_fixes_with_mermaid_protection(file_path)
+
+    def _apply_basic_markdown_fixes_with_mermaid_protection(
+        self, file_path: Path
+    ) -> dict:
+        """Apply basic markdown fixes with Mermaid diagram protection"""
+        fixes = []
+
+        try:
+            with open(file_path, encoding="utf-8") as f:
+                content = f.read()
+
+            original_content = content
+
+            # Protect Mermaid diagrams by temporarily replacing them
+            mermaid_blocks = []
+            mermaid_pattern = r"```mermaid\n(.*?)\n```"
+
+            def preserve_mermaid(match):
+                mermaid_blocks.append(match.group(0))
+                return f"__MERMAID_PLACEHOLDER_{len(mermaid_blocks) - 1}__"
+
+            content = re.sub(
+                mermaid_pattern, preserve_mermaid, content, flags=re.DOTALL
+            )
+
+            # Apply basic markdown fixes
+            lines = content.split("\n")
+            fixed_lines = []
+
+            for i, line in enumerate(lines):
+                original_line = line
+
+                # Remove trailing whitespace
+                line = line.rstrip()
+                if original_line != line:
+                    fixes.append(f"Line {i + 1}: Removed trailing whitespace")
+
+                # Fix excessive blank lines (max 2 consecutive)
+                if i > 0 and not line.strip() and not lines[i - 1].strip():
+                    if (
+                        len(fixed_lines) > 1
+                        and not fixed_lines[-1].strip()
+                        and not fixed_lines[-2].strip()
+                    ):
+                        fixes.append(f"Line {i + 1}: Removed excessive blank line")
+                        continue
+
+                fixed_lines.append(line)
+
+            # Ensure file ends with single newline
+            if fixed_lines and fixed_lines[-1].strip():
+                fixed_lines.append("")
+                fixes.append("Added final newline")
+
+            new_content = "\n".join(fixed_lines)
+
+            # Restore Mermaid diagrams
+            for i, mermaid_block in enumerate(mermaid_blocks):
+                new_content = new_content.replace(
+                    f"__MERMAID_PLACEHOLDER_{i}__", mermaid_block
+                )
+
+            # Only write if changes were made
+            if new_content != original_content:
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(new_content)
+
+                if fixes:
+                    self.stats["files_with_fixes"] += 1
+                    self.stats["total_fixes"] += len(fixes)
+
+            return {"success": True, "fixes": len(fixes), "fixes_list": fixes}
+
+        except (OSError, UnicodeError) as e:
+            self.stats["errors"].append(
+                f"Error processing markdown file {file_path}: {str(e)}"
+            )
+            return {"success": False, "error": str(e)}
 
     def _apply_basic_markdown_fixes(self, file_path: Path) -> dict:
         """Apply basic markdown fixes without external linter"""
@@ -183,6 +284,144 @@ class WorkspaceLinter:
             return {"success": False, "error": str(e)}
 
     def fix_python_file(self, file_path: Path) -> dict:
+        """Fix Python formatting issues using ruff + basic cleanup"""
+        fixes = []
+        backup_created = None
+
+        try:
+            with open(file_path, encoding="utf-8") as f:
+                content = f.read()
+
+            original_content = content
+
+            # Try to use ruff for comprehensive Python fixing
+            ruff_fixes = self._apply_ruff_fixes(file_path)
+            if ruff_fixes["success"]:
+                fixes.extend(ruff_fixes["fixes_list"])
+
+                # Re-read content after ruff fixes
+                with open(file_path, encoding="utf-8") as f:
+                    content = f.read()
+
+            # Apply additional basic fixes
+            basic_fixes = self._apply_basic_python_fixes(content)
+            content = basic_fixes["content"]
+            fixes.extend(basic_fixes["fixes_list"])
+
+            # Only create backup and write if changes were made
+            if content != original_content:
+                # Create backup
+                backup_path = file_path.with_suffix(file_path.suffix + ".backup")
+                shutil.copy2(file_path, backup_path)
+                backup_created = str(backup_path)
+
+                # Write fixed content
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+
+                if fixes:
+                    self.stats["files_with_fixes"] += 1
+                    self.stats["total_fixes"] += len(fixes)
+
+                return {
+                    "success": True,
+                    "fixes": len(fixes),
+                    "fixes_list": fixes,
+                    "backup_created": backup_created,
+                }
+            else:
+                return {"success": True, "fixes": 0, "fixes_list": []}
+
+        except (OSError, UnicodeError) as e:
+            self.stats["errors"].append(
+                f"Error processing Python file {file_path}: {str(e)}"
+            )
+            return {"success": False, "error": str(e)}
+
+    def _apply_ruff_fixes(self, file_path: Path) -> dict:
+        """Apply ruff formatting and linting fixes"""
+        import subprocess
+
+        fixes = []
+
+        try:
+            # Try ruff format first
+            result = subprocess.run(
+                ["ruff", "format", str(file_path)], capture_output=True, text=True
+            )
+            if result.returncode == 0:
+                fixes.append("Applied ruff formatting")
+
+            # Try ruff check --fix
+            result = subprocess.run(
+                ["ruff", "check", "--fix", str(file_path)],
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                fixes.append("Applied ruff linting fixes")
+
+            return {"success": True, "fixes_list": fixes}
+
+        except FileNotFoundError:
+            # Ruff not available
+            return {"success": False, "fixes_list": []}
+        except subprocess.SubprocessError:
+            return {"success": False, "fixes_list": []}
+
+    def _apply_basic_python_fixes(self, content: str) -> dict:
+        """Apply basic Python formatting fixes"""
+        fixes = []
+        original_content = content
+
+        # Fix common Python issues
+        lines = content.split("\n")
+        fixed_lines = []
+
+        for i, line in enumerate(lines):
+            original_line = line
+
+            # Remove trailing whitespace
+            line = line.rstrip()
+            if original_line != line:
+                fixes.append(f"Line {i + 1}: Removed trailing whitespace")
+
+            # Fix excessive blank lines (max 2 consecutive)
+            if i > 0 and not line.strip() and not lines[i - 1].strip():
+                # Skip this blank line if previous was also blank
+                if (
+                    len(fixed_lines) > 1
+                    and not fixed_lines[-1].strip()
+                    and not fixed_lines[-2].strip()
+                ):
+                    fixes.append(f"Line {i + 1}: Removed excessive blank line")
+                    continue
+
+            fixed_lines.append(line)
+
+        # Ensure file ends with single newline
+        if fixed_lines and fixed_lines[-1].strip():
+            fixed_lines.append("")
+            fixes.append("Added final newline")
+        elif (
+            len(fixed_lines) > 1
+            and not fixed_lines[-1].strip()
+            and not fixed_lines[-2].strip()
+        ):
+            # Remove extra blank lines at end
+            while (
+                len(fixed_lines) > 1
+                and not fixed_lines[-1].strip()
+                and not fixed_lines[-2].strip()
+            ):
+                fixed_lines.pop()
+                fixes.append("Removed excessive blank lines at end")
+
+        new_content = "\n".join(fixed_lines)
+
+        return {"content": new_content, "fixes_list": fixes}
+
+    def _original_fix_python_file(self, file_path: Path) -> dict:
         """Fix common Python formatting issues"""
         fixes = []
 

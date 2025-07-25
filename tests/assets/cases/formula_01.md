@@ -32,4 +32,4 @@ To use the evaluator to score each candidate solution, we formulate the scoring 
 
 $p_{cls}("correct"|\tilde{X}, P) = p_M("correct"|T(P, \tilde{X}))$, (5)
 
-¹We note that the tokenizer we used tokenizes the words "correct" and "incorrect" both into a single token.
+¹We note that the tokenizer we used tokenizes the words "correct" and "incorrect" both into a single token.\n

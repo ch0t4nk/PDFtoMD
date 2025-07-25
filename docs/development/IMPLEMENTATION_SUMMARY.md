@@ -32,13 +32,13 @@
 
 ## 📊 **Proven Results**
 
-```
+`
 Real Test Data (4 PDF files, 189 pages):
 ├── Before Linting: 453KB total file size
 ├── After Linting: 277KB total file size
 ├── Savings: 177KB (39% reduction)
 └── API Cost: $0.00 (local processing)
-```
+`
 
 ## 🎯 **Key Benefits**
 
@@ -57,4 +57,4 @@ The system is now production-ready with:
 - Automatic maintenance and cleanup
 - Comprehensive documentation updates
 
-All features committed to git with version 2.1.0 changelog! 🎉
+All features committed to git with version 2.1.0 changelog! 🎉\n

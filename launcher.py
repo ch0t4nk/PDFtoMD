@@ -5,8 +5,9 @@ Usage: python launcher.py [tool] [args...]
 
 Available tools:
   auto-batch    - Main batch processing script
-  workspace-lint - Lint and fix workspace files
-  quick-lint    - Quick linting utility
+  workspace-lint - Basic workspace linting and fixing
+  enhanced-lint - Advanced workspace linting with ruff + Mermaid protection
+  quick-lint    - Quick markdown linting utility
   cleanup-temp  - Cleanup temporary files and directories
   combine-pages - Combine PDF pages utility
   convert-single - Single file conversion tool
@@ -25,6 +26,7 @@ ROOT_DIR = Path(__file__).parent
 TOOLS = {
     "auto-batch": "src/batch/auto_batch.py",
     "workspace-lint": "src/scripts/workspace_lint.py",
+    "enhanced-lint": "src/scripts/enhanced_workspace_lint.py",
     "quick-lint": "src/scripts/quick_lint.py",
     "cleanup-temp": "cleanup.py",
     "combine-pages": "tools/conversion/combine_pages.py",

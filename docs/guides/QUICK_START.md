@@ -1,4 +1,5 @@
 # 🚀 Quick Start Guide - Auto Batch Processing
+
 ```mermaid
 sequenceDiagram
  participant U as User
@@ -26,12 +27,14 @@ sequenceDiagram
 | 2 | Edit `.env` file | Add API key: `OPENAI_API_KEY="sk-..."` |
 | 3 | `python config.py` | Test configuration |
 | 4 | `python src/batch/auto_batch.py` | Start processing! |
+| Alt | `python launcher.py auto-batch` | Alternative using launcher |
 
 - *🎉 Result:** 50% cost savings, automated monitoring, organized outputs in timestamped folders.
 
 - --
 
 ## What Happens Automatically
+
 ```mermaid
 flowchart TD
  A[Scan for PDFs] --> B[Estimate Costs]
@@ -56,7 +59,7 @@ flowchart TD
  style L fill:#F0E68C
 ```
 
-**🤖 AUTO BATCH PROCESSING WORKFLOW**
+- *🤖 AUTO BATCH PROCESSING WORKFLOW**
 1. 🔍 **Scan for PDFs** - Finds all.pdf files in input folder
 2. 📊 **Estimate costs** - Shows cost breakdown before processing
 3. 🚀 **Submit to OpenAI Batch API** - 50% cheaper than standard API
@@ -67,7 +70,8 @@ flowchart TD
 8. 🧹 **Cleanup** - Removes temporary files automatically
 
 ## Example Run
-```bash
+
+`bash
 $ python auto_batch.py
 🚀 AUTOMATED BATCH PDF PROCESSING
 📁 Input Folder: pdfs
@@ -103,9 +107,10 @@ $ python auto_batch.py
 
 🎉 PROCESSING COMPLETE!
 📁 Results: converted_markdown\session_20250715_202045
-```
+`
 
 ## Cost Savings Comparison
+
 ```mermaid
 xychart-beta
  title "Cost Comparison: Standard API vs Batch API"
@@ -126,6 +131,7 @@ xychart-beta
 > 💡 **Pro Tip:** The more documents you process, the more you save!
 
 ## Output Structure
+
 ```mermaid
 graph TD
  A[outputs/] --> B[converted/]
@@ -149,8 +155,8 @@ graph TD
  style H fill:#F0F8E6
 ```
 
-**🗂️ Organized File Structure:**
-```
+- *🗂️ Organized File Structure:**
+`
 outputs/
 ├── converted/
 │ └── session_20250716_202045/
@@ -162,11 +168,13 @@ outputs/
 ├── metadata/
 │ └── 20250716_summary.json # Daily processing summary
 └── temp/ # Automatically cleaned up
-```
+`
+
 ## Configuration (Optional)
 
 All settings are managed through the SSOT configuration system in `config.py`:
-```python
+`python
+
 # Configuration is automatically loaded from.env
 
 # To customize, edit.env file:
@@ -192,7 +200,8 @@ MAX_TOKENS=8192
 
 COST_WARNING_THRESHOLD=1.0
 COST_ALERT_THRESHOLD=5.0
-```
+`
+
 ## Troubleshooting
 
 | Problem | Solution |
@@ -213,4 +222,4 @@ COST_ALERT_THRESHOLD=5.0
 
 - --
 
-- *Happy batch processing!** 🚀 For questions, see the [main README](../../README.md) or [detailed guide](AUTO_BATCH_GUIDE.md).
+- *Happy batch processing!** 🚀 For questions, see the [main README](../../README.md) or [detailed guide](AUTO_BATCH_GUIDE.md).\n
