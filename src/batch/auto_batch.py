@@ -44,7 +44,7 @@ except ImportError:
 class AutoBatchProcessor:
     """Automated batch PDF processing with SSOT configuration compliance."""
 
-    def __init__(self, pdf_folder=None, output_folder=None, enable_linting=True):
+    def __init__(self, pdf_folder=None, output_folder=None, enable_linting=True, prompt_type="batch"):
         self.pdf_folder = (
             Path(pdf_folder) if pdf_folder else Path(str(config.DEFAULT_PDF_FOLDER))
         )
@@ -55,8 +55,9 @@ class AutoBatchProcessor:
         )
         self.enable_linting = enable_linting
         self.master = PDFBatchMaster()
-        self.converter = BatchPDFConverter()
+        self.converter = BatchPDFConverter(prompt_type=prompt_type)
         self.session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.prompt_type = prompt_type
 
     def print_banner(self, message, symbol="="):
         """Print formatted banner"""
@@ -177,7 +178,9 @@ class AutoBatchProcessor:
             check_count += 1
             elapsed = time.time() - start_time
 
-            print(f"⏰ [{time.strftime('%H:%M:%S')}] Check #{check_count} - {elapsed / 60:.1f}m elapsed")
+            print(
+                f"⏰ [{time.strftime('%H:%M:%S')}] Check #{check_count} - {elapsed / 60:.1f}m elapsed"
+            )
 
             # Use the batch_api to check status (handles chunked batches automatically)
             status_result = self.converter.check_batch_status(batch_id)
@@ -198,7 +201,9 @@ class AutoBatchProcessor:
 
                 if total_requests > 0:
                     progress_pct = (completed_requests / total_requests) * 100
-                    print(f"   📊 Progress: {completed_requests}/{total_requests} requests ({progress_pct:.1f}%)")
+                    print(
+                        f"   📊 Progress: {completed_requests}/{total_requests} requests ({progress_pct:.1f}%)"
+                    )
                     print(f"   📦 Chunks: {completed_chunks}/{total_chunks} completed")
 
                 if all_completed:
@@ -208,10 +213,16 @@ class AutoBatchProcessor:
                     print("❌ All chunks failed!")
                     return False
                 elif any_failed and completed_chunks > 0:
-                    print(f"⚠️  Some chunks failed, but {completed_chunks}/{total_chunks} completed successfully")
-                    print(f"   📊 Partial success: {completed_requests}/{total_requests} requests completed ({(completed_requests/total_requests)*100:.1f}%)")
+                    print(
+                        f"⚠️  Some chunks failed, but {completed_chunks}/{total_chunks} completed successfully"
+                    )
+                    print(
+                        f"   📊 Partial success: {completed_requests}/{total_requests} requests completed ({(completed_requests / total_requests) * 100:.1f}%)"
+                    )
                     # If we have significant completion, consider it a partial success
-                    if completed_requests > total_requests * 0.5:  # More than 50% completed
+                    if (
+                        completed_requests > total_requests * 0.5
+                    ):  # More than 50% completed
                         print("✅ Continuing with partial results (>50% completion)")
                         return True
                     else:
@@ -225,15 +236,17 @@ class AutoBatchProcessor:
             else:
                 # Single batch (batch object from OpenAI API)
                 try:
-                    if hasattr(status_result, 'status'):
+                    if hasattr(status_result, "status"):
                         status = status_result.status
                         request_counts = status_result.request_counts
 
                         if request_counts:
-                            completed = getattr(request_counts, 'completed', 0) or 0
-                            total = getattr(request_counts, 'total', 0) or 0
+                            completed = getattr(request_counts, "completed", 0) or 0
+                            total = getattr(request_counts, "total", 0) or 0
                             progress_pct = (completed / total * 100) if total > 0 else 0
-                            print(f"   📊 Status: {status} ({completed}/{total} - {progress_pct:.1f}%)")
+                            print(
+                                f"   📊 Status: {status} ({completed}/{total} - {progress_pct:.1f}%)"
+                            )
                         else:
                             print(f"   📊 Status: {status}")
 
@@ -520,7 +533,7 @@ class AutoBatchProcessor:
         # Also clean up temp directory contents and stray page images
         temp_cleanup_patterns = [
             "temp/workspace/*",
-            "temp/output/*", 
+            "temp/output/*",
             "temp/temp_batch",
             "page_*.jpg",  # Page images that may have been created in root (legacy issue)
             "*.jpg",  # Individual page images in root (legacy issue)
@@ -548,7 +561,7 @@ class AutoBatchProcessor:
                         pass
             else:
                 item = Path(pattern)
-                if item.exists() and not "session_" in item.name:
+                if item.exists() and "session_" not in item.name:
                     try:
                         if item.is_dir():
                             shutil.rmtree(item)
@@ -601,7 +614,9 @@ class AutoBatchProcessor:
             # Step 4: Submit batch
             batch_id = self.submit_batch()
             if batch_id is None:
-                raise RuntimeError("Batch submission failed - check OpenAI account status")
+                raise RuntimeError(
+                    "Batch submission failed - check OpenAI account status"
+                )
 
             # Step 5: Monitor batch
             if not self.monitor_batch(batch_id):
@@ -691,6 +706,12 @@ Safety:
         action="store_true",
         help="Skip metadata enhancement (embedded headers and summaries)",
     )
+    parser.add_argument(
+        "--prompt-type",
+        choices=["batch", "mermaid"],
+        default="batch",
+        help="Type of prompts to use: 'batch' for standard processing or 'mermaid' for enhanced diagrams (default: batch)",
+    )
 
     # Parse arguments
     args = parser.parse_args()
@@ -701,6 +722,7 @@ Safety:
     print(f"📁 Output Folder: {args.output_folder}")
     print(f"🔧 Linting: {'Disabled' if args.no_lint else 'Enabled'}")
     print(f"📊 Metadata: {'Disabled' if args.no_metadata else 'Enabled'}")
+    print(f"🎨 Prompt Type: {args.prompt_type.upper()}")
     print()
 
     print("This script will:")
@@ -723,6 +745,7 @@ Safety:
         pdf_folder=args.pdf_folder,
         output_folder=args.output_folder,
         enable_linting=not args.no_lint,
+        prompt_type=args.prompt_type,
     )
     success = processor.run_full_automation()
 
