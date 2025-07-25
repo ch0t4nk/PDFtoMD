@@ -42,6 +42,54 @@ if config_path.exists():
 else:
     raise ImportError("Config file not found")
 
+# Import centralized prompts
+prompts_path = root_dir / "prompts" / "batch_prompts.py"
+if prompts_path.exists():
+    spec = importlib.util.spec_from_file_location("batch_prompts", prompts_path)
+    if spec and spec.loader:
+        prompts_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(prompts_module)
+        BATCH_SYSTEM_PROMPT = prompts_module.BATCH_SYSTEM_PROMPT
+        BATCH_USER_PROMPT = prompts_module.BATCH_USER_PROMPT
+        BATCH_TEMPERATURE = prompts_module.BATCH_TEMPERATURE
+        BATCH_MAX_TOKENS = prompts_module.BATCH_MAX_TOKENS
+    else:
+        # Fallback to embedded prompts if import fails
+        BATCH_SYSTEM_PROMPT = """You are an expert document conversion assistant. Convert this document page to clean, professional Markdown format. Focus on accurate text extraction and proper structure while maintaining readability."""
+        BATCH_USER_PROMPT = """Convert this document page to Markdown format with these specific requirements:
+
+1. **Text Extraction**: Extract ALL text accurately, including headers, body text, captions, and technical specifications
+2. **Structure**: Use proper Markdown heading hierarchy (# ## ### etc.) based on document structure
+3. **Tables**: Convert tables to proper Markdown table format with | separators
+4. **Technical Content**: Preserve technical symbols, formulas, part numbers, and specifications exactly
+5. **Code/Commands**: Use proper code blocks for any code examples or commands
+6. **Lists**: Convert bulleted and numbered lists to proper Markdown list format
+7. **No Image References**: DO NOT include any ![](filename.png) image references
+8. **Describe Visuals**: Describe diagrams, schematics, and images in plain text
+9. **Clean Output**: Output ONLY the Markdown content, no code block wrappers, no "```markdown"
+
+Focus on creating clean, professional documentation that preserves all information from the original page."""
+        BATCH_TEMPERATURE = 0.05
+        BATCH_MAX_TOKENS = 8192
+else:
+    # Fallback to embedded prompts
+    BATCH_SYSTEM_PROMPT = """You are an expert document conversion assistant. Convert this document page to clean, professional Markdown format. Focus on accurate text extraction and proper structure while maintaining readability."""
+    BATCH_USER_PROMPT = """Convert this document page to Markdown format with these specific requirements:
+
+1. **Text Extraction**: Extract ALL text accurately, including headers, body text, captions, and technical specifications
+2. **Structure**: Use proper Markdown heading hierarchy (# ## ### etc.) based on document structure
+3. **Tables**: Convert tables to proper Markdown table format with | separators
+4. **Technical Content**: Preserve technical symbols, formulas, part numbers, and specifications exactly
+5. **Code/Commands**: Use proper code blocks for any code examples or commands
+6. **Lists**: Convert bulleted and numbered lists to proper Markdown list format
+7. **No Image References**: DO NOT include any ![](filename.png) image references
+8. **Describe Visuals**: Describe diagrams, schematics, and images in plain text
+9. **Clean Output**: Output ONLY the Markdown content, no code block wrappers, no "```markdown"
+
+Focus on creating clean, professional documentation that preserves all information from the original page."""
+    BATCH_TEMPERATURE = 0.05
+    BATCH_MAX_TOKENS = 8192
+
 
 class BatchPDFConverter:
     def __init__(self):
@@ -57,10 +105,15 @@ class BatchPDFConverter:
 
     def extract_pdf_pages(self, pdf_path):
         """Extract pages from PDF as images"""
-        # Import the core modules from converted directory
+        # Import the core modules from src/core directory
         import sys
+        from pathlib import Path
 
-        sys.path.append(str(config.DEFAULT_CONVERTED_FOLDER))
+        # Add the src directory to path to access core modules
+        src_dir = Path(__file__).parent.parent  # Go up to src/
+        if str(src_dir) not in sys.path:
+            sys.path.insert(0, str(src_dir))
+        
         from core.PDFWorker import PDFWorker
 
         # Create temporary directory for this PDF
@@ -71,16 +124,10 @@ class BatchPDFConverter:
         # Extract PDF pages
         worker = PDFWorker(pdf_path, 1, 0)  # All pages
 
-        # Convert PDF to images
-        original_output_dir = worker.output_dir
-        worker.output_dir = str(temp_dir)  # Set temp directory as output
-
+        # Convert PDF to images in temp directory
         page_images = worker.convert_to_images(
-            dpi=200, fmt="jpg"
+            output_dir=str(temp_dir), dpi=200, fmt="jpg"
         )  # Lower DPI for faster processing
-
-        # Restore original output directory
-        worker.output_dir = original_output_dir
 
         # Create page mapping
         page_list = []
@@ -93,22 +140,6 @@ class BatchPDFConverter:
         """Create batch requests for all PDF pages"""
         batch_requests = []
         file_mapping = {}  # Maps custom_id to (pdf_name, page_num)
-
-        system_prompt = """You are an expert document conversion assistant. Convert this document page to clean, professional Markdown format. Focus on accurate text extraction and proper structure while maintaining readability."""
-
-        user_prompt = """Convert this document page to Markdown format with these specific requirements:
-
-1. **Text Extraction**: Extract ALL text accurately, including headers, body text, captions, and technical specifications
-2. **Structure**: Use proper Markdown heading hierarchy (# ## ### etc.) based on document structure
-3. **Tables**: Convert tables to proper Markdown table format with | separators
-4. **Technical Content**: Preserve technical symbols, formulas, part numbers, and specifications exactly
-5. **Code/Commands**: Use proper code blocks for any code examples or commands
-6. **Lists**: Convert bulleted and numbered lists to proper Markdown list format
-7. **No Image References**: DO NOT include any ![](filename.png) image references
-8. **Describe Visuals**: Describe diagrams, schematics, and images in plain text
-9. **Clean Output**: Output ONLY the Markdown content, no code block wrappers, no "```markdown"
-
-Focus on creating clean, professional documentation that preserves all information from the original page."""
 
         for pdf_file in pdf_files:
             pdf_path = Path(str(config.DEFAULT_PDF_FOLDER)) / pdf_file
@@ -131,7 +162,7 @@ Focus on creating clean, professional documentation that preserves all informati
                     # Encode image
                     base64_image = self.encode_image(image_path)
 
-                    # Create batch request
+                    # Create batch request using centralized prompts
                     request = {
                         "custom_id": custom_id,
                         "method": "POST",
@@ -139,11 +170,11 @@ Focus on creating clean, professional documentation that preserves all informati
                         "body": {
                             "model": self.model,
                             "messages": [
-                                {"role": "system", "content": system_prompt},
+                                {"role": "system", "content": BATCH_SYSTEM_PROMPT},
                                 {
                                     "role": "user",
                                     "content": [
-                                        {"type": "text", "text": user_prompt},
+                                        {"type": "text", "text": BATCH_USER_PROMPT},
                                         {
                                             "type": "image_url",
                                             "image_url": {
@@ -153,8 +184,8 @@ Focus on creating clean, professional documentation that preserves all informati
                                     ],
                                 },
                             ],
-                            "temperature": 0.05,  # Very low for consistency
-                            "max_tokens": 8192,  # Higher for complete conversion
+                            "temperature": BATCH_TEMPERATURE,
+                            "max_tokens": BATCH_MAX_TOKENS,
                         },
                     }
                     batch_requests.append(request)
@@ -166,7 +197,12 @@ Focus on creating clean, professional documentation that preserves all informati
         return batch_requests, file_mapping
 
     def submit_batch(self, requests, file_mapping):
-        """Submit batch to OpenAI"""
+        """Submit single batch to OpenAI Batch API for 50% cost savings"""
+        # Always submit as single batch to get OpenAI Batch API 50% discount
+        return self._submit_single_batch(requests, file_mapping)
+    
+    def _submit_single_batch(self, requests, file_mapping):
+        """Submit a single batch (original logic)"""
         # Create JSONL file
         batch_file = f"batch_requests_{int(time.time())}.jsonl"
 
@@ -199,6 +235,7 @@ Focus on creating clean, professional documentation that preserves all informati
             "file_mapping": file_mapping,
             "batch_file": batch_file,
             "submitted_at": time.time(),
+            "is_chunked": False
         }
 
         # Save batch info to temp directory instead of root
@@ -213,9 +250,116 @@ Focus on creating clean, professional documentation that preserves all informati
         os.remove(batch_file)
 
         return batch.id
+    
+    def _submit_chunked_batches(self, requests, file_mapping, chunk_size):
+        """Submit multiple smaller batches sequentially to avoid token queue limits"""
+        total_requests = len(requests)
+        num_chunks = (total_requests + chunk_size - 1) // chunk_size  # Ceiling division
+        
+        print(f"🔄 Large batch detected! Splitting {total_requests} requests into {num_chunks} chunks of ~{chunk_size} each...")
+        print(f"⚠️  Sequential submission mode enabled to avoid token queue limits")
+        
+        batch_ids = []
+        chunk_mappings = []
+        
+        # Submit chunks one at a time with monitoring
+        for chunk_idx in range(num_chunks):
+            start_idx = chunk_idx * chunk_size
+            end_idx = min(start_idx + chunk_size, total_requests)
+            chunk_requests = requests[start_idx:end_idx]
+            
+            # Create file mapping for this chunk
+            chunk_file_mapping = {}
+            for request in chunk_requests:
+                custom_id = request["custom_id"]
+                if custom_id in file_mapping:
+                    chunk_file_mapping[custom_id] = file_mapping[custom_id]
+            
+            print(f"📤 Submitting chunk {chunk_idx + 1}/{num_chunks} ({len(chunk_requests)} requests)...")
+            
+            # Submit this chunk
+            try:
+                chunk_batch_id = self._submit_single_batch(chunk_requests, chunk_file_mapping)
+                batch_ids.append(chunk_batch_id)
+                chunk_mappings.append(chunk_file_mapping)
+                
+                # If not the last chunk, wait for this chunk to start processing
+                # to avoid overwhelming the token queue
+                if chunk_idx < num_chunks - 1:
+                    print(f"⏳ Waiting for chunk {chunk_idx + 1} to start processing...")
+                    self._wait_for_chunk_start(chunk_batch_id)
+                    
+            except Exception as e:
+                print(f"❌ Failed to submit chunk {chunk_idx + 1}: {e}")
+                # Continue with remaining chunks
+                continue
+        
+        if not batch_ids:
+            raise RuntimeError("Failed to submit any batch chunks!")
+        
+        # Create master batch info for tracking all chunks
+        master_batch_id = f"chunked_{int(time.time())}"
+        master_batch_info = {
+            "master_batch_id": master_batch_id,
+            "chunk_batch_ids": batch_ids,
+            "total_requests": total_requests,
+            "num_chunks": len(batch_ids),
+            "submitted_at": time.time(),
+            "is_chunked": True,
+            "file_mapping": file_mapping  # Keep full mapping for result reconstruction
+        }
+        
+        # Save master batch info
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        temp_batch_dir.mkdir(parents=True, exist_ok=True)
+        master_batch_file = temp_batch_dir / f"batch_info_{master_batch_id}.json"
+        
+        with open(master_batch_file, "w") as f:
+            json.dump(master_batch_info, f, indent=2)
+        
+        print(f"✅ All chunks submitted successfully!")
+        print(f"📋 Master Batch ID: {master_batch_id}")
+        print(f"🔢 Total Chunks: {len(batch_ids)}")
+        print(f"📊 Individual Batch IDs: {batch_ids}")
+        
+        return master_batch_id
+    
+    def _wait_for_chunk_start(self, batch_id, max_wait_time=120):
+        """Wait for a batch to start processing (move from 'validating' to 'in_progress')"""
+        start_time = time.time()
+        
+        while time.time() - start_time < max_wait_time:
+            try:
+                batch = self.client.batches.retrieve(batch_id)
+                status = batch.status
+                
+                if status in ["in_progress", "completed", "failed"]:
+                    print(f"   ✅ Chunk {batch_id[-8:]} is now {status}")
+                    return True
+                elif status == "validating":
+                    print(f"   ⏳ Chunk {batch_id[-8:]} still validating...")
+                    time.sleep(10)
+                else:
+                    print(f"   ⚠️  Unexpected status: {status}")
+                    time.sleep(5)
+                    
+            except Exception as e:
+                print(f"   ❌ Error checking chunk status: {e}")
+                time.sleep(10)
+        
+        print(f"   ⚠️  Timeout waiting for chunk to start, continuing anyway...")
+        return False
 
     def check_batch_status(self, batch_id):
-        """Check batch processing status"""
+        """Check batch processing status (handles both single and chunked batches)"""
+        # Check if this is a chunked batch
+        if batch_id.startswith("chunked_"):
+            return self._check_chunked_batch_status(batch_id)
+        else:
+            return self._check_single_batch_status(batch_id)
+    
+    def _check_single_batch_status(self, batch_id):
+        """Check status of a single batch"""
         try:
             batch = self.client.batches.retrieve(batch_id)
             print(f"📋 Batch ID: {batch_id}")
@@ -233,9 +377,120 @@ Focus on creating clean, professional documentation that preserves all informati
         except (RuntimeError, ValueError, KeyError) as e:
             print(f"❌ Error checking batch: {e}")
             return None
+    
+    def _check_chunked_batch_status(self, master_batch_id):
+        """Check status of all chunks in a chunked batch"""
+        # Load master batch info
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        master_batch_file = temp_batch_dir / f"batch_info_{master_batch_id}.json"
+        
+        if not master_batch_file.exists():
+            print(f"❌ Master batch info not found: {master_batch_id}")
+            return None
+        
+        try:
+            with open(master_batch_file) as f:
+                master_info = json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"❌ Error loading master batch info: {e}")
+            return None
+        
+        chunk_batch_ids = master_info.get("chunk_batch_ids", [])
+        master_total_requests = master_info.get("total_requests", 0)  # Get total from master info
+        
+        if not chunk_batch_ids:
+            print(f"❌ No chunk batch IDs found in master batch")
+            return None
+        
+        print(f"📋 Master Batch ID: {master_batch_id}")
+        print(f"🔢 Total Chunks: {len(chunk_batch_ids)}")
+        print(f"📊 Total Requests: {master_total_requests}")
+        print(f"📊 Checking status of all chunks...")
+        
+        completed_chunks = 0
+        failed_chunks = 0
+        in_progress_chunks = 0
+        total_completed_requests = 0
+        
+        chunk_statuses = []
+        
+        for i, chunk_id in enumerate(chunk_batch_ids, 1):
+            try:
+                batch = self.client.batches.retrieve(chunk_id)
+                status = batch.status
+                request_counts = batch.request_counts
+                
+                if request_counts and hasattr(request_counts, 'completed'):
+                    completed = getattr(request_counts, 'completed', 0) or 0
+                    # For failed batches with 0/0, we can't get the original total from API
+                    # We'll estimate based on chunk position and master total
+                    if status == "failed" and completed == 0:
+                        # Don't add failed requests to total_completed_requests
+                        pass
+                    else:
+                        total_completed_requests += completed
+                else:
+                    completed = 0
+                
+                print(f"   📦 Chunk {i}/{len(chunk_batch_ids)}: {status} ({completed} completed)")
+                
+                if status == "completed":
+                    completed_chunks += 1
+                elif status == "failed":
+                    failed_chunks += 1
+                else:
+                    in_progress_chunks += 1
+                
+                chunk_statuses.append({
+                    "chunk_id": chunk_id,
+                    "status": status,
+                    "completed": completed,
+                    "total": 0  # We'll use master_total_requests for overall progress
+                })
+                
+            except Exception as e:
+                print(f"   ❌ Chunk {i}: Error checking status - {e}")
+                failed_chunks += 1
+                chunk_statuses.append({
+                    "chunk_id": chunk_id,
+                    "status": "error",
+                    "completed": 0,
+                    "total": 0
+                })
+        
+        # Summary
+        print(f"\n📊 Overall Status:")
+        print(f"   ✅ Completed chunks: {completed_chunks}/{len(chunk_batch_ids)}")
+        print(f"   🔄 In progress chunks: {in_progress_chunks}/{len(chunk_batch_ids)}")
+        print(f"   ❌ Failed chunks: {failed_chunks}/{len(chunk_batch_ids)}")
+        print(f"   📄 Total requests: {total_completed_requests}/{master_total_requests}")
+        
+        if master_total_requests > 0:
+            progress_pct = (total_completed_requests / master_total_requests) * 100
+            print(f"   📈 Overall progress: {progress_pct:.1f}%")
+        
+        # Return a summary object
+        return {
+            "master_batch_id": master_batch_id,
+            "chunk_statuses": chunk_statuses,
+            "completed_chunks": completed_chunks,
+            "total_chunks": len(chunk_batch_ids),
+            "completed_requests": total_completed_requests,
+            "total_requests": master_total_requests,
+            "all_completed": completed_chunks == len(chunk_batch_ids),
+            "any_failed": failed_chunks > 0
+        }
 
     def retrieve_results(self, batch_id):
-        """Retrieve and process batch results"""
+        """Retrieve and process batch results (handles both single and chunked batches)"""
+        # Check if this is a chunked batch
+        if batch_id.startswith("chunked_"):
+            return self._retrieve_chunked_results(batch_id)
+        else:
+            return self._retrieve_single_results(batch_id)
+    
+    def _retrieve_single_results(self, batch_id):
+        """Retrieve results from a single batch (original logic)"""
         # Load batch info from temp directory
         temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
         batch_info_file = temp_batch_dir / f"batch_info_{batch_id}.json"
@@ -493,6 +748,186 @@ Focus on creating clean, professional documentation that preserves all informati
         except (OSError, RuntimeError, ValueError) as e:
             print(f"❌ Error retrieving results: {e}")
             return False
+    
+    def _retrieve_chunked_results(self, master_batch_id):
+        """Retrieve and combine results from all chunks in a chunked batch"""
+        # Load master batch info
+        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+        master_batch_file = temp_batch_dir / f"batch_info_{master_batch_id}.json"
+        
+        if not master_batch_file.exists():
+            print(f"❌ Master batch info not found: {master_batch_id}")
+            return False
+        
+        try:
+            with open(master_batch_file) as f:
+                master_info = json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"❌ Error loading master batch info: {e}")
+            return False
+        
+        chunk_batch_ids = master_info.get("chunk_batch_ids", [])
+        file_mapping = master_info.get("file_mapping", {})
+        
+        if not chunk_batch_ids:
+            print(f"❌ No chunk batch IDs found in master batch")
+            return False
+        
+        print(f"📥 Retrieving results from {len(chunk_batch_ids)} batch chunks...")
+        
+        # Check if all chunks are completed
+        incomplete_chunks = []
+        for i, chunk_id in enumerate(chunk_batch_ids, 1):
+            try:
+                batch = self.client.batches.retrieve(chunk_id)
+                if batch.status != "completed":
+                    incomplete_chunks.append(f"Chunk {i} ({chunk_id}): {batch.status}")
+            except Exception as e:
+                incomplete_chunks.append(f"Chunk {i} ({chunk_id}): Error - {e}")
+        
+        if incomplete_chunks:
+            print(f"❌ Some chunks are not completed yet:")
+            for incomplete in incomplete_chunks:
+                print(f"   {incomplete}")
+            return False
+        
+        # Collect results from all chunks
+        all_results = {}
+        all_usage_stats = {}
+        
+        for i, chunk_id in enumerate(chunk_batch_ids, 1):
+            print(f"📥 Retrieving chunk {i}/{len(chunk_batch_ids)}...")
+            
+            try:
+                batch = self.client.batches.retrieve(chunk_id)
+                result_file_id = batch.output_file_id
+                
+                if not result_file_id:
+                    print(f"⚠️  No output file for chunk {i}, skipping...")
+                    continue
+                
+                result = self.client.files.content(result_file_id)
+                
+                # Parse chunk results
+                for line in result.text.split("\n"):
+                    if line.strip():
+                        try:
+                            result_item = json.loads(line)
+                            custom_id = result_item.get("custom_id")
+                            if custom_id and result_item.get("response"):
+                                content = result_item["response"]["body"]["choices"][0]["message"]["content"]
+                                all_results[custom_id] = content
+                                
+                                # Extract usage statistics
+                                if "usage" in result_item["response"]["body"]:
+                                    usage = result_item["response"]["body"]["usage"]
+                                    all_usage_stats[custom_id] = {
+                                        "prompt_tokens": usage.get("prompt_tokens", 0),
+                                        "completion_tokens": usage.get("completion_tokens", 0),
+                                        "total_tokens": usage.get("total_tokens", 0),
+                                        "input_cost": (usage.get("prompt_tokens", 0) / 1_000_000) * 0.150,
+                                        "output_cost": (usage.get("completion_tokens", 0) / 1_000_000) * 0.600,
+                                        "total_cost": ((usage.get("prompt_tokens", 0) / 1_000_000) * 0.150) + 
+                                                    ((usage.get("completion_tokens", 0) / 1_000_000) * 0.600),
+                                    }
+                        except (json.JSONDecodeError, KeyError, ValueError, IndexError) as e:
+                            print(f"⚠️  Error parsing result line in chunk {i}: {e}")
+                            
+            except Exception as e:
+                print(f"❌ Error retrieving chunk {i}: {e}")
+                continue
+        
+        print(f"✅ Retrieved {len(all_results)} results from all chunks")
+        
+        # Group results by PDF and create final markdown files (same logic as single batch)
+        pdf_contents = {}
+        pdf_usage_stats = {}
+        
+        for custom_id, content in all_results.items():
+            if custom_id in file_mapping:
+                pdf_name, page_num, temp_dir = file_mapping[custom_id]
+                
+                if pdf_name not in pdf_contents:
+                    pdf_contents[pdf_name] = {}
+                    pdf_usage_stats[pdf_name] = {
+                        "total_tokens": 0,
+                        "total_cost": 0.0,
+                        "prompt_tokens": 0,
+                        "completion_tokens": 0,
+                        "page_count": 0,
+                    }
+                
+                pdf_contents[pdf_name][page_num] = content
+                
+                # Accumulate usage stats for this PDF
+                if custom_id in all_usage_stats:
+                    stats = all_usage_stats[custom_id]
+                    pdf_usage_stats[pdf_name]["total_tokens"] += stats["total_tokens"]
+                    pdf_usage_stats[pdf_name]["total_cost"] += stats["total_cost"]
+                    pdf_usage_stats[pdf_name]["prompt_tokens"] += stats["prompt_tokens"]
+                    pdf_usage_stats[pdf_name]["completion_tokens"] += stats["completion_tokens"]
+                    pdf_usage_stats[pdf_name]["page_count"] += 1
+        
+        # Create final markdown files (same as single batch)
+        os.makedirs(str(config.DEFAULT_CONVERTED_FOLDER), exist_ok=True)
+        
+        for pdf_name, pages in pdf_contents.items():
+            output_file = Path(str(config.DEFAULT_CONVERTED_FOLDER)) / f"{pdf_name}_batch.md"
+            usage_data = pdf_usage_stats.get(pdf_name, {})
+            
+            with open(output_file, "w", encoding="utf-8") as f:
+                for page_num in sorted(pages.keys()):
+                    f.write(f"---\n# Page {page_num}\n---\n\n")
+                    f.write(pages[page_num])
+                    f.write("\n\n")
+                
+                # Add comprehensive metadata including usage statistics
+                f.write("---\n\n## Processing Metadata\n\n")
+                f.write(f"- **Document:** {pdf_name}\n")
+                f.write(f"- **Total Pages:** {len(pages)}\n")
+                f.write("- **Processing Method:** OpenAI Batch API (Chunked)\n")
+                f.write(f"- **Model:** {self.model}\n")
+                f.write(f"- **Master Batch ID:** {master_batch_id}\n")
+                f.write(f"- **Chunks:** {len(chunk_batch_ids)}\n")
+                f.write(f"- **Processed:** {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+                
+                # Add usage and cost information (same as single batch)
+                if usage_data and usage_data.get("page_count", 0) > 0:
+                    f.write("### 📊 Processing Statistics\n\n")
+                    f.write(f"- **Total Tokens Used:** {usage_data['total_tokens']:,}\n")
+                    f.write(f"- **Prompt Tokens:** {usage_data['prompt_tokens']:,}\n")
+                    f.write(f"- **Completion Tokens:** {usage_data['completion_tokens']:,}\n")
+                    f.write(f"- **Total Processing Cost:** ${usage_data['total_cost']:.4f}\n")
+                    f.write(f"- **Average Tokens per Page:** {usage_data['total_tokens'] / usage_data['page_count']:.0f}\n")
+                    f.write(f"- **Average Cost per Page:** ${usage_data['total_cost'] / usage_data['page_count']:.4f}\n\n")
+                    
+                    # Cost breakdown
+                    input_cost = (usage_data["prompt_tokens"] / 1_000_000) * 0.150
+                    output_cost = (usage_data["completion_tokens"] / 1_000_000) * 0.600
+                    f.write("### 💰 Cost Breakdown\n\n")
+                    f.write(f"- **Input Processing:** ${input_cost:.4f} (vision + text)\n")
+                    f.write(f"- **Output Generation:** ${output_cost:.4f} (markdown text)\n")
+                    f.write("- **Batch API Discount:** 50% off regular pricing\n")
+                    f.write(f"- **Estimated Regular Cost:** ${usage_data['total_cost'] * 2:.4f}\n\n")
+                    
+                    # Efficiency metrics
+                    tokens_per_dollar = (usage_data["total_tokens"] / usage_data["total_cost"] 
+                                       if usage_data["total_cost"] > 0 else 0)
+                    pages_per_dollar = (usage_data["page_count"] / usage_data["total_cost"] 
+                                      if usage_data["total_cost"] > 0 else 0)
+                    f.write("### ⚡ Efficiency Metrics\n\n")
+                    f.write(f"- **Tokens per Dollar:** {tokens_per_dollar:.0f}\n")
+                    f.write(f"- **Pages per Dollar:** {pages_per_dollar:.1f}\n")
+                    f.write("- **Processing Method:** Chunked Batch API (cost-optimized)\n")
+            
+            print(f"✅ Created: {output_file} ({len(pages)} pages)")
+            
+            # Print individual document stats
+            if usage_data and usage_data.get("page_count", 0) > 0:
+                print(f"   💰 Cost: ${usage_data['total_cost']:.4f} | 🔢 Tokens: {usage_data['total_tokens']:,} | 📄 Avg: ${usage_data['total_cost'] / usage_data['page_count']:.4f}/page")
+        
+        print(f"🎉 Chunked batch processing completed! Generated {len(pdf_contents)} markdown files.")
+        return True
 
 
 def main():

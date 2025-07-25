@@ -108,7 +108,37 @@ class PDFBatchMaster:
             return None
 
     def check_batch_status(self, batch_id):
-        """Check batch status and return parsed info"""
+        """Check batch status and return parsed info (handles both single and chunked batches)"""
+        # Check if this is a chunked batch
+        if batch_id.startswith("chunked_"):
+            # Delegate to batch_api for chunked batch handling
+            try:
+                from src.batch.batch_api import BatchPDFConverter
+                converter = BatchPDFConverter()
+                result = converter.check_batch_status(batch_id)
+                
+                if isinstance(result, dict) and "master_batch_id" in result:
+                    # Convert chunked result to master.py format
+                    return {
+                        "id": batch_id,
+                        "status": "completed" if result.get("all_completed", False) else "failed" if result.get("any_failed", False) else "in_progress",
+                        "completed": result.get("completed_requests", 0),
+                        "failed": 0,  # Individual chunk failures don't map directly
+                        "total": result.get("total_requests", 0),
+                        "created_at": None,
+                        "completed_at": None,
+                        "failed_at": None,
+                        "usage": {},
+                        "chunked": True,
+                        "chunk_details": result
+                    }
+                else:
+                    return None
+            except Exception as e:
+                self.print_status(f"Error checking chunked batch {batch_id}: {e}", "ERROR")
+                return None
+        
+        # Handle regular batch IDs
         try:
             batch = self.client.batches.retrieve(batch_id)
 
@@ -135,6 +165,7 @@ class PDFBatchMaster:
                 "completed_at": batch.completed_at,
                 "failed_at": batch.failed_at,
                 "usage": usage_info,
+                "chunked": False
             }
         except Exception as e:  # pylint: disable=broad-except
             self.print_status(f"Error checking batch {batch_id}: {e}", "ERROR")

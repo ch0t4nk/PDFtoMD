@@ -235,7 +235,7 @@ if __name__ == "__main__":
         exit(1)
 
     # convert to images
-    img_paths = worker.convert_to_images()
+    img_paths = worker.convert_to_images(output_dir=str(output_dir))
     logger.info("Image conversion completed")
 
     # convert to markdown with progress tracking

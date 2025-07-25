@@ -51,7 +51,7 @@ class AutoBatchProcessor:
         self.output_folder = (
             Path(output_folder)
             if output_folder
-            else Path(str(config.DEFAULT_CONVERTED_FOLDER))
+            else Path(str(config.DEFAULT_OUTPUT_FOLDER))
         )
         self.enable_linting = enable_linting
         self.master = PDFBatchMaster()
@@ -161,7 +161,7 @@ class AutoBatchProcessor:
         return batch_id
 
     def monitor_batch(self, batch_id):
-        """Monitor batch until completion"""
+        """Monitor batch until completion (handles both single and chunked batches)"""
         self.print_step(5, f"Monitoring batch {batch_id}")
 
         start_time = time.time()
@@ -169,40 +169,86 @@ class AutoBatchProcessor:
 
         while True:
             check_count += 1
+            elapsed = time.time() - start_time
 
-            # Get batch status using the corrected find_active_batches method
-            batches = self.master.find_active_batches()
-            current_batch = None
+            print(f"⏰ [{time.strftime('%H:%M:%S')}] Check #{check_count} - {elapsed / 60:.1f}m elapsed")
 
-            for batch in batches:
-                if batch["id"] == batch_id:
-                    current_batch = batch
-                    break
+            # Use the batch_api to check status (handles chunked batches automatically)
+            status_result = self.converter.check_batch_status(batch_id)
 
-            if not current_batch:
+            if not status_result:
                 print("❌ Batch not found!")
                 return False
 
-            status = current_batch["status"]
-            completed = current_batch["completed"]
-            total = current_batch["total"]
+            # Handle chunked batch results
+            if isinstance(status_result, dict) and "master_batch_id" in status_result:
+                # Chunked batch
+                completed_requests = status_result.get("completed_requests", 0)
+                total_requests = status_result.get("total_requests", 0)
+                completed_chunks = status_result.get("completed_chunks", 0)
+                total_chunks = status_result.get("total_chunks", 0)
+                all_completed = status_result.get("all_completed", False)
+                any_failed = status_result.get("any_failed", False)
 
-            elapsed = time.time() - start_time
-            progress_pct = (completed / total * 100) if total > 0 else 0
+                if total_requests > 0:
+                    progress_pct = (completed_requests / total_requests) * 100
+                    print(f"   📊 Progress: {completed_requests}/{total_requests} requests ({progress_pct:.1f}%)")
+                    print(f"   📦 Chunks: {completed_chunks}/{total_chunks} completed")
 
-            print(
-                f"   🔄 Check #{check_count}: {status} ({completed}/{total} - {progress_pct:.1f}%) - {elapsed / 60:.1f}m elapsed"
-            )
+                if all_completed:
+                    print(f"✅ All chunks completed in {elapsed / 60:.1f} minutes!")
+                    return True
+                elif any_failed and completed_chunks == 0:
+                    print("❌ All chunks failed!")
+                    return False
+                elif any_failed and completed_chunks > 0:
+                    print(f"⚠️  Some chunks failed, but {completed_chunks}/{total_chunks} completed successfully")
+                    print(f"   📊 Partial success: {completed_requests}/{total_requests} requests completed ({(completed_requests/total_requests)*100:.1f}%)")
+                    # If we have significant completion, consider it a partial success
+                    if completed_requests > total_requests * 0.5:  # More than 50% completed
+                        print("✅ Continuing with partial results (>50% completion)")
+                        return True
+                    else:
+                        print("❌ Too many failures, aborting")
+                        return False
+                else:
+                    # Still processing
+                    time.sleep(30)
+                    continue
 
-            if status == "completed":
-                print(f"✅ Batch completed in {elapsed / 60:.1f} minutes!")
-                return True
-            if status == "failed":
-                print("❌ Batch failed!")
-                return False
             else:
-                # Wait before next check
-                time.sleep(30)
+                # Single batch (batch object from OpenAI API)
+                try:
+                    if hasattr(status_result, 'status'):
+                        status = status_result.status
+                        request_counts = status_result.request_counts
+
+                        if request_counts:
+                            completed = getattr(request_counts, 'completed', 0) or 0
+                            total = getattr(request_counts, 'total', 0) or 0
+                            progress_pct = (completed / total * 100) if total > 0 else 0
+                            print(f"   📊 Status: {status} ({completed}/{total} - {progress_pct:.1f}%)")
+                        else:
+                            print(f"   📊 Status: {status}")
+
+                        if status == "completed":
+                            print(f"✅ Batch completed in {elapsed / 60:.1f} minutes!")
+                            return True
+                        elif status == "failed":
+                            print("❌ Batch failed!")
+                            return False
+                        else:
+                            # Still processing
+                            time.sleep(30)
+                            continue
+                    else:
+                        # Unexpected result type
+                        print(f"❌ Unexpected status result: {status_result}")
+                        return False
+                except AttributeError:
+                    # Handle case where status_result doesn't have expected attributes
+                    print(f"❌ Invalid status result format: {type(status_result)}")
+                    return False
 
     def retrieve_results(self, batch_id):
         """Retrieve and process results"""
@@ -453,28 +499,37 @@ class AutoBatchProcessor:
         print("\n🧹 Cleaning up workspace...")
 
         # Remove temp files but keep pdfs if they were copied
+        # NOTE: Only clean up files in the working directory, NOT the output folder
         cleanup_patterns = [
             "temp_batch",
             "batch_info_*.json",
             "usage_stats_*.json",
-            str(config.DEFAULT_CONVERTED_FOLDER),
         ]
 
-        # Also clean up temp directory contents
+        # Only clean converted folder if it's in the workspace (not the target output)
+        converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
+        if converted_dir.is_relative_to(Path.cwd()):
+            cleanup_patterns.append(str(converted_dir))
+
+        # Also clean up temp directory contents and stray page images
         temp_cleanup_patterns = [
             "temp/workspace/*",
-            "temp/output/*",
+            "temp/output/*", 
             "temp/temp_batch",
-            "page_*.jpg",
-            "*.jpg",  # Individual page images in root
+            "page_*.jpg",  # Page images that may have been created in root (legacy issue)
+            "*.jpg",  # Individual page images in root (legacy issue)
         ]
 
         cleaned = 0
 
-        # Clean up main patterns
+        # Clean up main patterns (only in current working directory)
         for pattern in cleanup_patterns:
             if "*" in pattern:
                 for item in Path(".").glob(pattern):
+                    # Safety check: don't delete session folders
+                    if "session_" in item.name:
+                        print(f"   ⚠️  Skipped session folder: {item.name}")
+                        continue
                     try:
                         if item.is_dir():
                             shutil.rmtree(item)
@@ -487,7 +542,7 @@ class AutoBatchProcessor:
                         pass
             else:
                 item = Path(pattern)
-                if item.exists():
+                if item.exists() and not "session_" in item.name:
                     try:
                         if item.is_dir():
                             shutil.rmtree(item)
@@ -501,6 +556,10 @@ class AutoBatchProcessor:
         # Clean up temp directory patterns
         for pattern in temp_cleanup_patterns:
             for item in Path(".").glob(pattern):
+                # Additional safety check for session folders
+                if "session_" in str(item):
+                    print(f"   ⚠️  Skipped session-related file: {item}")
+                    continue
                 try:
                     if item.is_dir():
                         shutil.rmtree(item)
@@ -556,8 +615,11 @@ class AutoBatchProcessor:
             # Step 8: Organize outputs
             final_folder = self.organize_outputs(session_folder, report)
 
-            # Step 9: Cleanup
-            self.cleanup_workspace()
+            # Step 9: Cleanup (only if enabled)
+            if config.AUTO_CLEANUP:
+                self.cleanup_workspace()
+            else:
+                print("\n🚫 Auto cleanup disabled - temporary files preserved")
 
             # Final summary
             total_time = time.time() - start_time
@@ -607,8 +669,8 @@ Safety:
     parser.add_argument(
         "output_folder",
         nargs="?",
-        default=str(config.DEFAULT_CONVERTED_FOLDER),
-        help=f"Output folder for converted files (default: {config.DEFAULT_CONVERTED_FOLDER})",
+        default=str(config.DEFAULT_OUTPUT_FOLDER),
+        help=f"Output folder for converted files (default: {config.DEFAULT_OUTPUT_FOLDER})",
     )
     parser.add_argument(
         "--no-lint",

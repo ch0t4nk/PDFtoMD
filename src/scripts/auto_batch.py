@@ -67,7 +67,7 @@ class AutoBatchProcessor:
         self.output_folder = (
             Path(output_folder)
             if output_folder
-            else Path(str(config.DEFAULT_CONVERTED_FOLDER))
+            else Path(str(config.DEFAULT_OUTPUT_FOLDER))
         )
         self.enable_linting = enable_linting
         self.master = PDFBatchMaster()
@@ -534,6 +534,10 @@ class AutoBatchProcessor:
 
         for pattern in cleanup_patterns:
             for item in Path(".").glob(pattern):
+                # Safety check: don't delete session folders or files
+                if "session_" in item.name:
+                    print(f"   ⚠️  Skipped session-related file: {item.name}")
+                    continue
                 try:
                     if item.is_dir():
                         shutil.rmtree(item)
@@ -544,9 +548,11 @@ class AutoBatchProcessor:
                 except (OSError, PermissionError):
                     print(f"   ⚠️  Could not remove {item.name}")
 
-        # Clean up converted directory (moved to session)
+        # Clean up converted directory (moved to session) - only if it's in workspace
         converted_dir = Path(str(config.DEFAULT_CONVERTED_FOLDER))
-        if converted_dir.exists() and any(converted_dir.iterdir()):
+        if (converted_dir.exists() and 
+            converted_dir.is_relative_to(Path.cwd()) and 
+            any(converted_dir.iterdir())):
             try:
                 shutil.rmtree(converted_dir)
                 converted_dir.mkdir(exist_ok=True)  # Recreate empty
@@ -599,8 +605,11 @@ class AutoBatchProcessor:
             # Step 8: Organize outputs
             final_folder = self.organize_outputs(session_folder, report)
 
-            # Step 9: Cleanup
-            self.cleanup_workspace()
+            # Step 9: Cleanup (only if enabled)
+            if config.AUTO_CLEANUP:
+                self.cleanup_workspace()
+            else:
+                print("\n🚫 Auto cleanup disabled - temporary files preserved")
 
             # Final summary
             total_time = time.time() - start_time
@@ -650,8 +659,8 @@ Safety:
     parser.add_argument(
         "output_folder",
         nargs="?",
-        default=str(config.DEFAULT_CONVERTED_FOLDER),
-        help=f"Output folder for converted files (default: {config.DEFAULT_CONVERTED_FOLDER})",
+        default=str(config.DEFAULT_OUTPUT_FOLDER),
+        help=f"Output folder for converted files (default: {config.DEFAULT_OUTPUT_FOLDER})",
     )
     parser.add_argument(
         "--no-lint",
