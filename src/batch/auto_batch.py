@@ -236,34 +236,38 @@ class AutoBatchProcessor:
             else:
                 # Single batch (batch object from OpenAI API)
                 try:
-                    if hasattr(status_result, "status"):
-                        status = status_result.status
-                        request_counts = status_result.request_counts
-
-                        if request_counts:
-                            completed = getattr(request_counts, "completed", 0) or 0
-                            total = getattr(request_counts, "total", 0) or 0
-                            progress_pct = (completed / total * 100) if total > 0 else 0
-                            print(
-                                f"   📊 Status: {status} ({completed}/{total} - {progress_pct:.1f}%)"
-                            )
-                        else:
-                            print(f"   📊 Status: {status}")
-
-                        if status == "completed":
-                            print(f"✅ Batch completed in {elapsed / 60:.1f} minutes!")
-                            return True
-                        elif status == "failed":
-                            print("❌ Batch failed!")
-                            return False
-                        else:
-                            # Still processing
-                            time.sleep(30)
-                            continue
+                    if hasattr(status_result, "status") and hasattr(status_result, "request_counts"):
+                        # OpenAI batch object - use getattr to avoid type checker issues
+                        status = getattr(status_result, "status", "unknown")
+                        request_counts = getattr(status_result, "request_counts", {})
+                    elif isinstance(status_result, dict):
+                        # Dictionary result 
+                        status = status_result.get("status", "unknown")
+                        request_counts = status_result.get("request_counts", {})
                     else:
-                        # Unexpected result type
-                        print(f"❌ Unexpected status result: {status_result}")
+                        status = "unknown"
+                        request_counts = {}
+
+                    if request_counts:
+                        completed = getattr(request_counts, "completed", 0) or 0
+                        total = getattr(request_counts, "total", 0) or 0
+                        progress_pct = (completed / total * 100) if total > 0 else 0
+                        print(
+                            f"   📊 Status: {status} ({completed}/{total} - {progress_pct:.1f}%)"
+                        )
+                    else:
+                        print(f"   📊 Status: {status}")
+
+                    if status == "completed":
+                        print(f"✅ Batch completed in {elapsed / 60:.1f} minutes!")
+                        return True
+                    elif status == "failed":
+                        print("❌ Batch failed!")
                         return False
+                    else:
+                        # Still processing
+                        time.sleep(30)
+                        continue
                 except AttributeError:
                     # Handle case where status_result doesn't have expected attributes
                     print(f"❌ Invalid status result format: {type(status_result)}")

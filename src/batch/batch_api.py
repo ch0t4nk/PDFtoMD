@@ -52,6 +52,13 @@ class BatchPDFConverter:
         )
         self.model = config.OPENAI_DEFAULT_MODEL
         self.prompt_type = prompt_type
+        
+        # Initialize attributes that will be set by _load_prompts
+        self.system_prompt = ""
+        self.user_prompt = ""
+        self.temperature = 0.05
+        self.max_tokens = 8192
+        
         self._load_prompts()
 
     def _load_prompts(self):
@@ -227,7 +234,7 @@ Focus on creating clean, professional documentation that preserves all informati
             try:
                 return func()
             except (openai.RateLimitError, openai.InternalServerError) as e:
-                error_type = self._handle_openai_error(e, f"attempt {attempt + 1}")
+                self._handle_openai_error(e, f"attempt {attempt + 1}")
                 if attempt < max_retries - 1:
                     delay = base_delay * (2**attempt)
                     print(
@@ -261,7 +268,7 @@ Focus on creating clean, professional documentation that preserves all informati
             if file_mapping:
                 # Clean up specific directories from file mapping
                 temp_dirs_to_clean = set()
-                for custom_id, (pdf_name, page_num, temp_dir_str) in file_mapping.items():
+                for _, (_, _, temp_dir_str) in file_mapping.items():
                     temp_dir_path = Path(temp_dir_str)
                     if temp_dir_path.exists():
                         temp_dirs_to_clean.add(temp_dir_path)
@@ -428,6 +435,12 @@ Focus on creating clean, professional documentation that preserves all informati
 
             try:
                 batch_input_file = self._retry_with_exponential_backoff(upload_file)
+                if batch_input_file is None:
+                    print("❌ Failed to upload batch file - received None from API")
+                    if batch_file.exists():
+                        batch_file.unlink()
+                    self.cleanup_temp_directories(file_mapping)
+                    return None
             except Exception as e:
                 error_type = self._handle_openai_error(e, "file upload")
                 if error_type in ["billing_limit", "insufficient_quota", "auth_error"]:
@@ -461,6 +474,10 @@ Focus on creating clean, professional documentation that preserves all informati
 
             try:
                 batch = self._retry_with_exponential_backoff(submit_batch)
+                if batch is None:
+                    print("❌ Failed to create batch - received None from API")
+                    self.cleanup_temp_directories(file_mapping) 
+                    return None
             except Exception as e:
                 error_type = self._handle_openai_error(e, "batch submission")
                 if error_type in ["billing_limit", "insufficient_quota", "auth_error"]:
@@ -655,6 +672,10 @@ Focus on creating clean, professional documentation that preserves all informati
 
         try:
             batch = self._retry_with_exponential_backoff(get_batch_status)
+            if batch is None:
+                print(f"❌ Failed to retrieve batch status for {batch_id}")
+                return None
+                
             print(f"📋 Batch ID: {batch_id}")
             print(f"📊 Status: {batch.status}")
             print(f"🔢 Request counts: {batch.request_counts}")
@@ -909,7 +930,7 @@ Focus on creating clean, professional documentation that preserves all informati
 
             for custom_id, content in results.items():
                 if custom_id in file_mapping:
-                    pdf_name, page_num, temp_dir = file_mapping[custom_id]
+                    pdf_name, page_num, _ = file_mapping[custom_id]
 
                     if pdf_name not in pdf_contents:
                         pdf_contents[pdf_name] = {}
@@ -1175,7 +1196,7 @@ Focus on creating clean, professional documentation that preserves all informati
 
         for custom_id, content in all_results.items():
             if custom_id in file_mapping:
-                pdf_name, page_num, temp_dir = file_mapping[custom_id]
+                pdf_name, page_num, _ = file_mapping[custom_id]
 
                 if pdf_name not in pdf_contents:
                     pdf_contents[pdf_name] = {}
