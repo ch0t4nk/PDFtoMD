@@ -145,7 +145,7 @@ class AutoBatchProcessor:
         }
 
     def submit_batch(self):
-        """Submit batch for processing"""
+        """Submit batch for processing with error handling"""
         self.print_step(4, "Submitting batch to OpenAI")
 
         # Use batch_api to submit
@@ -154,6 +154,12 @@ class AutoBatchProcessor:
 
         requests, file_mapping = self.converter.create_batch_requests(pdf_files)
         batch_id = self.converter.submit_batch(requests, file_mapping)
+
+        if batch_id is None:
+            print(f"\n❌ BATCH SUBMISSION FAILED")
+            print(f"   Unable to submit batch to OpenAI.")
+            print(f"   Please resolve the issues above and try again.")
+            return None
 
         print(f"✅ Batch submitted: {batch_id}")
         print(f"📊 Requests queued: {len(requests)}")
@@ -594,6 +600,8 @@ class AutoBatchProcessor:
 
             # Step 4: Submit batch
             batch_id = self.submit_batch()
+            if batch_id is None:
+                raise RuntimeError("Batch submission failed - check OpenAI account status")
 
             # Step 5: Monitor batch
             if not self.monitor_batch(batch_id):

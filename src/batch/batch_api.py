@@ -25,6 +25,7 @@ import time
 from pathlib import Path
 
 from openai import OpenAI
+import openai
 
 # Import config using relative path
 current_dir = Path(__file__).parent
@@ -97,6 +98,90 @@ class BatchPDFConverter:
             api_key=config.OPENAI_API_KEY, base_url=config.OPENAI_API_BASE
         )
         self.model = config.OPENAI_DEFAULT_MODEL
+
+    def _handle_openai_error(self, error, operation="API operation"):
+        """Handle OpenAI API errors gracefully with user-friendly messages"""
+        if isinstance(error, openai.BadRequestError):
+            if "billing_hard_limit_reached" in str(error):
+                print(f"💳 BILLING LIMIT REACHED")
+                print(f"   Your OpenAI account has reached its billing hard limit.")
+                print(f"   Please check your billing settings at: https://platform.openai.com/account/billing")
+                print(f"   Current limit may need to be increased to continue processing.")
+                return "billing_limit"
+            elif "insufficient_quota" in str(error):
+                print(f"💸 INSUFFICIENT QUOTA")
+                print(f"   Your OpenAI account doesn't have enough credits for this operation.")
+                print(f"   Please add credits at: https://platform.openai.com/account/billing")
+                return "insufficient_quota"
+            elif "rate_limit_exceeded" in str(error):
+                print(f"⏳ RATE LIMIT EXCEEDED")
+                print(f"   You've hit OpenAI's rate limits. This usually resolves automatically.")
+                print(f"   The system will retry after a brief pause...")
+                return "rate_limit"
+            else:
+                print(f"❌ BAD REQUEST: {error}")
+                print(f"   The request was malformed or contained invalid parameters.")
+                return "bad_request"
+        
+        elif isinstance(error, openai.AuthenticationError):
+            print(f"🔐 AUTHENTICATION ERROR")
+            print(f"   Your OpenAI API key is invalid or has been revoked.")
+            print(f"   Please check your API key in the .env file.")
+            print(f"   Get a new key at: https://platform.openai.com/account/api-keys")
+            return "auth_error"
+        
+        elif isinstance(error, openai.PermissionDeniedError):
+            print(f"🚫 PERMISSION DENIED")
+            print(f"   Your API key doesn't have permission for this operation.")
+            print(f"   Check your OpenAI plan and permissions.")
+            return "permission_denied"
+        
+        elif isinstance(error, openai.NotFoundError):
+            print(f"🔍 RESOURCE NOT FOUND")
+            print(f"   The requested resource (batch, file, etc.) was not found.")
+            print(f"   It may have been deleted or the ID is incorrect.")
+            return "not_found"
+        
+        elif isinstance(error, openai.UnprocessableEntityError):
+            print(f"⚠️  UNPROCESSABLE REQUEST")
+            print(f"   The request was well-formed but couldn't be processed.")
+            print(f"   This often happens with content policy violations or invalid input.")
+            return "unprocessable"
+        
+        elif isinstance(error, openai.RateLimitError):
+            print(f"🕐 RATE LIMIT ERROR")
+            print(f"   You're making requests too quickly. Slowing down...")
+            return "rate_limit"
+        
+        elif isinstance(error, openai.InternalServerError):
+            print(f"🔧 OPENAI SERVER ERROR")
+            print(f"   OpenAI's servers are experiencing issues.")
+            print(f"   This is usually temporary - try again in a few minutes.")
+            return "server_error"
+        
+        else:
+            print(f"❌ UNEXPECTED ERROR during {operation}: {error}")
+            print(f"   Error type: {type(error).__name__}")
+            return "unknown_error"
+
+    def _retry_with_exponential_backoff(self, func, max_retries=3, base_delay=1):
+        """Retry function with exponential backoff for transient errors"""
+        for attempt in range(max_retries):
+            try:
+                return func()
+            except (openai.RateLimitError, openai.InternalServerError) as e:
+                error_type = self._handle_openai_error(e, f"attempt {attempt + 1}")
+                if attempt < max_retries - 1:
+                    delay = base_delay * (2 ** attempt)
+                    print(f"   ⏳ Retrying in {delay} seconds... (attempt {attempt + 1}/{max_retries})")
+                    time.sleep(delay)
+                else:
+                    print(f"   ❌ All retry attempts failed")
+                    raise
+            except Exception as e:
+                # Non-retryable errors
+                self._handle_openai_error(e)
+                raise
 
     def encode_image(self, image_path):
         """Convert image to base64 for API"""
@@ -202,44 +287,85 @@ class BatchPDFConverter:
         return self._submit_single_batch(requests, file_mapping)
     
     def _submit_single_batch(self, requests, file_mapping):
-        """Submit a single batch (original logic)"""
+        """Submit a single batch with comprehensive error handling"""
         # Create JSONL file
         batch_file = f"batch_requests_{int(time.time())}.jsonl"
 
-        with open(batch_file, "w") as f:
-            for request in requests:
-                f.write(json.dumps(request) + "\n")
+        try:
+            with open(batch_file, "w") as f:
+                for request in requests:
+                    f.write(json.dumps(request) + "\n")
 
-        print(f"📤 Uploading batch file with {len(requests)} requests...")
+            print(f"📤 Uploading batch file with {len(requests)} requests...")
 
-        # Upload file
-        with open(batch_file, "rb") as f:
-            batch_input_file = self.client.files.create(file=f, purpose="batch")
+            # Upload file with error handling
+            def upload_file():
+                with open(batch_file, "rb") as f:
+                    return self.client.files.create(file=f, purpose="batch")
+            
+            try:
+                batch_input_file = self._retry_with_exponential_backoff(upload_file)
+            except Exception as e:
+                error_type = self._handle_openai_error(e, "file upload")
+                if error_type in ["billing_limit", "insufficient_quota", "auth_error"]:
+                    print(f"\n🛑 CANNOT CONTINUE: Please resolve the above issue before retrying.")
+                    return None
+                raise
 
-        # Submit batch
-        batch = self.client.batches.create(
-            input_file_id=batch_input_file.id,
-            endpoint="/v1/chat/completions",
-            completion_window="24h",
-            metadata={"description": f"PDF conversion batch - {len(requests)} pages"},
-        )
+            # Submit batch with error handling
+            def submit_batch():
+                return self.client.batches.create(
+                    input_file_id=batch_input_file.id,
+                    endpoint="/v1/chat/completions",
+                    completion_window="24h",
+                    metadata={"description": f"PDF conversion batch - {len(requests)} pages"},
+                )
+            
+            try:
+                batch = self._retry_with_exponential_backoff(submit_batch)
+            except Exception as e:
+                error_type = self._handle_openai_error(e, "batch submission")
+                if error_type in ["billing_limit", "insufficient_quota", "auth_error"]:
+                    print(f"\n🛑 CANNOT CONTINUE: Please resolve the above issue before retrying.")
+                    return None
+                raise
 
-        print("✅ Batch submitted successfully!")
-        print(f"📋 Batch ID: {batch.id}")
-        print(f"📊 Status: {batch.status}")
-        print(f"🔢 Requests: {batch.request_counts}")
+            print("✅ Batch submitted successfully!")
+            print(f"📋 Batch ID: {batch.id}")
+            print(f"📊 Status: {batch.status}")
+            print(f"🔢 Requests: {batch.request_counts}")
 
-        # Save batch info for later retrieval
-        batch_info = {
-            "batch_id": batch.id,
-            "file_mapping": file_mapping,
-            "batch_file": batch_file,
-            "submitted_at": time.time(),
-            "is_chunked": False
-        }
+            # Save batch info for later retrieval
+            batch_info = {
+                "batch_id": batch.id,
+                "file_mapping": file_mapping,
+                "batch_file": batch_file,
+                "submitted_at": time.time(),
+                "is_chunked": False
+            }
 
-        # Save batch info to temp directory instead of root
-        temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+            # Save batch info to temp directory instead of root
+            temp_batch_dir = config.DEFAULT_TEMP_FOLDER / "temp_batch"
+            temp_batch_dir.mkdir(parents=True, exist_ok=True)
+            batch_info_file = temp_batch_dir / f"batch_info_{batch.id}.json"
+
+            with open(batch_info_file, "w") as f:
+                json.dump(batch_info, f, indent=2)
+
+            # Clean up local batch file
+            os.remove(batch_file)
+
+            return batch.id
+
+        except Exception as e:
+            # Clean up batch file on any error
+            if os.path.exists(batch_file):
+                os.remove(batch_file)
+            
+            print(f"\n❌ BATCH SUBMISSION FAILED")
+            print(f"   Error: {e}")
+            print(f"   Please check your OpenAI account status and try again.")
+            return None
         temp_batch_dir.mkdir(parents=True, exist_ok=True)
         batch_info_file = temp_batch_dir / f"batch_info_{batch.id}.json"
 
@@ -359,9 +485,12 @@ class BatchPDFConverter:
             return self._check_single_batch_status(batch_id)
     
     def _check_single_batch_status(self, batch_id):
-        """Check status of a single batch"""
+        """Check status of a single batch with error handling"""
+        def get_batch_status():
+            return self.client.batches.retrieve(batch_id)
+        
         try:
-            batch = self.client.batches.retrieve(batch_id)
+            batch = self._retry_with_exponential_backoff(get_batch_status)
             print(f"📋 Batch ID: {batch_id}")
             print(f"📊 Status: {batch.status}")
             print(f"🔢 Request counts: {batch.request_counts}")
@@ -374,8 +503,12 @@ class BatchPDFConverter:
                 print(f"❌ Failed: {batch.failed_at}")
 
             return batch
-        except (RuntimeError, ValueError, KeyError) as e:
-            print(f"❌ Error checking batch: {e}")
+        except Exception as e:
+            error_type = self._handle_openai_error(e, "batch status check")
+            if error_type == "not_found":
+                print(f"   This may indicate the batch was cancelled or expired.")
+            elif error_type in ["billing_limit", "auth_error"]:
+                print(f"   Cannot check batch status due to account issues.")
             return None
     
     def _check_chunked_batch_status(self, master_batch_id):
