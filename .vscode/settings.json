@@ -40,13 +40,45 @@
   "cSpell.showStatus": true,
   "cSpell.spellCheckDelayMs": 50,
   "markdownlint.config": {
+    "MD001": false,
+    "MD003": false,
+    "MD004": false,
+    "MD007": false,
+    "MD009": false,
+    "MD013": false,
     "MD022": false,
+    "MD023": false,
+    "MD024": false,
+    "MD025": false,
+    "MD026": false,
+    "MD029": false,
     "MD031": false,
     "MD032": false,
-    "MD040": false,
-    "MD049": false,
+    "MD034": false,
     "MD036": false,
+    "MD040": false,
+    "MD047": false,
+    "MD049": false,
     "default": true
+  },
+  "markdownlint.ignore": [
+    "**/*.backup",
+    "**/*.bak",
+    "**/temp/**",
+    "**/outputs/**",
+    "**/converted_markdown/**",
+    "**/.tmp*/**",
+    "**/temp_batch/**"
+  ],
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": false,
+  "python.defaultInterpreterPath": "python",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportUnusedVariable": "none",
+    "reportUnusedImport": "none",
+    "reportMissingTypeStubs": "none"
   },
   "files.associations": {
     "*.md": "markdown"
